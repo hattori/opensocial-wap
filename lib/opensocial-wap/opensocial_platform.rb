@@ -1,6 +1,8 @@
 # encoding: UTF-8
 
+require 'oauth'
 require 'oauth/helper'
+require 'oauth/signature/rsa/sha1'
 
 module OpensocialWap
   # OAuth検証やAPIリクエストを実行するためのクラス.
