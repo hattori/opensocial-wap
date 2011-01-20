@@ -20,7 +20,8 @@ module OpensocialWap
 
     # subclass MAY be override. it depends on the spec of opensocial services.
     def signature_base_string method, normalized_uri, parameters_for_signature, get_params, post_params
-      base = [method, normalized_uri, parameters_for_signature]
+      normalized_params = normalize(parameters_for_signature)
+      base = [method, normalized_uri, normalized_params]
       base.map { |v| escape(v) }.join("&")
     end
     
