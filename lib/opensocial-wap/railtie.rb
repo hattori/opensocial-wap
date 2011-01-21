@@ -9,7 +9,7 @@ require 'opensocial-wap/helpers/form_helper'
 module OpensocialWap
   class Railtie < Rails::Railtie
     initializer "opensocial-wap.initialize" do |app|
-      puts 'opensocial-wap initialized.'
+
     end
   end
 end
