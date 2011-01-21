@@ -1,0 +1,30 @@
+PATH
+  remote: .
+  specs:
+    opensocial-wap (0.0.1)
+      oauth
+      rack
+
+GEM
+  remote: http://rubygems.org/
+  specs:
+    diff-lcs (1.1.2)
+    oauth (0.4.4)
+    rack (1.2.1)
+    rspec (2.4.0)
+      rspec-core (~> 2.4.0)
+      rspec-expectations (~> 2.4.0)
+      rspec-mocks (~> 2.4.0)
+    rspec-core (2.4.0)
+    rspec-expectations (2.4.0)
+      diff-lcs (~> 1.1.2)
+    rspec-mocks (2.4.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  oauth
+  opensocial-wap!
+  rack
+  rspec
