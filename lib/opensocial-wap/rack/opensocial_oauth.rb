@@ -18,14 +18,14 @@ module OpensocialWap
         @platform = opt[:platform]
         @skip_verify = opt[:skip] == true ? true : false
         @logging = opt[:logging] == true ? true : false
-        @logic = OpensocialOauthVerification.new @platform, @skip_verify, @logging
+        @verifier= OpensocialOauthVerifier.new @platform, @skip_verify, @logging
       end
       
       def call(env)
         @logger ||= @logging ? env['rack.errors'] : nil
         log('call') if @logging
         rack_request = ::Rack::Request.new env
-        result = @logic.verify rack_request, @logger
+        result = @verifier.verify rack_request, @logger
         unless result
           return result
         end
@@ -39,8 +39,22 @@ module OpensocialWap
       end
     end
 
-    class OpensocialOauthVerification
+    module RequestWithOpensocialOauth
+      def opensocial_oauth_skipped?
+        env['OPENSOCIAL_OAUTH_SKIPPED'] ? true : false
+      end
+      def opensocial_oauth_verified?
+        env['OPENSOCIAL_OAUTH_VERIFIED'] ? true : false
+      end
+    end
+
+    class OpensocialOauthVerifier
+      include RequestWithOpensocialOauth
+
+      attr_reader :env
+
       def initialize platform, skip_verify=false, logging=false
+         @env = {}
          @platform = platform
          @skip_verify = skip_verify
          @loggin = logging
@@ -53,18 +67,19 @@ module OpensocialWap
           if rack_request.env['HTTP_AUTHORIZATION']
             is_valid_request = @platform.verify_request :logger=>logger
             if is_valid_request
-              rack_request.env['OPENSOCIAL_OAUTH_VERIFIED'] = true
+              @env['OPENSOCIAL_OAUTH_VERIFIED'] = true
             else
               return unauthorized
             end
           else
             # always false if HTTP_AUTHORIZATION header is not available.
-            rack_request.env['OPENSOCIAL_OAUTH_VERIFIED'] = false
+            @env['OPENSOCIAL_OAUTH_VERIFIED'] = false
           end
         else
-          rack_request.env['OPENSOCIAL_OAUTH_SKIPPED'] = true
-          rack_request.env['OPENSOCIAL_OAUTH_VERIFIED'] = true # always true if skipped.
+          @env['OPENSOCIAL_OAUTH_SKIPPED'] = true
+          @env['OPENSOCIAL_OAUTH_VERIFIED'] = true # always true if skipped.
         end
+        rack_request.env.merge!(@env)
         true
       end
 
@@ -78,14 +93,6 @@ module OpensocialWap
       end
     end
     
-    module RequestWithOpensocialOauth
-      def opensocial_oauth_skipped?
-        env['OPENSOCIAL_OAUTH_SKIPPED'] ? true : false
-      end
-      def opensocial_oauth_verified?
-        env['OPENSOCIAL_OAUTH_VERIFIED'] ? true : false
-      end
-    end
   end
 end
 

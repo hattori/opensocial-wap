@@ -7,8 +7,8 @@ class OpensocialRequestTest < Test::Unit::TestCase
     request_from_sns = ::Rack::Request.new(env)
 
     platform = OpensocialWap::OpensocialPlatform.new(:consumer_key=>'sample_consumer_key', :consumer_secret=>'sample_consumer_secret')
-    logic = OpensocialWap::Rack::OpensocialOauthVerification.new platform
-    result = logic.verify request_from_sns, nil
+    verifier = OpensocialWap::Rack::OpensocialOauthVerifier.new platform
+    result = verifier.verify request_from_sns, nil
     assert_equal result, true
     rack_request = ::Rack::Request.new(request_from_sns.env)
     assert_equal false, rack_request.opensocial_oauth_skipped? 
@@ -24,8 +24,8 @@ class OpensocialRequestTest < Test::Unit::TestCase
     request_from_sns = ::Rack::Request.new(env)
 
     platform = OpensocialWap::OpensocialPlatform.new(:consumer_key=>'sample_consumer_key', :consumer_secret=>'sample_consumer_secret')
-    logic = OpensocialWap::Rack::OpensocialOauthVerification.new platform
-    result = logic.verify request_from_sns, nil
+    verifier = OpensocialWap::Rack::OpensocialOauthVerifier.new platform
+    result = verifier.verify request_from_sns, nil
     assert_equal result, true 
     rack_request = ::Rack::Request.new(request_from_sns.env)
     assert_equal false, rack_request.opensocial_oauth_skipped?
@@ -42,8 +42,8 @@ class OpensocialRequestTest < Test::Unit::TestCase
 
     # invalid consumer secret
     platform = OpensocialWap::OpensocialPlatform.new(:consumer_key=>'sample_consumer_key', :consumer_secret=>'foobar')
-    logic = OpensocialWap::Rack::OpensocialOauthVerification.new platform
-    result = logic.verify request_from_sns, nil
+    verifier = OpensocialWap::Rack::OpensocialOauthVerifier.new platform
+    result = verifier.verify request_from_sns, nil
     rack_request = ::Rack::Request.new(request_from_sns.env)
     assert_equal false, rack_request.opensocial_oauth_skipped?
     assert_equal false, rack_request.opensocial_oauth_verified?
@@ -56,8 +56,8 @@ class OpensocialRequestTest < Test::Unit::TestCase
 
     platform = OpensocialWap::OpensocialPlatform.new(:consumer_key=>'sample_consumer_key', :consumer_secret=>'sample_consumer_secret')
     skip_verification = true
-    logic = OpensocialWap::Rack::OpensocialOauthVerification.new platform, skip_verification 
-    result = logic.verify request_from_sns, nil
+    verifier = OpensocialWap::Rack::OpensocialOauthVerifier.new platform, skip_verification 
+    result = verifier.verify request_from_sns, nil
     assert_equal result, true 
     rack_request = ::Rack::Request.new(request_from_sns.env)
     assert_equal true, rack_request.opensocial_oauth_skipped?
@@ -73,8 +73,8 @@ class OpensocialRequestTest < Test::Unit::TestCase
     request_from_sns = ::Rack::Request.new(env)
 
     platform = OpensocialWap::OpensocialPlatform.new(:consumer_key=>'sample_consumer_key', :consumer_secret=>'sample_consumer_secret')
-    logic = OpensocialWap::Rack::OpensocialOauthVerification.new platform
-    result = logic.verify request_from_sns, nil
+    verifier = OpensocialWap::Rack::OpensocialOauthVerifier.new platform
+    result = verifier.verify request_from_sns, nil
     assert_equal result, true 
     rack_request = ::Rack::Request.new(request_from_sns.env)
     assert_equal false, rack_request.opensocial_oauth_skipped?
@@ -91,8 +91,8 @@ class OpensocialRequestTest < Test::Unit::TestCase
    
     # invalid consumer secret
     platform = OpensocialWap::OpensocialPlatform.new(:consumer_key=>'sample_consumer_key', :consumer_secret=>'foobar')
-    logic = OpensocialWap::Rack::OpensocialOauthVerification.new platform
-    result = logic.verify request_from_sns, nil
+    verifier = OpensocialWap::Rack::OpensocialOauthVerifier.new platform
+    result = verifier.verify request_from_sns, nil
     rack_request = ::Rack::Request.new(request_from_sns.env)
     assert_equal false, rack_request.opensocial_oauth_skipped?
     assert_equal false, rack_request.opensocial_oauth_verified?
@@ -105,8 +105,8 @@ class OpensocialRequestTest < Test::Unit::TestCase
 
     platform = OpensocialWap::OpensocialPlatform.new(:consumer_key=>'sample_consumer_key', :consumer_secret=>'sample_consumer_secret')
     skip_verification = true
-    logic = OpensocialWap::Rack::OpensocialOauthVerification.new platform, skip_verification
-    result = logic.verify request_from_sns, nil
+    verifier = OpensocialWap::Rack::OpensocialOauthVerifier.new platform, skip_verification
+    result = verifier.verify request_from_sns, nil
     assert_equal result, true 
     rack_request = ::Rack::Request.new(request_from_sns.env)
     assert_equal true, rack_request.opensocial_oauth_skipped?
