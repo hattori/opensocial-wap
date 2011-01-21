@@ -89,4 +89,4 @@ DEPENDENCIES
   opensocial-wap!
   rack
   rails (>= 3.0.0)
-  rspec (>= 2.3.0)
+  rspec (>= 2.4.0)
