@@ -54,7 +54,7 @@ module OpensocialWap
       
       # コンテナのURLを含む形式の完全URL.
       def full_url_for(url, params, container_url, app_id)
-        "#{container_url}#{app_id}#{query_url_for(url, params)}"
+        "#{container_url}#{app_id}/#{query_url_for(url, params)}"
       end
       
       # URLのプロトコルとホスト部分.
