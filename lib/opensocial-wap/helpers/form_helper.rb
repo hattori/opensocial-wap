@@ -4,7 +4,7 @@ module OpensocialWap
     module FormHelper
       include Base
 
-      def form_for(record_or_name_or_array, *args, &proc)                                                                                         
+      def form_for(record_or_name_or_array, *args, &proc)
         super
       end
       
@@ -31,8 +31,10 @@ module OpensocialWap
         options[:html].reverse_merge!(html_options)
 
         # osw_options 自体を options から取得
-        osw_options = default_osw_options.merge(options[:osw_options] || {})
-        url_for(object_or_array, osw_options)
+        osw_options = default_osw_options.merge(options.delete(:osw_options) || {})
+
+        # TODO: options[:format] が指定されている場合の処理.
+        options[:url] ||= url_for(object_or_array, osw_options)
       end
     end
   end
