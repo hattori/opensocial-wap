@@ -48,7 +48,7 @@ module OpensocialWap
       
       # クエリ形式("?url=エンコードされたURL")のURL.
       def query_url_for(url, params)
-        params = (params || {}).merge({:url => ERB::Util.url_encode(url)})
+        params = (params || {}).merge({:url =>url})
         "?" + params.select{|k,v| v}.collect{|k,v| "#{k}=#{ERB::Util.url_encode(v)}" }.join('&')
       end
       
