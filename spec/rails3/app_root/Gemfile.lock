@@ -68,6 +68,7 @@ GEM
       rake (>= 0.8.7)
       thor (~> 0.14.4)
     rake (0.8.7)
+    rcov (0.9.9)
     rspec (2.4.0)
       rspec-core (~> 2.4.0)
       rspec-expectations (~> 2.4.0)
@@ -95,5 +96,6 @@ PLATFORMS
 DEPENDENCIES
   opensocial-wap!
   rails (= 3.0.3)
+  rcov
   rspec-rails
   sqlite3-ruby
