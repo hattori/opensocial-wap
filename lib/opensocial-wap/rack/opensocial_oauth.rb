@@ -29,7 +29,23 @@ module OpensocialWap
         unless result
           return result
         end
-        @app.call(env)
+        status, env, response = @app.call(env)
+
+        log("status = #{status}") if @logging
+        log("env = #{env}") if @logging
+        log("response = #{response}") if @logging
+
+        if env['Content-Type'] =~ %r!text/html|application/xhtml\+xml!
+          type, charset = env['Content-Type'].split(/;\s*charset=/)
+
+          body = response_to_body(response)
+          body = body.gsub(/<input name="utf8" type="hidden" value="#{[0x2713].pack("U")}"[^>]*?>/, ' ')
+          body = body.gsub(/<input name="utf8" type="hidden" value="&#x2713;"[^>]*?>/, ' ')
+
+          response.body = body
+        end
+        new_response = ::Rack::Response.new(response, status, env)
+        new_response.finish
       end
 
       private
@@ -37,6 +53,21 @@ module OpensocialWap
       def log(msg)
         @logger.write "\n[#{Time.now.strftime(LOG_TIMESTAMP_FORMAT)}] OpensocialWap::Rack::OpensocialOauth #{msg} \n\n"
       end
+
+      def response_to_body(response)
+        if response.respond_to?(:to_str)
+          response.to_str
+        elsif response.respond_to?(:each)
+          body = []
+          response.each do |part|
+            body << response_to_body(part)
+          end
+          body.join("\n")
+        else
+          body
+        end
+      end
+
     end
 
     module RequestWithOpensocialOauth
