@@ -24,12 +24,12 @@ module OpensocialWap
               end
         
         case url_format
-        when :local
+        when :plain
           url
         when :query
           query_url_for(url, osw_options[:params])
         when :full
-          full_url_for(url, osw_options[:params], osw_options[:container_url], params[:opensocial_app_id])
+          full_url_for(url, osw_options, params[:opensocial_app_id])
         end
       end
       
@@ -53,8 +53,11 @@ module OpensocialWap
       end
       
       # コンテナのURLを含む形式の完全URL.
-      def full_url_for(url, params, container_url, app_id)
-        "#{container_url}#{app_id}/#{query_url_for(url, params)}"
+      def full_url_for(url, osw_options, app_id)
+        protocol = url.scan(/^.*:\/\//)
+        host = osw_options[:container_host]
+        params = osw_options[:params]
+        base_url({ :protocol => protocol, :host => container_host }) + "/#{app_id}/#{query_url_for(url, params)}"
       end
       
       # URLのプロトコルとホスト部分.

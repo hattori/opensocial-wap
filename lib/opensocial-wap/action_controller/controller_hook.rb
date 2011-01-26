@@ -9,7 +9,6 @@ module ActionController
         include ::OpensocialWap::Routing::UrlFor
         include ::OpensocialWap::ActionController::Redirecting
         helper ::OpensocialWap::Helpers::UrlHelper
-        helper ::OpensocialWap::Helpers::FormHelper
         helper ::OpensocialWap::Helpers::FormTagHelper
       end
     end
