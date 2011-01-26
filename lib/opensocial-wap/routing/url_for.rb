@@ -54,10 +54,10 @@ module OpensocialWap
       
       # コンテナのURLを含む形式の完全URL.
       def full_url_for(url, osw_options, app_id)
-        protocol = url.scan(/^.*:\/\//)
+        protocol = url.scan(%r{^\w[\w+.-]*://}).first
         host = osw_options[:container_host]
         params = osw_options[:params]
-        base_url({ :protocol => protocol, :host => container_host }) + "/#{app_id}/#{query_url_for(url, params)}"
+        base_url({ :protocol => protocol, :host => host }) + "/#{app_id}/#{query_url_for(url, params)}"
       end
       
       # URLのプロトコルとホスト部分.
