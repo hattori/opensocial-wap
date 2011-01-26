@@ -5,7 +5,7 @@ module OpensocialWap
     module UrlFor
 
       # OpenSocial WAP Extension 用 url_for.
-      def url_for(options = nil, osw_options = {:url_format => nil, :params => {}})
+      def url_for(options = nil, osw_options = {:params => {}})
         url_format = osw_options && osw_options[:url_format]        
         return super(options) unless url_format
         
@@ -48,7 +48,7 @@ module OpensocialWap
       
       # クエリ形式("?url=エンコードされたURL")のURL.
       def query_url_for(url, params)
-        params = (params || {}).merge({:url =>url})
+        params = (params || {}).merge({:url => url})
         "?" + params.select{|k,v| v}.collect{|k,v| "#{k}=#{ERB::Util.url_encode(v)}" }.join('&')
       end
       
