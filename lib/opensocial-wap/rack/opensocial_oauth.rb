@@ -16,9 +16,8 @@ module OpensocialWap
       def initialize(app, opt={})
         @app = app
         @platform = opt[:platform]
-        @skip_verify = opt[:skip] == true ? true : false
         @logging = opt[:logging] == true ? true : false
-        @verifier= OpensocialOauthVerifier.new @platform, @skip_verify, @logging
+        @verifier= OpensocialOauthVerifier.new @platform, @logging
       end
       
       def call(env)
@@ -29,11 +28,7 @@ module OpensocialWap
 
         rack_request = ::Rack::Request.new env
 
-        result = @verifier.verify rack_request, @logger
-
-        unless result
-          return result
-        end
+        @verifier.verify rack_request, @logger
 
         status, env, response = @app.call(env)
 
@@ -83,9 +78,6 @@ module OpensocialWap
     end
 
     module RequestWithOpensocialOauth
-      def opensocial_oauth_skipped?
-        env['opensocial-wap.rack']['OPENSOCIAL_OAUTH_SKIPPED'] ? true : false
-      end
       def opensocial_oauth_verified?
         env['opensocial-wap.rack']['OPENSOCIAL_OAUTH_VERIFIED'] ? true : false
       end
@@ -94,9 +86,8 @@ module OpensocialWap
     class OpensocialOauthVerifier
       include RequestWithOpensocialOauth
 
-      def initialize platform, skip_verify=false, logging=false
+      def initialize platform, logging=false
          @platform = platform
-         @skip_verify = skip_verify
          @loggin = logging
       end
 
@@ -104,24 +95,18 @@ module OpensocialWap
         env = {}
         rack_request_proxy = OAuth::OpensocialOauthRequestProxy.new(@platform, rack_request)
         @platform.request = rack_request_proxy
-        unless @skip_verify
-          if rack_request.env['HTTP_AUTHORIZATION']
-            is_valid_request = @platform.verify_request :logger=>logger
-            if is_valid_request
-              env['OPENSOCIAL_OAUTH_VERIFIED'] = true
-            else
-              return unauthorized
-            end
+        if rack_request.env['HTTP_AUTHORIZATION']
+          is_valid_request = @platform.verify_request :logger=>logger
+          if is_valid_request
+            env['OPENSOCIAL_OAUTH_VERIFIED'] = true
           else
-            # always false if HTTP_AUTHORIZATION header is not available.
             env['OPENSOCIAL_OAUTH_VERIFIED'] = false
           end
         else
-          env['OPENSOCIAL_OAUTH_SKIPPED'] = true
-          env['OPENSOCIAL_OAUTH_VERIFIED'] = true # always true if skipped.
+          # false if HTTP_AUTHORIZATION header is not available.
+          env['OPENSOCIAL_OAUTH_VERIFIED'] = false
         end
         rack_request.env['opensocial-wap.rack'].merge!(env)
-        true
       end
 
       def unauthorized
