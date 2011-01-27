@@ -16,34 +16,28 @@ module OpensocialWap
       def initialize(app, opt={})
         @app = app
         @platform = opt[:platform]
-        @skip_verify = opt[:skip] == true ? true : false
         @logging = opt[:logging] == true ? true : false
-        @verifier= OpensocialOauthVerifier.new @platform, @skip_verify, @logging
+        @verifier= OpensocialOauthVerifier.new @platform, @logging
       end
       
       def call(env)
         @logger ||= @logging ? env['rack.errors'] : nil
         log('call') if @logging
+
+        env['opensocial-wap.rack'] ||= {}
+
         rack_request = ::Rack::Request.new env
-        result = @verifier.verify rack_request, @logger
-        unless result
-          return result
-        end
+
+        @verifier.verify rack_request, @logger
+
         status, env, response = @app.call(env)
 
         log("status = #{status}") if @logging
         log("env = #{env}") if @logging
         log("response = #{response}") if @logging
+ 
+        response = remove_utf8_form_input_tag env, response
 
-        if env['Content-Type'] =~ %r!text/html|application/xhtml\+xml!
-          type, charset = env['Content-Type'].split(/;\s*charset=/)
-
-          body = response_to_body(response)
-          body = body.gsub(/<input name="utf8" type="hidden" value="#{[0x2713].pack("U")}"[^>]*?>/, ' ')
-          body = body.gsub(/<input name="utf8" type="hidden" value="&#x2713;"[^>]*?>/, ' ')
-
-          response.body = body
-        end
         new_response = ::Rack::Response.new(response, status, env)
         new_response.finish
       end
@@ -68,50 +62,51 @@ module OpensocialWap
         end
       end
 
+      def remove_utf8_form_input_tag env, response
+        if env['Content-Type'] =~ %r!text/html|application/xhtml\+xml!
+          type, charset = env['Content-Type'].split(/;\s*charset=/)
+
+          body = response_to_body(response)
+          body = body.gsub(/<input name="utf8" type="hidden" value="#{[0x2713].pack("U")}"[^>]*?>/, ' ')
+          body = body.gsub(/<input name="utf8" type="hidden" value="&#x2713;"[^>]*?>/, ' ')
+
+          response.body = body
+        end
+        response
+      end
+
     end
 
     module RequestWithOpensocialOauth
-      def opensocial_oauth_skipped?
-        env['OPENSOCIAL_OAUTH_SKIPPED'] ? true : false
-      end
       def opensocial_oauth_verified?
-        env['OPENSOCIAL_OAUTH_VERIFIED'] ? true : false
+        env['opensocial-wap.rack']['OPENSOCIAL_OAUTH_VERIFIED'] ? true : false
       end
     end
 
     class OpensocialOauthVerifier
       include RequestWithOpensocialOauth
 
-      attr_reader :env
-
-      def initialize platform, skip_verify=false, logging=false
-         @env = {}
+      def initialize platform, logging=false
          @platform = platform
-         @skip_verify = skip_verify
          @loggin = logging
       end
 
       def verify rack_request, logger=nil
+        env = {}
         rack_request_proxy = OAuth::OpensocialOauthRequestProxy.new(@platform, rack_request)
         @platform.request = rack_request_proxy
-        unless @skip_verify
-          if rack_request.env['HTTP_AUTHORIZATION']
-            is_valid_request = @platform.verify_request :logger=>logger
-            if is_valid_request
-              @env['OPENSOCIAL_OAUTH_VERIFIED'] = true
-            else
-              return unauthorized
-            end
+        if rack_request.env['HTTP_AUTHORIZATION']
+          is_valid_request = @platform.verify_request :logger=>logger
+          if is_valid_request
+            env['OPENSOCIAL_OAUTH_VERIFIED'] = true
           else
-            # always false if HTTP_AUTHORIZATION header is not available.
-            @env['OPENSOCIAL_OAUTH_VERIFIED'] = false
+            env['OPENSOCIAL_OAUTH_VERIFIED'] = false
           end
         else
-          @env['OPENSOCIAL_OAUTH_SKIPPED'] = true
-          @env['OPENSOCIAL_OAUTH_VERIFIED'] = true # always true if skipped.
+          # false if HTTP_AUTHORIZATION header is not available.
+          env['OPENSOCIAL_OAUTH_VERIFIED'] = false
         end
-        rack_request.env.merge!(@env)
-        true
+        rack_request.env['opensocial-wap.rack'].merge!(env)
       end
 
       def unauthorized
