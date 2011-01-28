@@ -8,33 +8,48 @@ require 'oauth/signature/rsa/sha1'
 
 module OpensocialWap
   module Rack
+    module LogLevel
+      DEBUG   = 0
+      INFO    = 1
+      WARN    = 2
+      ERROR   = 3
+      FATAL   = 4
+      UNKNOWN = 5
+      LABELS=['DEBUG','INFO','WARN','ERROR','FATAL','UNKNOWN']
+      def log_level_to_label log_level
+        LABELS[log_level] 
+      end
+      def label_to_log_level log_level_label
+        LABELS.index log_level_label.to_s.upcase
+      end
+    end
     class OpensocialOauth
       include ::Rack::Utils
+      include LogLevel
       
       LOG_TIMESTAMP_FORMAT = '%Y-%m-%d %H:%M:%S'
       
       def initialize(app, opt={})
         @app = app
         @platform = opt[:platform]
-        @logging = opt[:logging] == true ? true : false
-        @verifier= OpensocialOauthVerifier.new @platform, @logging
+        @log_level = label_to_log_level opt[:log_level] 
+        @verifier= OpensocialOauthVerifier.new @platform, @log_level
       end
       
       def call(env)
-        @logger ||= @logging ? env['rack.errors'] : nil
-        log('call') if @logging
+        @logger ||= env['rack.errors'] 
 
         env['opensocial-wap.rack'] ||= {}
 
         rack_request = ::Rack::Request.new env
 
-        @verifier.verify rack_request, @logger
+        @verifier.verify rack_request, @logger 
 
         status, env, response = @app.call(env)
 
-        log("status = #{status}") if @logging
-        log("env = #{env}") if @logging
-        log("response = #{response}") if @logging
+        log(DEBUG, "status = #{status}") 
+        log(DEBUG, "env = #{env}")
+        log(DEBUG, "response = #{response}") 
  
         response = remove_utf8_form_input_tag env, response
 
@@ -44,8 +59,9 @@ module OpensocialWap
 
       private
       
-      def log(msg)
-        @logger.write "\n[#{Time.now.strftime(LOG_TIMESTAMP_FORMAT)}] OpensocialWap::Rack::OpensocialOauth #{msg} \n\n"
+      def log(log_level=DEBUG, msg) 
+        return if log_level < @log_level 
+        @logger.write "\n[#{Time.now.strftime(LOG_TIMESTAMP_FORMAT)}] #{log_level_to_label(log_level)} OpensocialWap::Rack::OpensocialOauth #{msg} \n\n"
       end
 
       def response_to_body(response)
@@ -85,10 +101,11 @@ module OpensocialWap
 
     class OpensocialOauthVerifier
       include RequestWithOpensocialOauth
+      include LogLevel
 
-      def initialize platform, logging=false
+      def initialize platform, log_level=ERROR
          @platform = platform
-         @loggin = logging
+         @log_level = log_level
       end
 
       def verify rack_request, logger=nil
