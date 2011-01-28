@@ -11,7 +11,7 @@ module OpensocialWap
   class Railtie < Rails::Railtie
     initializer "opensocial-wap.initialize" do |app|
       # do something..
-
+      config.app_middleware.insert_before(ActionDispatch::Cookies, Rails::Rack::Debugger)
     end
   end
 end
