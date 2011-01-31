@@ -16,26 +16,47 @@ module OpensocialWap
           def extract_session_id(env)
             stale_session_check! do
               request = ActionDispatch::Request.new(env)
-              if use_opensocial_wap_sid? 
+              if use_opensocial_wap_sid?(request)
                 # opensocial_(viewer|owner)_id をsession_idとして使用.
-                get_params = request.query_parameters
-                session_key = get_params.key?('opensocial_viewer_id') ? 'opensocial_viewer_id' : 'opensocial_owner_id'
-                sid = get_params[session_key]
+                params = params_for_sid(request)
+                session_key = params.key?('opensocial_viewer_id') ? 'opensocial_viewer_id' : 'opensocial_owner_id'
+                sid = params[session_key]
               else
                 # 通常の方法でsession_idを取得.
                 sid = request.cookies[@key]
                 sid ||= request.params[@key] unless @cookie_only
               end
- puts "##### sid : #{sid} #####"
+#puts "##### sid : #{sid} ###"
               sid
             end
           end
 
-          def use_opensocial_wap_sid?
-            # TODO
-            # initializer で、opensocial_wap_sid を使うよう指定している.
-            # OAuth の検証にパスしていて, opensocial_(viewer|owner)_id がクエリパラメータに存在する.
-            true
+          # セッションIDを、opensocial_(viewer|owner)_id にするかどうかを判定する.
+          # 以下の条件を満たしたときに、true を返す.
+          # * アプリの初期化時に、config.opensocial_wap.sid = :parameter が指定されている.
+          # * OAuthの検証にパスしている.
+          # * opensocial_(viewer|owner)_id がクエリパラメータに存在する.
+          # 以上の条件を満たさない場合は、通常通り cookie からセッションIDを取得する.
+          def use_opensocial_wap_sid?(request)
+            app_config = Rails.application.config
+            if app_config.respond_to? :opensocial_wap
+              sid = app_config.opensocial_wap.sid || :cookie # デフォルトでは無効(cookieからセッションIDを取得する).
+              if sid.to_sym == :parameter
+                # OAuthの検証にパスしている.
+                if request.opensocial_oauth_verified?
+                  # opensocial_(viewer|owner)_id がクエリパラメータに存在する.
+                  params = params_for_sid(request)
+                  if [ 'opensocial_viewer_id',  'opensocial_owner_id'].any? {|p| params.keys.include? p }
+                    return true
+                  end
+                end
+              end
+            end
+            false
+          end
+
+          def params_for_sid(request)
+            @params_for_sid ||= request.query_parameters.merge(request.request_parameters)
           end
         end
       end    
