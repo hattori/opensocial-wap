@@ -24,7 +24,8 @@ module OpensocialWap
       log_level = config.opensocial_wap.log_level || :error
       if platform
         puts "opensocial-wap is enabled with #{platform.class}"
-        config.app_middleware.insert_before ActionDispatch::Cookies,  OpensocialWap::Rack::OpensocialOauth, :platform=>platform, :log_level=>log_level.to_s.upcase
+        config.app_middleware.use OpensocialWap::Rack::OpensocialOauth, :platform=>platform, :log_level=>log_level.to_s.upcase
+        #config.app_middleware.insert_before ActionDispatch::Cookies,  OpensocialWap::Rack::OpensocialOauth, :platform=>platform, :log_level=>log_level.to_s.upcase
       else
         puts "opensocial-wap is NOT enabled" 
       end
