@@ -13,8 +13,13 @@ module OpensocialWap
         options ||= {}
         url = case options
               when String
-                opts = options_for_full_url(nil, osw_options)
-                base_url(opts) + options
+                # URL文字列がプロトコル部分を含まなければ、プロトコル、ホスト、ポートを付与する.
+                unless options.scan(%r{^\w[\w+.-]*://}).first
+                  opts = options_for_full_url(nil, osw_options)
+                  base_url(opts) + options
+                else
+                  options
+                end
               when Hash
                 opts = options_for_full_url(options, osw_options)
                 url_for(opts)
