@@ -32,4 +32,15 @@ AppRoot::Application.configure do
 
   # Print deprecation notices to the stderr
   config.active_support.deprecation = :stderr
+
+  # OpenSocial WAP Extention
+  require 'opensocial-wap/platforms/sample_platform'
+  config.opensocial_wap.platform = OpensocialWap::SamplePlatform.new(:consumer_key=>'abcdefg', 
+                                                                     :consumer_secret=>'abcdefg12345')
+  config.opensocial_wap.url_options = {
+    :url_format => :full,
+    :params => { :guid => 'ON' }, 
+    :container_host => 'container.example.com', 
+    :host => 'host.example.com' }
+  config.opensocial_wap.sid = :parameter
 end
