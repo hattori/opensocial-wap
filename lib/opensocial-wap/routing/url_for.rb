@@ -46,7 +46,7 @@ module OpensocialWap
         options.reverse_merge!(url_options).symbolize_keys
         options[:only_path] = false
         [:protocol, :host, :port].each do |key|
-          options[key] ||= osw_options[key] if osw_options.key?(key) 
+          options[key] = osw_options[key] if osw_options.key?(key)
         end
         options
       end
