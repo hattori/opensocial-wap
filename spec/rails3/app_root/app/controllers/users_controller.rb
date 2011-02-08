@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
 
-  opensocial_wap :url_format => :query, :params => { :guid => 'ON' }, :container_url => 'http://container.example.com/'
+  opensocial_wap
   
   # GET /url
   def url

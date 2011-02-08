@@ -3,44 +3,58 @@ require 'spec_helper'
 
 describe OpensocialWap::Helpers::UrlHelper do
 
-  class ActionView::TestCase::TestController
-    opensocial_wap :url_format => :query, :params => { :guid => 'ON' }, :container_url => 'http://container.example.com/'
-  end
-
   describe "#url_for" do
-    it "osw_options を指定しなければ、従来の形式でURLを構築すること" do
-      helper.url_for(User.new).should == '/users'
+    context "osw_options を指定していない場合" do
+      it "従来の形式の URL を返すこと" do
+        controller = UsersController.new
+        user = User.create(:name => 'Alice', :age => 15)
+        helper.url_for(user).should == "/users/#{user.id}"
+      end
     end
     
-    it ":url_format で指定した形式で URL を構築できること" do
-      #controller_class = helper.controller.class
-      helper.url_for(User.new, {:url_format => :full, :params => {:p1 => 'xyz'}}).should == "http://container.example.com//?p1=xyz&url=http%253A%252F%252Ftest.host%252Fusers"
+    context "osw_options を指定している場合" do
+      it ":url_format が :plain であれば、指定した形式の URL を返すこと" do
+        controller = UsersController.new
+        osw_options = controller.class.opensocial_wap_options.merge(:url_format => :plain)
+        helper.url_for(User.new, osw_options).should == "http://host.example.com/users"
+      end
+
+      it ":url_format が :query であれば、指定した形式の URL を返すこと" do
+        controller = UsersController.new
+        osw_options = controller.class.opensocial_wap_options.merge(:url_format => :query)
+        helper.url_for(User.new, osw_options).should == "?guid=ON&url=http%3A%2F%2Fhost.example.com%2Fusers"
+      end
+
+      it ":url_format が :full であれば、指定した形式の URL を返すこと" do
+        controller = UsersController.new
+debugger
+        controller.params = { :opensocial_app_id => '12345'}
+        osw_options = controller.class.opensocial_wap_options.merge(:url_format => :full)
+        helper.url_for(User.new, osw_options).should == "http://container.example.com/12345/?guid=ON&url=http%3A%2F%2Fhost.example.com%2Fusers"
+      end
     end
   end
 
   describe "#link_to" do
-    it "リンク先URL が、OpenSocial WAP Extension形式のURLになること" do
+    it "リンク先URL が、controller の opensocial_wap での指定に従って、OpenSocial WAP Extension形式のURLになること" do
+      controller = UsersController.new
       user = User.stub(:find).with("37") { mock_user }
-      p helper.link_to(user)
+      helper.link_to(user).should == "?guid=ON&url=http%3A%2F%2Fhost.example.com%2Fusers%2F37"
     end
 
   end
 
   describe "#button_to" do
-
+    pending
   end
-
   describe "#link_to_unless_current" do
-
+    pending
   end
-
   describe "#link_to_unless" do
-
-
+    pending
   end
-
   describe "#link_to_if" do
-
+    pending
   end
 
 end

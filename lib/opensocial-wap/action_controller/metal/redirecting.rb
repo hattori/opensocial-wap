@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 module OpensocialWap
   module ActionController
     module Redirecting
@@ -9,7 +11,7 @@ module OpensocialWap
 
       private
       
-      # 
+      # :redirect_url_format で指定した形式のURLを返す.
       def _compute_redirect_to_location(options)
         url = super
         osw_options = self.opensocial_wap_options
