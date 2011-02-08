@@ -5,6 +5,7 @@ require 'rack/request'
 require 'rack/utils'
 require 'oauth/request_proxy/rack_request'
 require 'oauth/signature/rsa/sha1'
+require 'cgi'
 
 module OpensocialWap
   module Rack
@@ -29,6 +30,24 @@ module OpensocialWap
         @logger = logger
         @log_level = log_level
       end
+      def isDebug
+         isLogLevel LogLevel::DEBUG
+      end
+      def isInfo
+         isLogLevel LogLevel::INFO
+      end
+      def isWarn
+         isLogLevel LogLevel::WARN
+      end
+      def isError
+         isLogLevel LogLevel::ERROR
+      end
+      def isFatal
+         isLogLevel LogLevel::FATAL
+      end
+      def isLogLevel log_level
+         log_level <= @log_level
+      end
       def debug msg
         log LogLevel::DEBUG, msg
       end
@@ -45,8 +64,9 @@ module OpensocialWap
         log LogLevel::FATAL, msg
       end
       def log(log_level, msg)
-        return if log_level < @log_level
-        @logger.write "\n[#{Time.now.strftime(LOG_TIMESTAMP_FORMAT)}] #{LogLevel::log_level_to_label(log_level)} #{msg}"
+        if isLogLevel log_level
+          @logger.write "\n[#{Time.now.strftime(LOG_TIMESTAMP_FORMAT)}] #{LogLevel::log_level_to_label(log_level)} #{msg}"
+        end
       end
     end
     class OpensocialOauth
@@ -56,23 +76,18 @@ module OpensocialWap
         @app = app
         @platform = opt[:platform]
         @log_level = LogLevel::label_to_log_level opt[:log_level] 
-        @verifier= OpensocialOauthVerifier.new @platform, @log_level
+        @verifier= OpensocialOauthVerifier.new @platform
       end
       
       def call(env)
         @logger ||= Logger.new env['rack.errors'], @log_level
-
+        @logger.debug "rack.env['HTTP_AUTHORIZATION'] = #{env['HTTP_AUTHORIZATION']}"
+        # marker
         env['opensocial-wap.rack'] ||= {}
-
         rack_request = ::Rack::Request.new env
-
         @verifier.verify rack_request, @logger 
 
         status, header, response = @app.call(env)
-
-        @logger.debug "status = #{status}"
-        @logger.debug "header = #{header}"
-        @logger.debug "response = #{response}"
  
         response = remove_utf8_form_input_tag header, response
 
@@ -82,11 +97,6 @@ module OpensocialWap
 
       private
       
-      #def log(log_level=DEBUG, msg) 
-      #  return if log_level < @log_level 
-      #  @logger.write "\n[#{Time.now.strftime(LOG_TIMESTAMP_FORMAT)}] #{log_level_to_label(log_level)} OpensocialWap::Rack::OpensocialOauth #{msg} \n\n"
-      #end
-
       def response_to_body(response)
         if response.respond_to?(:to_str)
           response.to_str
@@ -125,14 +135,13 @@ module OpensocialWap
     class OpensocialOauthVerifier
       include RequestWithOpensocialOauth
 
-      def initialize platform, log_level=LogLevel::ERROR
+      def initialize platform 
          @platform = platform
-         @log_level = log_level
       end
 
       def verify rack_request, logger=nil
         env = {}
-        rack_request_proxy = OAuth::OpensocialOauthRequestProxy.new(@platform, rack_request)
+        rack_request_proxy = OAuth::OpensocialOauthRequestProxy.new(@platform, rack_request, logger)
         @platform.request = rack_request_proxy
         if rack_request.env['HTTP_AUTHORIZATION']
           is_valid_request = @platform.verify_request :logger=>logger
@@ -163,12 +172,41 @@ end
 
 module OAuth
   class OpensocialOauthRequestProxy < OAuth::RequestProxy::RackRequest
-    def initialize(platform, request, options = {})
+    def initialize(platform, request, logger, options = {})
       super request, options
       @platform = platform
+      @logger = logger
+    end
+    def parameters
+      if options[:clobber_request]
+        options[:parameters] || {}
+      else
+        params = request_raw_params.merge(query_params).merge(header_params)
+        params = params.merge(options[:parameters] || {})
+        #if @logger and @logger.isDebug
+        #  @logger.debug "request_params = #{request_raw_params}"
+        #  @logger.debug "query_params = #{query_params}"
+        #  @logger.debug "header_params = #{header_params}"
+        #  @logger.debug "all(request,query,header) merged params = #{params}"
+        #end
+        params 
+      end
+    end
+    def request_raw_params
+       @request.POST
+       form_params = @request.env['rack.request.form_vars']
+       if form_params && form_params.size > 0 
+         form_params.split('&').inject({}) do |hsh, i| kv = i.split('='); hsh[CGI::unescape(kv[0])] = kv[1] ? CGI::unescape(kv[1]) : '' ; hsh end
+       else
+         {}
+       end
     end
     def signature_base_string
-      @platform.signature_base_string method, normalized_uri, parameters_for_signature, query_params, request_params
+      sbs = @platform.signature_base_string method, normalized_uri, parameters_for_signature, query_params, request_params
+      if @logger and @logger.isDebug
+        @logger.debug "signature_base_string = #{sbs}"
+      end
+      sbs
     end
   end
 end

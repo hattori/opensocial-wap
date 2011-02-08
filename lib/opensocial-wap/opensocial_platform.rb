@@ -29,8 +29,13 @@ module OpensocialWap
     
     # OAuth検証
     def verify_request(options = {})
+      logger = options[:logger]
       opts = { :consumer_secret => @consumer_secret, :token_secret => @request.parameters['oauth_token_secret'] }
       signature = OAuth::Signature.build(@request, opts)
+
+      if logger and logger.isDebug
+        logger.debug "oauth signature : #{OAuth::Signature.sign(@request, opts)}"
+      end
 
       #if options && options[:logger]
       #  logger = options[:logger]
