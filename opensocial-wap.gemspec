@@ -17,6 +17,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'rack'
   s.add_dependency 'oauth'
   s.add_development_dependency "rspec", ">=2.4.0"
+  s.add_development_dependency "rcov"
   s.add_development_dependency "rails", ">=3.0.0"
 
   s.files         = `git ls-files`.split("\n")
