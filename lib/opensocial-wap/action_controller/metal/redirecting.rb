@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 
+# ActionController::Redirecting を拡張.
 module OpensocialWap
   module ActionController
     module Redirecting
       include ::OpensocialWap::Routing::UrlFor
 
+      # Opensocial WAP Extension の URL設定中の　:redirect_url_format で指定した形式のURLにリダイレクトする.
       def redirect_to(options = {}, response_status = {})
         super
       end

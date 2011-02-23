@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+# ActionView::Helpers::UrlHelper を拡張.
 module OpensocialWap
   module Helpers
     module UrlHelper
@@ -7,42 +8,51 @@ module OpensocialWap
       include ::OpensocialWap::Routing::UrlFor
 
       # url_for for the OpenSocial WAP Extension.
-      # ows_options が nil か、osw_options に :url_formatが指定されていない(もしくは偽)の
-      # 場合、従来通りの url_for を実行する.
-      # そうでない場合、osw_options の値で、コントローラーの opensocial_wap クラスメソッドの
-      # 呼び出しで指定した値を上書きし、拡張url_forを呼び出す.
+      #
+      # ows_options 引数が nil か false である場合、本来の実装による url_for を実行する.
+      #
+      # osw_options 引数に有効な値が指定されていれば、拡張 url_for を呼び出す.
+      # osw_options は、下記の場所で指定することができる.
+      # * url_for の osw_options 引数.
+      # * コントローラの opensocial_wap クラスメソッドの引数中の、:opensocial_wapに対する値.
+      # * Rails.application.config.opensocial_wap.url_options の値(初期化時に指定).
+      # 優先順位は上の方が高い.
+      # 
       def url_for(options = {}, osw_options = nil)
-        url_format = osw_options && osw_options[:url_format]
-        return super(options) unless url_format
+        unless osw_options
+          return super(options) # 本来の実装.
+        end
 
         options ||= {}
-        osw_options = default_osw_options.merge(osw_options || {})
+        osw_options = default_osw_options.merge(osw_options) # controller で指定したオプションを引数で上書き.
 
         case options
         when :back
           controller.request.env["HTTP_REFERER"] || 'javascript:history.back()'
         else
+          # OpensocialWap::Routing::UrlFor の url_for を呼び出す.
           super(options, osw_options)
         end        
       end
 
       # link_to for the OpenSocial WAP Extension.
-      # 4番目(ブロックが与えられている場合は3番目)の引数を osw_options と見なす.
+      #
+      # 4番目(ブロックが与えられている場合は3番目)の引数で、osw_options の設定を上書きすることができる.
       def link_to(*args, &block)
         if block_given?
           options      = args.first || {}
           html_options = args.second
-          osw_options = args.third
+          osw_options = args.third # osw_options
           link_to(capture(&block), options, html_options, osw_options)
         else
           name         = args[0]
           options      = args[1] || {}
           html_options = args[2]
-          osw_options = args[3]
+          osw_options = args[3] # osw_options
           
           html_options = convert_options_to_data_attributes(options, html_options)
-          # controller で指定したオプションを引数で上書き.
-          url = url_for(options, default_osw_options.merge(osw_options || {}))
+
+          url = url_for(options, (osw_options || {})) # osw_options 引数付きで url_for 呼び出し.
           href = html_options['href']
           tag_options = tag_options(html_options)
           
@@ -52,7 +62,8 @@ module OpensocialWap
       end
       
       # button_to for the OpenSocial WAP Extension.
-      # 4番目の引数を ows_options とみなす.
+      #
+      # 4番目の引数で、osw_options の設定を上書きすることができる.
       def button_to(name, options = {}, html_options = {}, osw_options = {})
         html_options = html_options.stringify_keys
         convert_boolean_attributes!(html_options, %w( disabled ))
@@ -74,9 +85,7 @@ module OpensocialWap
                                   :value => form_authenticity_token)
         end
         
-        # controller で指定したオプションを引数で上書き.
-        osw_options = default_osw_options.merge(osw_options)
-        url = url_for(options, osw_options)
+        url = url_for(options, (osw_options || {}))
         name ||= url
         
         html_options = convert_options_to_data_attributes(options, html_options)
@@ -88,11 +97,15 @@ module OpensocialWap
       end
       
       # link_to_unless_current for the OpenSocial WAP Extension.
+      # 
+      # 4番目の引数で、osw_options の設定を上書きすることができる.
       def link_to_unless_current(name, options = {}, html_options = {}, osw_options = {}, &block)
         link_to_unless current_page?(options), name, options, html_options, osw_options, &block
       end
 
       # link_to_unless for the OpenSocial WAP Extension.
+      #
+      # 5番目の引数で、osw_options の設定を上書きすることができる.
       def link_to_unless(condition, name, options = {}, html_options = {}, osw_options = {}, &block)
         if condition
           if block_given?
@@ -106,6 +119,8 @@ module OpensocialWap
       end
 
       # link_to_id for the OpenSocial WAP Extension.
+      #
+      # 5番目の引数で、osw_options の設定を上書きすることができる.
       def link_to_if(condition, name, options = {}, html_options = {}, osw_options, &block)
         link_to_unless !condition, name, options, html_options, osw_options, &block
       end
