@@ -3,20 +3,21 @@
 module ActionController
   class Base
 
+    include ::OpensocialWap::Routing::UrlFor
+    helper ::OpensocialWap::Helpers::UrlHelper
+    helper ::OpensocialWap::Helpers::FormTagHelper
+
     DEFAULT_OPENSOCIAL_WAP_URL_OPTIONS = { :url_format => nil, :params => {} }.freeze
     class_inheritable_accessor :opensocial_wap_enabled
-    
+
     class << self
-      
+
       # OpenSocial WAP Extension 用のURLを構築することを、コントローラに指定する.
       def opensocial_wap(options = {})
         self.opensocial_wap_enabled = true
         init_opensocoal_wap_options(options)
         
-        include ::OpensocialWap::Routing::UrlFor
-        include ::OpensocialWap::ActionController::Redirecting
-        helper ::OpensocialWap::Helpers::UrlHelper
-        helper ::OpensocialWap::Helpers::FormTagHelper
+        include ::OpensocialWap::ActionController::Redirecting    
       end
 
       def opensocial_wap_options
