@@ -1,5 +1,7 @@
+# -*- coding: utf-8 -*-
 class UsersController < ApplicationController
 
+  # Opensocial WAP のURLを使用することを宣言.
   opensocial_wap
   
   # GET /url

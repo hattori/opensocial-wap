@@ -1,24 +1,34 @@
 # -*- coding: utf-8 -*-
 
+# ActionDispatch::Routing::UrlFor を拡張.
 module OpensocialWap
   module Routing
     module UrlFor
 
       # OpenSocial WAP Extension 用 url_for.
       def url_for(options = nil, osw_options = {:params => {}})
-        url_format = osw_options && osw_options[:url_format]        
-        return super(options) unless url_format
-        
+        url_format = osw_options && osw_options[:url_format]
+        unless url_format
+          return super(options)
+        end
+
         # アプリケーションサーバの完全URL(:only_path => false を指定したときのURL)
         options ||= {}
         url = case options
               when String
-                # URL文字列がプロトコル部分を含まなければ、プロトコル、ホスト、ポートを付与する.
-                unless options.scan(%r{^\w[\w+.-]*://}).first
+                # URL文字列をプロトコル部分とホスト部分に分割.
+                opt_parts = options.scan(%r{(^\w[\w+.-]*://)([\w\d\.:-]*)/?})
+                unless opt_parts.first
+                  # URL文字列がプロトコル部分を含まなければ、プロトコル、ホスト、ポートを付与する.
                   opts = options_for_full_url(nil, osw_options)
                   base_url(opts) + options
                 else
-                  options
+                  if opt_parts.second != osw_options[:host]
+                    # 外部URLであれば、そのまま返す.
+                    return options
+                  else
+                    options
+                  end
                 end
               when Hash
                 opts = options_for_full_url(options, osw_options)

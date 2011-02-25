@@ -22,10 +22,8 @@ module OpensocialWap
         unless osw_options
           return super(options) # 本来の実装.
         end
-
         options ||= {}
         osw_options = default_osw_options.merge(osw_options) # controller で指定したオプションを引数で上書き.
-
         case options
         when :back
           controller.request.env["HTTP_REFERER"] || 'javascript:history.back()'
@@ -51,8 +49,13 @@ module OpensocialWap
           osw_options = args[3] # osw_options
           
           html_options = convert_options_to_data_attributes(options, html_options)
+          
+          # コントローラで opensocial_wap が呼ばれていれば、osw_options を有効にする.
+          if controller.class.opensocial_wap_enabled
+            osw_options ||= {}
+          end
 
-          url = url_for(options, (osw_options || {})) # osw_options 引数付きで url_for 呼び出し.
+          url = url_for(options, (osw_options)) # osw_options 引数付きで url_for 呼び出し.
           href = html_options['href']
           tag_options = tag_options(html_options)
           
