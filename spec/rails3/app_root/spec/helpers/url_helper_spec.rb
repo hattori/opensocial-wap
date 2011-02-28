@@ -46,8 +46,11 @@ describe OpensocialWap::Helpers::UrlHelper do
 
     context NonOpensocialWapController do
 
-      it "リンクのURLが、通常の形式になること(パスを引数にした場合)" do
+      before do
         set_controller(NonOpensocialWapController.new)
+      end
+
+      it "リンクのURLが、通常の形式になること(パスを引数にした場合)" do
         user = User.create(:name => 'Alice', :age => 15)
 
         link = %Q|<a href="/users/#{user.id}">Alice</a>|
@@ -55,7 +58,6 @@ describe OpensocialWap::Helpers::UrlHelper do
       end
     
       it "リンクのURLが、通常の形式になること(モデルを引数にした場合)" do
-        set_controller(NonOpensocialWapController.new)
         user = User.create(:name => 'Alice', :age => 15)
 
         link = %Q|<a href="/users/#{user.id}">Alice</a>|
@@ -63,7 +65,6 @@ describe OpensocialWap::Helpers::UrlHelper do
       end
 
       it "リンクのURLが、通常の形式になること(Hashを引数にした場合)" do
-        set_controller(NonOpensocialWapController.new)
         user = User.create(:name => 'Alice', :age => 15)
 
         link = %Q|<a href="/users/#{user.id}">Alice</a>|
@@ -71,7 +72,6 @@ describe OpensocialWap::Helpers::UrlHelper do
       end
 
       it "外部URLの場合、そのままのURLが出力されること" do
-        set_controller(NonOpensocialWapController.new)
         user = User.create(:name => 'Alice', :age => 15)
 
         link = %Q|<a href="http://alice.example.com">Alice</a>|
@@ -79,7 +79,6 @@ describe OpensocialWap::Helpers::UrlHelper do
       end
 
       it "HTMLオプションが正しく追加されること" do
-        set_controller(NonOpensocialWapController.new)
         user = User.create(:name => 'Alice', :age => 15)
 
         link = %Q|<a href="/users/#{user.id}" id="user">Alice</a>|
@@ -87,7 +86,6 @@ describe OpensocialWap::Helpers::UrlHelper do
       end
 
       it "link_to メソッドのオプションで、URL形式を変更できること" do
-        set_controller(NonOpensocialWapController.new)        
         user = User.create(:name => 'Alice', :age => 15)
 
         link_plain = %Q|<a href="http://host.example.com/users/#{user.id}">Alice</a>|
@@ -103,8 +101,11 @@ describe OpensocialWap::Helpers::UrlHelper do
 
     context OpensocialWapPlainController do
 
-      it "リンクのURLが、Opensocial WAP :plain形式のURLになること(パスを引数にした場合)" do
+      before do
         set_controller(OpensocialWapPlainController.new)
+      end
+
+      it "リンクのURLが、Opensocial WAP :plain形式のURLになること(パスを引数にした場合)" do
         user = User.create(:name => 'Alice', :age => 15)
 
         link = %Q|<a href="http://host.example.com/users/#{user.id}">Alice</a>|
@@ -112,7 +113,6 @@ describe OpensocialWap::Helpers::UrlHelper do
       end
     
       it "リンクのURLが、Opensocial WAP :plain形式のURLになること(モデルを引数にした場合)" do
-        set_controller(OpensocialWapPlainController.new)
         user = User.create(:name => 'Alice', :age => 15)
 
         link = %Q|<a href="http://host.example.com/users/#{user.id}">Alice</a>|
@@ -120,7 +120,6 @@ describe OpensocialWap::Helpers::UrlHelper do
       end
 
       it "リンクのURLが、Opensocial WAP :plain形式のURLになること(Hashを引数にした場合)" do
-        set_controller(OpensocialWapPlainController.new)        
         user = User.create(:name => 'Alice', :age => 15)
 
         link = %Q|<a href="http://host.example.com/users/#{user.id}">Alice</a>|
@@ -128,7 +127,6 @@ describe OpensocialWap::Helpers::UrlHelper do
       end
 
       it "外部URLの場合、リンクのURLが、Opensocial WAP の影響を受けないこと" do
-        set_controller(OpensocialWapPlainController.new)
         user = User.create(:name => 'Alice', :age => 15)
 
         link = %Q|<a href="http://alice.example.com">Alice</a>|
@@ -136,7 +134,6 @@ describe OpensocialWap::Helpers::UrlHelper do
       end
 
       it "HTMLオプションが正しく追加されること" do
-        set_controller(OpensocialWapPlainController.new)        
         user = User.create(:name => 'Alice', :age => 15)
 
         link = %Q|<a href="http://host.example.com/users/#{user.id}" id="user">Alice</a>|
@@ -144,7 +141,6 @@ describe OpensocialWap::Helpers::UrlHelper do
       end
 
       it "link_to メソッドのオプションで、URL形式を変更できること" do
-        set_controller(OpensocialWapPlainController.new)        
         user = User.create(:name => 'Alice', :age => 15)
 
         link_query = %Q|<a href="?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F#{user.id}">Alice</a>|
@@ -156,9 +152,12 @@ describe OpensocialWap::Helpers::UrlHelper do
     end
     
     context OpensocialWapQueryController do
+
+      before do
+        set_controller(OpensocialWapQueryController.new)
+      end
       
       it "リンクのURLが、Opensocial WAP :plain形式のURLになること(パスを引数にした場合)" do
-        set_controller(OpensocialWapQueryController.new)
         user = User.create(:name => 'Alice', :age => 15)
 
         link = %Q|<a href="?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F#{user.id}">Alice</a>|
@@ -166,7 +165,6 @@ describe OpensocialWap::Helpers::UrlHelper do
       end
     
       it "リンクのURLが、Opensocial WAP :plain形式のURLになること(モデルを引数にした場合)" do
-        set_controller(OpensocialWapQueryController.new)
         user = User.create(:name => 'Alice', :age => 15)
 
         link = %Q|<a href="?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F#{user.id}">Alice</a>|
@@ -174,7 +172,6 @@ describe OpensocialWap::Helpers::UrlHelper do
       end
 
       it "リンクのURLが、Opensocial WAP :plain形式のURLになること(Hashを引数にした場合)" do
-        set_controller(OpensocialWapQueryController.new)        
         user = User.create(:name => 'Alice', :age => 15)
 
         link = %Q|<a href="?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F#{user.id}">Alice</a>|
@@ -182,7 +179,6 @@ describe OpensocialWap::Helpers::UrlHelper do
       end
 
       it "外部URLの場合、リンクのURLが、Opensocial WAP の影響を受けないこと" do
-        set_controller(OpensocialWapQueryController.new)        
         user = User.create(:name => 'Alice', :age => 15)
 
         link = %Q|<a href="http://alice.example.com">Alice</a>|
@@ -190,7 +186,6 @@ describe OpensocialWap::Helpers::UrlHelper do
       end
 
       it "HTMLオプションが正しく追加されること" do
-        set_controller(OpensocialWapQueryController.new)
         user = User.create(:name => 'Alice', :age => 15)
 
         link = %Q|<a href="?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F#{user.id}" id="user">Alice</a>|
@@ -198,7 +193,6 @@ describe OpensocialWap::Helpers::UrlHelper do
       end
 
       it "link_to メソッドのオプションで、URL形式を変更できること" do
-        set_controller(OpensocialWapQueryController.new)        
         user = User.create(:name => 'Alice', :age => 15)
 
         link_plain = %Q|<a href="http://host.example.com/users/#{user.id}">Alice</a>|
@@ -210,8 +204,12 @@ describe OpensocialWap::Helpers::UrlHelper do
     end
     
     describe OpensocialWapFullController do
-      it "リンクのURLが、Opensocial WAP :plain形式のURLになること(パスを引数にした場合)" do
+
+      before do
         set_controller(OpensocialWapFullController.new)
+      end
+
+      it "リンクのURLが、Opensocial WAP :plain形式のURLになること(パスを引数にした場合)" do
         user = User.create(:name => 'Alice', :age => 15)
 
         link = %Q|<a href="http://container.example.com/12345/?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F#{user.id}">Alice</a>|
@@ -219,7 +217,6 @@ describe OpensocialWap::Helpers::UrlHelper do
       end
     
       it "リンクのURLが、Opensocial WAP :plain形式のURLになること(モデルを引数にした場合)" do
-        set_controller(OpensocialWapFullController.new)
         user = User.create(:name => 'Alice', :age => 15)
 
         link = %Q|<a href="http://container.example.com/12345/?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F#{user.id}">Alice</a>|
@@ -227,7 +224,6 @@ describe OpensocialWap::Helpers::UrlHelper do
       end
 
       it "リンクのURLが、Opensocial WAP :plain形式のURLになること(Hashを引数にした場合)" do
-        set_controller(OpensocialWapFullController.new)        
         user = User.create(:name => 'Alice', :age => 15)
 
         link = %Q|<a href="http://container.example.com/12345/?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F#{user.id}">Alice</a>|
@@ -235,7 +231,6 @@ describe OpensocialWap::Helpers::UrlHelper do
       end
 
       it "外部URLの場合、リンクのURLが、Opensocial WAP の影響を受けないこと" do
-        set_controller(OpensocialWapFullController.new)        
         user = User.create(:name => 'Alice', :age => 15)
 
         link = %Q|<a href="http://alice.example.com">Alice</a>|
@@ -243,7 +238,6 @@ describe OpensocialWap::Helpers::UrlHelper do
       end
 
       it "HTMLオプションが正しく追加されること" do
-        set_controller(OpensocialWapFullController.new)
         user = User.create(:name => 'Alice', :age => 15)
 
         link = %Q|<a href="http://container.example.com/12345/?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F#{user.id}" id="user">Alice</a>|
@@ -251,7 +245,6 @@ describe OpensocialWap::Helpers::UrlHelper do
       end
 
       it "link_to メソッドのオプションで、URL形式を変更できること" do
-        set_controller(OpensocialWapFullController.new)        
         user = User.create(:name => 'Alice', :age => 15)
 
         link_plain = %Q|<a href="http://host.example.com/users/#{user.id}">Alice</a>|
@@ -265,9 +258,12 @@ describe OpensocialWap::Helpers::UrlHelper do
 
   describe "#button_to" do
 
+    before do
+      set_controller(NonOpensocialWapController.new)
+    end
+
     context NonOpensocialWapController do
       it "ボタンのURLが、通常の形式になること(パスを引数にした場合)" do
-        set_controller(NonOpensocialWapController.new)
         user = User.create(:name => 'Alice', :age => 15)
 
         html = %Q|action="/users/#{user.id}"|
@@ -275,7 +271,6 @@ describe OpensocialWap::Helpers::UrlHelper do
       end
     
       it "ボタンのURLが、通常の形式になること(モデルを引数にした場合)" do
-        set_controller(NonOpensocialWapController.new)
         user = User.create(:name => 'Alice', :age => 15)
 
         html = %Q|action="/users/#{user.id}"|
@@ -283,7 +278,6 @@ describe OpensocialWap::Helpers::UrlHelper do
       end
 
       it "ボタンのURLが、通常の形式になること(Hashを引数にした場合)" do
-        set_controller(NonOpensocialWapController.new)
         user = User.create(:name => 'Alice', :age => 15)
 
         html = %Q|action="/users/#{user.id}"|
@@ -291,7 +285,6 @@ describe OpensocialWap::Helpers::UrlHelper do
       end
 
       it "外部URLの場合、そのままのURLが出力されること" do
-        set_controller(NonOpensocialWapController.new)
         user = User.create(:name => 'Alice', :age => 15)
 
         html = %Q|action="http://alice.example.com"|
@@ -299,7 +292,6 @@ describe OpensocialWap::Helpers::UrlHelper do
       end
 
       it "xxxxx button_to メソッドのオプションで、URL形式を変更できること" do
-        set_controller(NonOpensocialWapController.new)        
         user = User.create(:name => 'Alice', :age => 15)
 
         html_plain = %Q|action="http://host.example.com/users/#{user.id}"|
@@ -314,8 +306,12 @@ describe OpensocialWap::Helpers::UrlHelper do
     end
 
     context OpensocialWapPlainController do
-      it "ボタンのURLが、Opensocial WAP :plain形式のURLになること(パスを引数にした場合)" do
+
+      before do
         set_controller(OpensocialWapPlainController.new)
+      end
+
+      it "ボタンのURLが、Opensocial WAP :plain形式のURLになること(パスを引数にした場合)" do
         user = User.create(:name => 'Alice', :age => 15)
 
         html = %Q|action="http://host.example.com/users/#{user.id}"|
@@ -323,7 +319,6 @@ describe OpensocialWap::Helpers::UrlHelper do
       end
     
       it "ボタンのURLが、Opensocial WAP :plain形式のURLになること(モデルを引数にした場合)" do
-        set_controller(OpensocialWapPlainController.new)
         user = User.create(:name => 'Alice', :age => 15)
 
         html = %Q|action="http://host.example.com/users/#{user.id}"|
@@ -331,7 +326,6 @@ describe OpensocialWap::Helpers::UrlHelper do
       end
 
       it "ボタンのURLが、Opensocial WAP :plain形式のURLになること(Hashを引数にした場合)" do
-        set_controller(OpensocialWapPlainController.new)        
         user = User.create(:name => 'Alice', :age => 15)
 
         html = %Q|action="http://host.example.com/users/#{user.id}"|
@@ -339,7 +333,6 @@ describe OpensocialWap::Helpers::UrlHelper do
       end
 
       it "外部URLの場合、ボタンのURLが、Opensocial WAP の影響を受けないこと" do
-        set_controller(OpensocialWapPlainController.new)
         user = User.create(:name => 'Alice', :age => 15)
 
         html = %Q|action="http://alice.example.com"|
@@ -347,7 +340,6 @@ describe OpensocialWap::Helpers::UrlHelper do
       end
 
       it "button_to メソッドのオプションで、URL形式を変更できること" do
-        set_controller(OpensocialWapPlainController.new)        
         user = User.create(:name => 'Alice', :age => 15)
 
         html_query = %Q|action="?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F#{user.id}"|
@@ -359,9 +351,12 @@ describe OpensocialWap::Helpers::UrlHelper do
     end
 
     context OpensocialWapQueryController do
- 
-      it "ボタンのURLが、Opensocial WAP :plain形式のURLになること(パスを引数にした場合)" do
+
+      before do
         set_controller(OpensocialWapQueryController.new)
+      end
+
+      it "ボタンのURLが、Opensocial WAP :plain形式のURLになること(パスを引数にした場合)" do
         user = User.create(:name => 'Alice', :age => 15)
 
         html = %Q|action="?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F#{user.id}"|
@@ -369,7 +364,6 @@ describe OpensocialWap::Helpers::UrlHelper do
       end
     
       it "ボタンのURLが、Opensocial WAP :plain形式のURLになること(モデルを引数にした場合)" do
-        set_controller(OpensocialWapQueryController.new)
         user = User.create(:name => 'Alice', :age => 15)
 
         html = %Q|action="?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F#{user.id}"|
@@ -377,7 +371,6 @@ describe OpensocialWap::Helpers::UrlHelper do
       end
 
       it "ボタンのURLが、Opensocial WAP :plain形式のURLになること(Hashを引数にした場合)" do
-        set_controller(OpensocialWapQueryController.new)        
         user = User.create(:name => 'Alice', :age => 15)
 
         html = %Q|action="?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F#{user.id}"|
@@ -385,7 +378,6 @@ describe OpensocialWap::Helpers::UrlHelper do
       end
 
       it "外部URLの場合、ボタンのURLが、Opensocial WAP の影響を受けないこと" do
-        set_controller(OpensocialWapQueryController.new)        
         user = User.create(:name => 'Alice', :age => 15)
 
         html = %Q|action="http://alice.example.com"|
@@ -393,7 +385,6 @@ describe OpensocialWap::Helpers::UrlHelper do
       end
 
       it "button_to メソッドのオプションで、URL形式を変更できること" do
-        set_controller(OpensocialWapQueryController.new)        
         user = User.create(:name => 'Alice', :age => 15)
 
         html_plain = %Q|action="http://host.example.com/users/#{user.id}"|
@@ -405,8 +396,12 @@ describe OpensocialWap::Helpers::UrlHelper do
     end
 
     context OpensocialWapFullController do
-      it "ボタンのURLが、Opensocial WAP :plain形式のURLになること(パスを引数にした場合)" do
+
+      before do
         set_controller(OpensocialWapFullController.new)
+      end
+
+      it "ボタンのURLが、Opensocial WAP :plain形式のURLになること(パスを引数にした場合)" do
         user = User.create(:name => 'Alice', :age => 15)
 
         html = %Q|action="http://container.example.com/12345/?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F#{user.id}"|
@@ -414,7 +409,6 @@ describe OpensocialWap::Helpers::UrlHelper do
       end
     
       it "ボタンのURLが、Opensocial WAP :plain形式のURLになること(モデルを引数にした場合)" do
-        set_controller(OpensocialWapFullController.new)
         user = User.create(:name => 'Alice', :age => 15)
 
         html = %Q|action="http://container.example.com/12345/?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F#{user.id}"|
@@ -422,7 +416,6 @@ describe OpensocialWap::Helpers::UrlHelper do
       end
 
       it "ボタンのURLが、Opensocial WAP :plain形式のURLになること(Hashを引数にした場合)" do
-        set_controller(OpensocialWapFullController.new)        
         user = User.create(:name => 'Alice', :age => 15)
 
         html = %Q|action="http://container.example.com/12345/?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F#{user.id}"|
@@ -430,7 +423,6 @@ describe OpensocialWap::Helpers::UrlHelper do
       end
 
       it "外部URLの場合、ボタンのURLが、Opensocial WAP の影響を受けないこと" do
-        set_controller(OpensocialWapFullController.new)        
         user = User.create(:name => 'Alice', :age => 15)
 
         html = %Q|action="http://alice.example.com"|
@@ -438,7 +430,6 @@ describe OpensocialWap::Helpers::UrlHelper do
       end
 
       it "button_to メソッドのオプションで、URL形式を変更できること" do
-        set_controller(OpensocialWapFullController.new)        
         user = User.create(:name => 'Alice', :age => 15)
 
         html_plain = %Q|action="http://host.example.com/users/#{user.id}"|
@@ -476,15 +467,17 @@ describe OpensocialWap::Helpers::UrlHelper do
 
   describe "#link_to_unless_current" do
     context OpensocialWapQueryController do
-      it "link_to_unless_current についても、OpenSocial WAP形式のURLがセットされること" do
+      
+      before do
         set_controller(OpensocialWapQueryController.new)
-        
+      end
+
+      it "link_to_unless_current についても、OpenSocial WAP形式のURLがセットされること" do        
         link =  %Q|<a href="?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers">Index</a>|
         helper.link_to_unless_current("Index", { :controller => "users", :action => "index" }).should == link
       end
 
       it "リンク先が現在のパスと同じであれば、link_to_unless_current の結果がリンクにならないこと" do
-        set_controller(OpensocialWapQueryController.new)
         # 比較対象のパスは、ローカル形式のパス.
         controller.request.path = '/users'
 
@@ -492,5 +485,4 @@ describe OpensocialWap::Helpers::UrlHelper do
       end
     end
   end
-
 end
