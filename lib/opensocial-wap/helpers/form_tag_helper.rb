@@ -24,7 +24,6 @@ module OpensocialWap
       # form_tag のHTMLオプションを計算する.
       def html_options_for_form(url_for_options, options, *parameters_for_url)
         options.stringify_keys.tap do |html_options|
-debugger
           html_options["enctype"] = "multipart/form-data" if html_options.delete("multipart")
           # ows_options を、options から取り出す.
           osw_options = extract_osw_options(html_options)

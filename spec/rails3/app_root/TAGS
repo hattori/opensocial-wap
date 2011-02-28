@@ -1,0 +1,39 @@
+
+app/controllers/application_controller.rb,79
+class ApplicationController < ActionController::BaseApplicationController1,0
+
+app/controllers/non_opensocial_wap_controller.rb,113
+class NonOpensocialWapController < ApplicationControllerNonOpensocialWapController4,74
+  def indexindex6,134
+
+app/controllers/opensocial_wap_full_controller.rb,115
+class OpensocialWapFullController < ApplicationControllerOpensocialWapFullController5,97
+  def indexindex8,196
+
+app/controllers/opensocial_wap_plain_controller.rb,117
+class OpensocialWapPlainController < ApplicationControllerOpensocialWapPlainController5,98
+  def indexindex8,199
+
+app/controllers/opensocial_wap_query_controller.rb,117
+class OpensocialWapQueryController < ApplicationControllerOpensocialWapQueryController5,98
+  def indexindex8,199
+
+app/controllers/users_controller.rb,266
+class UsersController < ApplicationControllerUsersController2,24
+  def urlurl8,161
+  def indexindex23,512
+  def showshow34,706
+  def newnew45,914
+  def editedit55,1086
+  def createcreate61,1175
+  def updateupdate77,1654
+  def destroydestroy93,2114
+
+app/helpers/application_helper.rb,47
+module ApplicationHelperApplicationHelper1,0
+
+app/helpers/users_helper.rb,35
+module UsersHelperUsersHelper1,0
+
+app/models/user.rb,41
+class User < ActiveRecord::BaseUser1,0
