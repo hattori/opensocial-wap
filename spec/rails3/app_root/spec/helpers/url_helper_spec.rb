@@ -10,13 +10,13 @@ def set_controller(c)
 end
 
 describe OpensocialWap::Helpers::UrlHelper do
+  fixtures :users
 
   describe "#url_for" do
     context "osw_options を指定していない場合" do
       it "従来の形式の URL を返すこと" do
         controller = NonOpensocialWapController.new
-        user = User.create(:name => 'Alice', :age => 15)
-        helper.url_for(user).should == "/users/#{user.id}"
+        helper.url_for(users(:alice)).should == "/users/1"
       end
     end
     
@@ -51,51 +51,39 @@ describe OpensocialWap::Helpers::UrlHelper do
       end
 
       it "リンクのURLが、通常の形式になること(パスを引数にした場合)" do
-        user = User.create(:name => 'Alice', :age => 15)
-
-        link = %Q|<a href="/users/#{user.id}">Alice</a>|
-        helper.link_to("Alice", user_path(user)).should == link
+        link = %Q|<a href="/users/1">Alice</a>|
+        helper.link_to("Alice", user_path(users(:alice))).should == link
       end
     
       it "リンクのURLが、通常の形式になること(モデルを引数にした場合)" do
-        user = User.create(:name => 'Alice', :age => 15)
-
-        link = %Q|<a href="/users/#{user.id}">Alice</a>|
-        helper.link_to("Alice", user).should == link
+        link = %Q|<a href="/users/1">Alice</a>|
+        helper.link_to("Alice", users(:alice)).should == link
       end
 
       it "リンクのURLが、通常の形式になること(Hashを引数にした場合)" do
-        user = User.create(:name => 'Alice', :age => 15)
-
-        link = %Q|<a href="/users/#{user.id}">Alice</a>|
-        helper.link_to("Alice", :controller=>"users", :action=>"show", :id=>user).should == link
+        link = %Q|<a href="/users/1">Alice</a>|
+        helper.link_to("Alice", :controller=>"users", :action=>"show", :id=>users(:alice)).should == link
       end
 
       it "外部URLの場合、そのままのURLが出力されること" do
-        user = User.create(:name => 'Alice', :age => 15)
-
         link = %Q|<a href="http://alice.example.com">Alice</a>|
         helper.link_to("Alice", "http://alice.example.com").should == link
       end
 
       it "HTMLオプションが正しく追加されること" do
-        user = User.create(:name => 'Alice', :age => 15)
-
-        link = %Q|<a href="/users/#{user.id}" id="user">Alice</a>|
-        helper.link_to("Alice", user, :id=>"user").should == link
+        link = %Q|<a href="/users/1" class="user">Alice</a>|
+        helper.link_to("Alice", users(:alice), :class=>"user").should == link
       end
 
       it "link_to メソッドのオプションで、URL形式を変更できること" do
-        user = User.create(:name => 'Alice', :age => 15)
+        link_plain = %Q|<a href="http://host.example.com/users/1">Alice</a>|
+        helper.link_to("Alice", users(:alice), :opensocial_wap => {:url_format => :plain}).should == link_plain
 
-        link_plain = %Q|<a href="http://host.example.com/users/#{user.id}">Alice</a>|
-        helper.link_to("Alice", user, :opensocial_wap => {:url_format => :plain}).should == link_plain
+        link_query = %Q|<a href="?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F1">Alice</a>|
+        helper.link_to("Alice", users(:alice), :opensocial_wap =>  {:url_format => :query}).should == link_query
 
-        link_query = %Q|<a href="?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F#{user.id}">Alice</a>|
-        helper.link_to("Alice", user, :opensocial_wap =>  {:url_format => :query}).should == link_query
-
-        link_full = %Q|<a href="http://container.example.com/12345/?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F#{user.id}">Alice</a>|
-        helper.link_to("Alice", user, :opensocial_wap =>  {:url_format => :full}).should == link_full
+        link_full = %Q|<a href="http://container.example.com/12345/?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F1">Alice</a>|
+        helper.link_to("Alice", users(:alice), :opensocial_wap =>  {:url_format => :full}).should == link_full
       end
     end
 
@@ -106,48 +94,36 @@ describe OpensocialWap::Helpers::UrlHelper do
       end
 
       it "リンクのURLが、Opensocial WAP :plain形式のURLになること(パスを引数にした場合)" do
-        user = User.create(:name => 'Alice', :age => 15)
-
-        link = %Q|<a href="http://host.example.com/users/#{user.id}">Alice</a>|
-        helper.link_to("Alice", user_path(user)).should == link
+        link = %Q|<a href="http://host.example.com/users/1">Alice</a>|
+        helper.link_to("Alice", user_path(users(:alice))).should == link
       end
     
       it "リンクのURLが、Opensocial WAP :plain形式のURLになること(モデルを引数にした場合)" do
-        user = User.create(:name => 'Alice', :age => 15)
-
-        link = %Q|<a href="http://host.example.com/users/#{user.id}">Alice</a>|
-        helper.link_to("Alice", user).should == link
+        link = %Q|<a href="http://host.example.com/users/1">Alice</a>|
+        helper.link_to("Alice", users(:alice)).should == link
       end
 
       it "リンクのURLが、Opensocial WAP :plain形式のURLになること(Hashを引数にした場合)" do
-        user = User.create(:name => 'Alice', :age => 15)
-
-        link = %Q|<a href="http://host.example.com/users/#{user.id}">Alice</a>|
-        helper.link_to("Alice", :controller=>"users", :action=>"show", :id=>user).should == link
+        link = %Q|<a href="http://host.example.com/users/1">Alice</a>|
+        helper.link_to("Alice", :controller=>"users", :action=>"show", :id=>users(:alice)).should == link
       end
 
       it "外部URLの場合、リンクのURLが、Opensocial WAP の影響を受けないこと" do
-        user = User.create(:name => 'Alice', :age => 15)
-
         link = %Q|<a href="http://alice.example.com">Alice</a>|
         helper.link_to("Alice", "http://alice.example.com").should == link
       end
 
       it "HTMLオプションが正しく追加されること" do
-        user = User.create(:name => 'Alice', :age => 15)
-
-        link = %Q|<a href="http://host.example.com/users/#{user.id}" id="user">Alice</a>|
-        helper.link_to("Alice", user, :id=>"user").should == link
+        link = %Q|<a href="http://host.example.com/users/1" class="user">Alice</a>|
+        helper.link_to("Alice", users(:alice), :class=>"user").should == link
       end
 
       it "link_to メソッドのオプションで、URL形式を変更できること" do
-        user = User.create(:name => 'Alice', :age => 15)
+        link_query = %Q|<a href="?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F1">Alice</a>|
+        helper.link_to("Alice", users(:alice), :opensocial_wap => {:url_format => :query}).should == link_query
 
-        link_query = %Q|<a href="?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F#{user.id}">Alice</a>|
-        helper.link_to("Alice", user, :opensocial_wap => {:url_format => :query}).should == link_query
-
-        link_full = %Q|<a href="http://container.example.com/12345/?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F#{user.id}">Alice</a>|
-        helper.link_to("Alice", user, :opensocial_wap => {:url_format => :full}).should == link_full
+        link_full = %Q|<a href="http://container.example.com/12345/?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F1">Alice</a>|
+        helper.link_to("Alice", users(:alice), :opensocial_wap => {:url_format => :full}).should == link_full
       end
     end
     
@@ -158,48 +134,36 @@ describe OpensocialWap::Helpers::UrlHelper do
       end
       
       it "リンクのURLが、Opensocial WAP :plain形式のURLになること(パスを引数にした場合)" do
-        user = User.create(:name => 'Alice', :age => 15)
-
-        link = %Q|<a href="?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F#{user.id}">Alice</a>|
-        helper.link_to("Alice", user_path(user)).should == link
+        link = %Q|<a href="?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F1">Alice</a>|
+        helper.link_to("Alice", user_path(users(:alice))).should == link
       end
     
       it "リンクのURLが、Opensocial WAP :plain形式のURLになること(モデルを引数にした場合)" do
-        user = User.create(:name => 'Alice', :age => 15)
-
-        link = %Q|<a href="?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F#{user.id}">Alice</a>|
-        helper.link_to("Alice", user).should == link
+        link = %Q|<a href="?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F1">Alice</a>|
+        helper.link_to("Alice", users(:alice)).should == link
       end
 
       it "リンクのURLが、Opensocial WAP :plain形式のURLになること(Hashを引数にした場合)" do
-        user = User.create(:name => 'Alice', :age => 15)
-
-        link = %Q|<a href="?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F#{user.id}">Alice</a>|
-        helper.link_to("Alice", :controller=>"users", :action=>"show", :id=>user).should == link
+        link = %Q|<a href="?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F1">Alice</a>|
+        helper.link_to("Alice", :controller=>"users", :action=>"show", :id=>users(:alice)).should == link
       end
 
       it "外部URLの場合、リンクのURLが、Opensocial WAP の影響を受けないこと" do
-        user = User.create(:name => 'Alice', :age => 15)
-
         link = %Q|<a href="http://alice.example.com">Alice</a>|
         helper.link_to("Alice", "http://alice.example.com").should == link
       end
 
       it "HTMLオプションが正しく追加されること" do
-        user = User.create(:name => 'Alice', :age => 15)
-
-        link = %Q|<a href="?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F#{user.id}" id="user">Alice</a>|
-        helper.link_to("Alice", user, :id=>"user").should == link
+        link = %Q|<a href="?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F1" class="user">Alice</a>|
+        helper.link_to("Alice", users(:alice), :class=>"user").should == link
       end
 
       it "link_to メソッドのオプションで、URL形式を変更できること" do
-        user = User.create(:name => 'Alice', :age => 15)
+        link_plain = %Q|<a href="http://host.example.com/users/1">Alice</a>|
+        helper.link_to("Alice", users(:alice), :opensocial_wap => {:url_format => :plain}).should == link_plain
 
-        link_plain = %Q|<a href="http://host.example.com/users/#{user.id}">Alice</a>|
-        helper.link_to("Alice", user, :opensocial_wap => {:url_format => :plain}).should == link_plain
-
-        link_full = %Q|<a href="http://container.example.com/12345/?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F#{user.id}">Alice</a>|
-        helper.link_to("Alice", user, :opensocial_wap => {:url_format => :full}).should == link_full
+        link_full = %Q|<a href="http://container.example.com/12345/?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F1">Alice</a>|
+        helper.link_to("Alice", users(:alice), :opensocial_wap => {:url_format => :full}).should == link_full
       end
     end
     
@@ -210,48 +174,36 @@ describe OpensocialWap::Helpers::UrlHelper do
       end
 
       it "リンクのURLが、Opensocial WAP :plain形式のURLになること(パスを引数にした場合)" do
-        user = User.create(:name => 'Alice', :age => 15)
-
-        link = %Q|<a href="http://container.example.com/12345/?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F#{user.id}">Alice</a>|
-        helper.link_to("Alice", user_path(user)).should == link
+        link = %Q|<a href="http://container.example.com/12345/?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F1">Alice</a>|
+        helper.link_to("Alice", user_path(users(:alice))).should == link
       end
     
       it "リンクのURLが、Opensocial WAP :plain形式のURLになること(モデルを引数にした場合)" do
-        user = User.create(:name => 'Alice', :age => 15)
-
-        link = %Q|<a href="http://container.example.com/12345/?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F#{user.id}">Alice</a>|
-        helper.link_to("Alice", user).should == link
+        link = %Q|<a href="http://container.example.com/12345/?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F1">Alice</a>|
+        helper.link_to("Alice", users(:alice)).should == link
       end
 
       it "リンクのURLが、Opensocial WAP :plain形式のURLになること(Hashを引数にした場合)" do
-        user = User.create(:name => 'Alice', :age => 15)
-
-        link = %Q|<a href="http://container.example.com/12345/?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F#{user.id}">Alice</a>|
-        helper.link_to("Alice", :controller=>"users", :action=>"show", :id=>user).should == link
+        link = %Q|<a href="http://container.example.com/12345/?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F1">Alice</a>|
+        helper.link_to("Alice", :controller=>"users", :action=>"show", :id=>users(:alice)).should == link
       end
 
       it "外部URLの場合、リンクのURLが、Opensocial WAP の影響を受けないこと" do
-        user = User.create(:name => 'Alice', :age => 15)
-
         link = %Q|<a href="http://alice.example.com">Alice</a>|
         helper.link_to("Alice", "http://alice.example.com").should == link
       end
 
       it "HTMLオプションが正しく追加されること" do
-        user = User.create(:name => 'Alice', :age => 15)
-
-        link = %Q|<a href="http://container.example.com/12345/?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F#{user.id}" id="user">Alice</a>|
-        helper.link_to("Alice", user, :id=>"user").should == link
+        link = %Q|<a href="http://container.example.com/12345/?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F1" class="user">Alice</a>|
+        helper.link_to("Alice", users(:alice), :class=>"user").should == link
       end
 
       it "link_to メソッドのオプションで、URL形式を変更できること" do
-        user = User.create(:name => 'Alice', :age => 15)
+        link_plain = %Q|<a href="http://host.example.com/users/1">Alice</a>|
+        helper.link_to("Alice", users(:alice), :opensocial_wap => {:url_format => :plain}).should == link_plain
 
-        link_plain = %Q|<a href="http://host.example.com/users/#{user.id}">Alice</a>|
-        helper.link_to("Alice", user, :opensocial_wap => {:url_format => :plain}).should == link_plain
-
-        link_query = %Q|<a href="?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F#{user.id}">Alice</a>|
-        helper.link_to("Alice", user, :opensocial_wap => {:url_format => :query}).should == link_query
+        link_query = %Q|<a href="?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F1">Alice</a>|
+        helper.link_to("Alice", users(:alice), :opensocial_wap => {:url_format => :query}).should == link_query
       end
     end
   end
@@ -264,44 +216,34 @@ describe OpensocialWap::Helpers::UrlHelper do
 
     context NonOpensocialWapController do
       it "ボタンのURLが、通常の形式になること(パスを引数にした場合)" do
-        user = User.create(:name => 'Alice', :age => 15)
-
-        html = %Q|action="/users/#{user.id}"|
-        helper.button_to("Alice", user_path(user)).should include html
+        html = %Q|action="/users/1"|
+        helper.button_to("Alice", user_path(users(:alice))).should include html
       end
     
       it "ボタンのURLが、通常の形式になること(モデルを引数にした場合)" do
-        user = User.create(:name => 'Alice', :age => 15)
-
-        html = %Q|action="/users/#{user.id}"|
-        helper.button_to("Alice", user).should include html
+        html = %Q|action="/users/1"|
+        helper.button_to("Alice", users(:alice)).should include html
       end
 
       it "ボタンのURLが、通常の形式になること(Hashを引数にした場合)" do
-        user = User.create(:name => 'Alice', :age => 15)
-
-        html = %Q|action="/users/#{user.id}"|
-        helper.button_to("Alice", :controller=>"users", :action=>"show", :id=>user).should include html
+        html = %Q|action="/users/1"|
+        helper.button_to("Alice", :controller=>"users", :action=>"show", :id=>users(:alice)).should include html
       end
 
       it "外部URLの場合、そのままのURLが出力されること" do
-        user = User.create(:name => 'Alice', :age => 15)
-
         html = %Q|action="http://alice.example.com"|
         helper.button_to("Alice", "http://alice.example.com").should include html
       end
 
       it "xxxxx button_to メソッドのオプションで、URL形式を変更できること" do
-        user = User.create(:name => 'Alice', :age => 15)
+        html_plain = %Q|action="http://host.example.com/users/1"|
+        helper.button_to("Alice", users(:alice), :opensocial_wap => {:url_format => :plain}).should include html_plain
 
-        html_plain = %Q|action="http://host.example.com/users/#{user.id}"|
-        helper.button_to("Alice", user, :opensocial_wap => {:url_format => :plain}).should include html_plain
+        html_query = %Q|action="?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F1"|
+        helper.button_to("Alice", users(:alice), :opensocial_wap =>  {:url_format => :query}).should include html_query
 
-        html_query = %Q|action="?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F#{user.id}"|
-        helper.button_to("Alice", user, :opensocial_wap =>  {:url_format => :query}).should include html_query
-
-        html_full = %Q|action="http://container.example.com/12345/?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F#{user.id}"|
-        helper.button_to("Alice", user, :opensocial_wap =>  {:url_format => :full}).should include html_full
+        html_full = %Q|action="http://container.example.com/12345/?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F1"|
+        helper.button_to("Alice", users(:alice), :opensocial_wap =>  {:url_format => :full}).should include html_full
       end
     end
 
@@ -312,41 +254,31 @@ describe OpensocialWap::Helpers::UrlHelper do
       end
 
       it "ボタンのURLが、Opensocial WAP :plain形式のURLになること(パスを引数にした場合)" do
-        user = User.create(:name => 'Alice', :age => 15)
-
-        html = %Q|action="http://host.example.com/users/#{user.id}"|
-        helper.button_to("Alice", user_path(user)).should include html
+        html = %Q|action="http://host.example.com/users/1"|
+        helper.button_to("Alice", user_path(users(:alice))).should include html
       end
     
       it "ボタンのURLが、Opensocial WAP :plain形式のURLになること(モデルを引数にした場合)" do
-        user = User.create(:name => 'Alice', :age => 15)
-
-        html = %Q|action="http://host.example.com/users/#{user.id}"|
-        helper.button_to("Alice", user).should include html
+        html = %Q|action="http://host.example.com/users/1"|
+        helper.button_to("Alice", users(:alice)).should include html
       end
 
       it "ボタンのURLが、Opensocial WAP :plain形式のURLになること(Hashを引数にした場合)" do
-        user = User.create(:name => 'Alice', :age => 15)
-
-        html = %Q|action="http://host.example.com/users/#{user.id}"|
-        helper.button_to("Alice", :controller=>"users", :action=>"show", :id=>user).should include html
+        html = %Q|action="http://host.example.com/users/1"|
+        helper.button_to("Alice", :controller=>"users", :action=>"show", :id=>users(:alice)).should include html
       end
 
       it "外部URLの場合、ボタンのURLが、Opensocial WAP の影響を受けないこと" do
-        user = User.create(:name => 'Alice', :age => 15)
-
         html = %Q|action="http://alice.example.com"|
         helper.button_to("Alice", "http://alice.example.com").should include html
       end
 
       it "button_to メソッドのオプションで、URL形式を変更できること" do
-        user = User.create(:name => 'Alice', :age => 15)
+        html_query = %Q|action="?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F1"|
+        helper.button_to("Alice", users(:alice), :opensocial_wap => {:url_format => :query}).should include html_query
 
-        html_query = %Q|action="?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F#{user.id}"|
-        helper.button_to("Alice", user, :opensocial_wap => {:url_format => :query}).should include html_query
-
-        html_full = %Q|action="http://container.example.com/12345/?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F#{user.id}"|
-        helper.button_to("Alice", user, :opensocial_wap => {:url_format => :full}).should include html_full
+        html_full = %Q|action="http://container.example.com/12345/?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F1"|
+        helper.button_to("Alice", users(:alice), :opensocial_wap => {:url_format => :full}).should include html_full
       end
     end
 
@@ -357,41 +289,31 @@ describe OpensocialWap::Helpers::UrlHelper do
       end
 
       it "ボタンのURLが、Opensocial WAP :plain形式のURLになること(パスを引数にした場合)" do
-        user = User.create(:name => 'Alice', :age => 15)
-
-        html = %Q|action="?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F#{user.id}"|
-        helper.button_to("Alice", user_path(user)).should include html
+        html = %Q|action="?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F1"|
+        helper.button_to("Alice", user_path(users(:alice))).should include html
       end
     
       it "ボタンのURLが、Opensocial WAP :plain形式のURLになること(モデルを引数にした場合)" do
-        user = User.create(:name => 'Alice', :age => 15)
-
-        html = %Q|action="?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F#{user.id}"|
-        helper.button_to("Alice", user).should include html
+        html = %Q|action="?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F1"|
+        helper.button_to("Alice", users(:alice)).should include html
       end
 
       it "ボタンのURLが、Opensocial WAP :plain形式のURLになること(Hashを引数にした場合)" do
-        user = User.create(:name => 'Alice', :age => 15)
-
-        html = %Q|action="?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F#{user.id}"|
-        helper.button_to("Alice", :controller=>"users", :action=>"show", :id=>user).should include html
+        html = %Q|action="?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F1"|
+        helper.button_to("Alice", :controller=>"users", :action=>"show", :id=>users(:alice)).should include html
       end
 
       it "外部URLの場合、ボタンのURLが、Opensocial WAP の影響を受けないこと" do
-        user = User.create(:name => 'Alice', :age => 15)
-
         html = %Q|action="http://alice.example.com"|
         helper.button_to("Alice", "http://alice.example.com").should include html
       end
 
       it "button_to メソッドのオプションで、URL形式を変更できること" do
-        user = User.create(:name => 'Alice', :age => 15)
+        html_plain = %Q|action="http://host.example.com/users/1"|
+        helper.button_to("Alice", users(:alice), :opensocial_wap => {:url_format => :plain}).should include html_plain
 
-        html_plain = %Q|action="http://host.example.com/users/#{user.id}"|
-        helper.button_to("Alice", user, :opensocial_wap => {:url_format => :plain}).should include html_plain
-
-        html_full = %Q|action="http://container.example.com/12345/?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F#{user.id}"|
-        helper.button_to("Alice", user, :opensocial_wap => {:url_format => :full}).should include html_full
+        html_full = %Q|action="http://container.example.com/12345/?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F1"|
+        helper.button_to("Alice", users(:alice), :opensocial_wap => {:url_format => :full}).should include html_full
       end
     end
 
@@ -402,41 +324,31 @@ describe OpensocialWap::Helpers::UrlHelper do
       end
 
       it "ボタンのURLが、Opensocial WAP :plain形式のURLになること(パスを引数にした場合)" do
-        user = User.create(:name => 'Alice', :age => 15)
-
-        html = %Q|action="http://container.example.com/12345/?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F#{user.id}"|
-        helper.button_to("Alice", user_path(user)).should include html
+        html = %Q|action="http://container.example.com/12345/?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F1"|
+        helper.button_to("Alice", user_path(users(:alice))).should include html
       end
     
       it "ボタンのURLが、Opensocial WAP :plain形式のURLになること(モデルを引数にした場合)" do
-        user = User.create(:name => 'Alice', :age => 15)
-
-        html = %Q|action="http://container.example.com/12345/?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F#{user.id}"|
-        helper.button_to("Alice", user).should include html
+        html = %Q|action="http://container.example.com/12345/?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F1"|
+        helper.button_to("Alice", users(:alice)).should include html
       end
 
       it "ボタンのURLが、Opensocial WAP :plain形式のURLになること(Hashを引数にした場合)" do
-        user = User.create(:name => 'Alice', :age => 15)
-
-        html = %Q|action="http://container.example.com/12345/?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F#{user.id}"|
-        helper.button_to("Alice", :controller=>"users", :action=>"show", :id=>user).should include html
+        html = %Q|action="http://container.example.com/12345/?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F1"|
+        helper.button_to("Alice", :controller=>"users", :action=>"show", :id=>users(:alice)).should include html
       end
 
       it "外部URLの場合、ボタンのURLが、Opensocial WAP の影響を受けないこと" do
-        user = User.create(:name => 'Alice', :age => 15)
-
         html = %Q|action="http://alice.example.com"|
         helper.button_to("Alice", "http://alice.example.com").should include html
       end
 
       it "button_to メソッドのオプションで、URL形式を変更できること" do
-        user = User.create(:name => 'Alice', :age => 15)
+        html_plain = %Q|action="http://host.example.com/users/1"|
+        helper.button_to("Alice", users(:alice), :opensocial_wap => {:url_format => :plain}).should include html_plain
 
-        html_plain = %Q|action="http://host.example.com/users/#{user.id}"|
-        helper.button_to("Alice", user, :opensocial_wap => {:url_format => :plain}).should include html_plain
-
-        html_query = %Q|action="?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F#{user.id}"|
-        helper.button_to("Alice", user, :opensocial_wap => {:url_format => :query}).should include html_query
+        html_query = %Q|action="?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F1"|
+        helper.button_to("Alice", users(:alice), :opensocial_wap => {:url_format => :query}).should include html_query
       end
     end
   end

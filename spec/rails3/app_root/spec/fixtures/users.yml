@@ -1,0 +1,12 @@
+alice:
+  id: 1
+  name: Alice
+  age: 15
+bob:
+  id: 2
+  name: Bob
+  age: 24
+carol:
+  id: 3
+  name: Carol
+  age: 33
