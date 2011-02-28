@@ -31,14 +31,14 @@ describe OpensocialWap::Helpers::FormTagHelper do
       end
 
       it "options引数で指定した値で、URL形式を変更できること" do
-        html_plain = helper.form_tag('/users', :opensocial_wap => {:url_format => :plain})
-        html_plain.should include %Q|action="http://host.example.com/users"|
+        html = helper.form_tag('/users', :opensocial_wap => {:url_format => :plain})
+        html.should include %Q|action="http://host.example.com/users"|
 
-        html_query = helper.form_tag('/users', :opensocial_wap => {:url_format => :query})
-        html_query.should include %Q|action="?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers"|
+        html = helper.form_tag('/users', :opensocial_wap => {:url_format => :query})
+        html.should include %Q|action="?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers"|
 
-        html_full = helper.form_tag('/users', :opensocial_wap => {:url_format => :full})
-        html_full.should include %Q|action="http://container.example.com/12345/?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers"|
+        html = helper.form_tag('/users', :opensocial_wap => {:url_format => :full})
+        html.should include %Q|action="http://container.example.com/12345/?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers"|
       end
     end
 
@@ -59,11 +59,11 @@ describe OpensocialWap::Helpers::FormTagHelper do
       end
 
       it "options引数で指定した値で、URL形式を変更できること" do
-        html_query = helper.form_tag('/users', :opensocial_wap => {:url_format => :query})
-        html_query.should include %Q|action="?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers"|
+        html = helper.form_tag('/users', :opensocial_wap => {:url_format => :query})
+        html.should include %Q|action="?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers"|
 
-        html_full = helper.form_tag('/users', :opensocial_wap => {:url_format => :full})
-        html_full.should include %Q|action="http://container.example.com/12345/?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers"|
+        html = helper.form_tag('/users', :opensocial_wap => {:url_format => :full})
+        html.should include %Q|action="http://container.example.com/12345/?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers"|
       end
     end
 
@@ -84,11 +84,11 @@ describe OpensocialWap::Helpers::FormTagHelper do
       end
 
       it "options引数で指定した値で、URL形式を変更できること" do
-        html_plain = helper.form_tag('/users', :opensocial_wap => {:url_format => :plain})
-        html_plain.should include %Q|action="http://host.example.com/users"|
+        html = helper.form_tag('/users', :opensocial_wap => {:url_format => :plain})
+        html.should include %Q|action="http://host.example.com/users"|
 
-        html_full = helper.form_tag('/users', :opensocial_wap => {:url_format => :full})
-        html_full.should include %Q|action="http://container.example.com/12345/?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers"|
+        html = helper.form_tag('/users', :opensocial_wap => {:url_format => :full})
+        html.should include %Q|action="http://container.example.com/12345/?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers"|
       end
     end
 
@@ -109,11 +109,11 @@ describe OpensocialWap::Helpers::FormTagHelper do
       end
 
       it "options引数で指定した値で、URL形式を変更できること" do
-        html_plain = helper.form_tag('/users', :opensocial_wap => {:url_format => :plain})
-        html_plain.should include %Q|action="http://host.example.com/users"|
+        html = helper.form_tag('/users', :opensocial_wap => {:url_format => :plain})
+        html.should include %Q|action="http://host.example.com/users"|
 
-        html_query = helper.form_tag('/users', :opensocial_wap => {:url_format => :query})
-        html_query.should include %Q|action="?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers"|
+        html = helper.form_tag('/users', :opensocial_wap => {:url_format => :query})
+        html.should include %Q|action="?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers"|
       end
     end
   end
