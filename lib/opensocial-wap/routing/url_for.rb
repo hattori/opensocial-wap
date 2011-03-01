@@ -17,13 +17,13 @@ module OpensocialWap
         url = case options
               when String
                 # URL文字列をプロトコル部分とホスト部分に分割.
-                opt_parts = options.scan(%r{(^\w[\w+.-]*://)([\w\d\.:-]*)/?})
-                unless opt_parts.first
+                opt_parts = options.scan(%r{(^\w[\w+.-]*://)([\w\d\.:-]*)/?}).first
+                if opt_parts.nil? || opt_parts.first.nil?
                   # URL文字列がプロトコル部分を含まなければ、プロトコル、ホスト、ポートを付与する.
                   opts = options_for_full_url(nil, osw_options)
                   base_url(opts) + options
                 else
-                  if opt_parts.second != osw_options[:host]
+                  if opt_parts.second != url_options[:host]
                     # 外部URLであれば、そのまま返す.
                     return options
                   else
@@ -45,6 +45,8 @@ module OpensocialWap
           query_url_for(url, osw_options[:params])
         when :full
           full_url_for(url, osw_options, params[:opensocial_app_id])
+        else
+          url 
         end
       end
       
@@ -56,7 +58,11 @@ module OpensocialWap
         options.reverse_merge!(url_options).symbolize_keys
         options[:only_path] = false
         [:protocol, :host, :port].each do |key|
-          options[key] = osw_options[key] if osw_options.key?(key)
+          if osw_options.key?(key)
+            options[key] = osw_options[key]
+          elsif url_options.key?(key)
+            options[key] = url_options[key]
+          end
         end
         options
       end
