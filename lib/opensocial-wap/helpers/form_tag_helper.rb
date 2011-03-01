@@ -5,7 +5,7 @@
 module OpensocialWap
   module Helpers
     module FormTagHelper
-      include Base
+      include UrlHelper
 
       # Rails オリジナル実装の form_tag と同じ.
       # ただし、options ハッシュに、:osw_options ハッシュを渡すことができる.
