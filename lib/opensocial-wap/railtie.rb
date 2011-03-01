@@ -2,7 +2,6 @@
 
 require 'opensocial-wap/rack/opensocial_oauth'
 require 'opensocial-wap/routing/url_for'
-require 'opensocial-wap/routing/url_for'
 require 'opensocial-wap/helpers/base'
 require 'opensocial-wap/helpers/url_helper'
 require 'opensocial-wap/helpers/form_tag_helper'
