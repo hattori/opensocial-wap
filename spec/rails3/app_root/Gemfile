@@ -7,3 +7,8 @@ gem 'rspec-rails'
 gem 'rcov'
 
 gem 'opensocial-wap', :path => '../../../'
+
+group :development, :test do
+  gem 'ruby-debug19'
+end
+
