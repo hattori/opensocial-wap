@@ -16,17 +16,14 @@ module OpensocialWap
       # :redirect_url_format で指定した形式のURLを返す.
       def _compute_redirect_to_location(options)
         url = super
-        osw_options = self.opensocial_wap_options
-        redirect_url_format = osw_options[:redirect_url_format] || :full
-        
-        case redirect_url_format
-        when :plain
-          url
-        when :query
-          query_url_for(url, osw_options[:params])
-        else
-          full_url_for(url, osw_options, params[:opensocial_app_id])
+        if (self.class.respond_to? :opensocial_wap_enabled) && (self.class.opensocial_wap_enabled == true)
+          osw_options = self.class.opensocial_wap_options.dup
+          redirect_url_format = osw_options[:redirect_url_format]
+          if redirect_url_format
+            osw_options[:url_format] = redirect_url_format
+          end
         end
+        url_for(url, osw_options)
       end
     end
   end
