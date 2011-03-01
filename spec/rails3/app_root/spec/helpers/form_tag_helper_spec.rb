@@ -32,13 +32,13 @@ describe OpensocialWap::Helpers::FormTagHelper do
 
       it "options引数で指定した値で、URL形式を変更できること" do
         html = helper.form_tag('/users', :opensocial_wap => {:url_format => :plain})
-        html.should include %Q|action="http://host.example.com/users"|
+        html.should include %Q|action="http://test.host/users"|
 
         html = helper.form_tag('/users', :opensocial_wap => {:url_format => :query})
-        html.should include %Q|action="?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers"|
+        html.should include %Q|action="?guid=ON&amp;url=http%3A%2F%2Ftest.host%2Fusers"|
 
         html = helper.form_tag('/users', :opensocial_wap => {:url_format => :full})
-        html.should include %Q|action="http://container.example.com/12345/?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers"|
+        html.should include %Q|action="http://container.example.com/12345/?guid=ON&amp;url=http%3A%2F%2Ftest.host%2Fusers"|
       end
     end
 
@@ -50,7 +50,7 @@ describe OpensocialWap::Helpers::FormTagHelper do
 
       it "actionのURLが、Opensocial WAP :plain形式になること" do
         html = helper.form_tag('/users')
-        html.should include %Q|action="http://host.example.com/users"|
+        html.should include %Q|action="http://test.host/users"|
       end
 
       it "URLが外部URLの場合、そのままの形で出力されること" do
@@ -60,10 +60,10 @@ describe OpensocialWap::Helpers::FormTagHelper do
 
       it "options引数で指定した値で、URL形式を変更できること" do
         html = helper.form_tag('/users', :opensocial_wap => {:url_format => :query})
-        html.should include %Q|action="?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers"|
+        html.should include %Q|action="?guid=ON&amp;url=http%3A%2F%2Ftest.host%2Fusers"|
 
         html = helper.form_tag('/users', :opensocial_wap => {:url_format => :full})
-        html.should include %Q|action="http://container.example.com/12345/?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers"|
+        html.should include %Q|action="http://container.example.com/12345/?guid=ON&amp;url=http%3A%2F%2Ftest.host%2Fusers"|
       end
     end
 
@@ -75,7 +75,7 @@ describe OpensocialWap::Helpers::FormTagHelper do
 
       it "actionのURLが、Opensocial WAP :query形式になること" do
         html = helper.form_tag('/users')
-        html.should include %Q|action="?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers"|
+        html.should include %Q|action="?guid=ON&amp;url=http%3A%2F%2Ftest.host%2Fusers"|
       end
 
       it "URLが外部URLの場合、そのままの形で出力されること" do
@@ -85,10 +85,10 @@ describe OpensocialWap::Helpers::FormTagHelper do
 
       it "options引数で指定した値で、URL形式を変更できること" do
         html = helper.form_tag('/users', :opensocial_wap => {:url_format => :plain})
-        html.should include %Q|action="http://host.example.com/users"|
+        html.should include %Q|action="http://test.host/users"|
 
         html = helper.form_tag('/users', :opensocial_wap => {:url_format => :full})
-        html.should include %Q|action="http://container.example.com/12345/?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers"|
+        html.should include %Q|action="http://container.example.com/12345/?guid=ON&amp;url=http%3A%2F%2Ftest.host%2Fusers"|
       end
     end
 
@@ -100,7 +100,7 @@ describe OpensocialWap::Helpers::FormTagHelper do
 
       it "actionのURLが、Opensocial WAP :full形式になること" do
         html = helper.form_tag('/users')
-        html.should include %Q|action="http://container.example.com/12345/?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers"|
+        html.should include %Q|action="http://container.example.com/12345/?guid=ON&amp;url=http%3A%2F%2Ftest.host%2Fusers"|
       end
 
       it "URLが外部URLの場合、そのままの形で出力されること" do
@@ -110,10 +110,10 @@ describe OpensocialWap::Helpers::FormTagHelper do
 
       it "options引数で指定した値で、URL形式を変更できること" do
         html = helper.form_tag('/users', :opensocial_wap => {:url_format => :plain})
-        html.should include %Q|action="http://host.example.com/users"|
+        html.should include %Q|action="http://test.host/users"|
 
         html = helper.form_tag('/users', :opensocial_wap => {:url_format => :query})
-        html.should include %Q|action="?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers"|
+        html.should include %Q|action="?guid=ON&amp;url=http%3A%2F%2Ftest.host%2Fusers"|
       end
     end
   end
@@ -139,13 +139,13 @@ describe OpensocialWap::Helpers::FormTagHelper do
 
       it ":htmlオプションを使って、URL形式を変更できること" do
         html = helper.form_for(users(:alice), :html => {:opensocial_wap => {:url_format => :plain}}){}
-        html.should include %Q|action="http://host.example.com/users/1"|
+        html.should include %Q|action="http://test.host/users/1"|
 
         html = helper.form_for(users(:alice), :html => {:opensocial_wap => {:url_format => :query}}){}
-        html.should include %Q|action="?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F1"|
+        html.should include %Q|action="?guid=ON&amp;url=http%3A%2F%2Ftest.host%2Fusers%2F1"|
 
         html = helper.form_for(users(:alice), :html => {:opensocial_wap => {:url_format => :full}}){}
-        html.should include %Q|action="http://container.example.com/12345/?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F1"|
+        html.should include %Q|action="http://container.example.com/12345/?guid=ON&amp;url=http%3A%2F%2Ftest.host%2Fusers%2F1"|
       end
     end
 
@@ -157,21 +157,21 @@ describe OpensocialWap::Helpers::FormTagHelper do
 
       it "actionのURLがOpensocial WAP :plain形式になること" do
         html = helper.form_for(users(:alice)){}
-        html.should include %Q|action="http://host.example.com/users/1"|
+        html.should include %Q|action="http://test.host/users/1"|
       end
 
       it "オプションが正しく反映されること" do
         html = helper.form_for(users(:alice), :format => :json, :html => { :method => :get } ){}
-        html.should include %Q|action="http://host.example.com/users/1.json"|
+        html.should include %Q|action="http://test.host/users/1.json"|
         html.should include %Q|method="get"|
       end
 
       it ":htmlオプションを使って、URL形式を変更できること" do
         html = helper.form_for(users(:alice), :html => {:opensocial_wap => {:url_format => :query}}){}
-        html.should include %Q|action="?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F1"|
+        html.should include %Q|action="?guid=ON&amp;url=http%3A%2F%2Ftest.host%2Fusers%2F1"|
 
         html = helper.form_for(users(:alice), :html => {:opensocial_wap => {:url_format => :full}}){}
-        html.should include %Q|action="http://container.example.com/12345/?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F1"|
+        html.should include %Q|action="http://container.example.com/12345/?guid=ON&amp;url=http%3A%2F%2Ftest.host%2Fusers%2F1"|
       end
     end
 
@@ -183,21 +183,21 @@ describe OpensocialWap::Helpers::FormTagHelper do
 
       it "actionのURLがOpensocial WAP :query形式になること" do
         html = helper.form_for(users(:alice)){}
-        html.should include %Q|action="?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F1"|
+        html.should include %Q|action="?guid=ON&amp;url=http%3A%2F%2Ftest.host%2Fusers%2F1"|
       end
 
       it "オプションが正しく反映されること" do
         html = helper.form_for(users(:alice), :format => :json, :html => { :method => :get } ){}
-        html.should include %Q|action="?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F1.json"|
+        html.should include %Q|action="?guid=ON&amp;url=http%3A%2F%2Ftest.host%2Fusers%2F1.json"|
         html.should include %Q|method="get"|
       end
 
       it ":htmlオプションを使って、URL形式を変更できること" do
         html = helper.form_for(users(:alice), :html => {:opensocial_wap => {:url_format => :plain}}){}
-        html.should include %Q|action="http://host.example.com/users/1"|
+        html.should include %Q|action="http://test.host/users/1"|
 
         html = helper.form_for(users(:alice), :html => {:opensocial_wap => {:url_format => :full}}){}
-        html.should include %Q|action="http://container.example.com/12345/?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F1"|
+        html.should include %Q|action="http://container.example.com/12345/?guid=ON&amp;url=http%3A%2F%2Ftest.host%2Fusers%2F1"|
       end
     end
 
@@ -209,21 +209,21 @@ describe OpensocialWap::Helpers::FormTagHelper do
 
       it "actionのURLがOpensocial WAP :full形式になること" do
         html = helper.form_for(users(:alice)){}
-        html.should include %Q|action="http://container.example.com/12345/?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F1"|
+        html.should include %Q|action="http://container.example.com/12345/?guid=ON&amp;url=http%3A%2F%2Ftest.host%2Fusers%2F1"|
       end
 
       it "オプションが正しく反映されること" do
         html = helper.form_for(users(:alice), :format => :json, :html => { :method => :get } ){}
-        html.should include %Q|action="http://container.example.com/12345/?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F1.json"|
+        html.should include %Q|action="http://container.example.com/12345/?guid=ON&amp;url=http%3A%2F%2Ftest.host%2Fusers%2F1.json"|
         html.should include %Q|method="get"|
       end
 
       it ":htmlオプションを使って、URL形式を変更できること" do
         html = helper.form_for(users(:alice), :html => {:opensocial_wap => {:url_format => :plain}}){}
-        html.should include %Q|action="http://host.example.com/users/1"|
+        html.should include %Q|action="http://test.host/users/1"|
 
         html = helper.form_for(users(:alice), :html => {:opensocial_wap => {:url_format => :query}}){}
-        html.should include %Q|action="?guid=ON&amp;url=http%3A%2F%2Fhost.example.com%2Fusers%2F1"|
+        html.should include %Q|action="?guid=ON&amp;url=http%3A%2F%2Ftest.host%2Fusers%2F1"|
       end
     end
 

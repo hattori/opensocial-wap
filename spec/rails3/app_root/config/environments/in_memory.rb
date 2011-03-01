@@ -39,8 +39,8 @@ AppRoot::Application.configure do
                                                                      :consumer_secret=>'abcdefg12345')
   config.opensocial_wap.url_options = {
     :url_format => :full,
+    :redirect_url_format => :full,
     :params => { :guid => 'ON' }, 
-    :container_host => 'container.example.com', 
-    :host => 'host.example.com' }
+    :container_host => 'container.example.com' }
   config.opensocial_wap.sid = :parameter
 end
