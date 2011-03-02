@@ -46,6 +46,6 @@ AppRoot::Application.configure do
   config.opensocial_wap.sid = :parameter
 
   # 以下、テスト用の設定.
-  require './lib/opensocial_wap_sid_enabler'
+  require File.expand_path("../../../lib/opensocial_wap_sid_enabler", __FILE__)
   config.middleware.insert_before ActiveRecord::SessionStore, OpensocialWapSidEnabler
 end
