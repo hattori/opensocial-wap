@@ -50,7 +50,7 @@ describe OpensocialWap::Session::OpensocialWapSid do
       page.should have_content "14"
     end
 
-    it " app.config.opensocial_wap.sidの値が:parameterでなければ、セッションキーはopensocial_viewer_idの値にならないこと." do
+    it "Rails.application.config.opensocial_wap.sidの値が:parameterでなければ、セッションキーはopensocial_viewer_idの値にならないこと." do
 
       app.config.opensocial_wap.sid = :session
 
