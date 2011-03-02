@@ -1,23 +1,6 @@
 # -*- coding: utf-8 -*-
 class UsersController < ApplicationController
 
-  # Opensocial WAP のURLを使用することを宣言.
-  opensocial_wap
-  
-  # GET /url
-  def url
-    user = User.new
-
-    case params[:url_format]
-    when 'original'
-      @u = url_for(user)
-    when 'default'
-      @u = url_for(user, self.class.opensocial_wap_options)
-    else
-      @u = url_for(user, self.class.opensocial_wap_options.merge(:url_format => params[:url_format].to_sym))
-    end
-  end
-
   # GET /users
   # GET /users.xml
   def index

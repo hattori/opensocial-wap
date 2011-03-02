@@ -21,6 +21,8 @@ Gem::Specification.new do |s|
   s.add_development_dependency "rcov"
   s.add_development_dependency "rails", ">=3.0.0"
   s.add_development_dependency "sqlite3-ruby"
+  s.add_development_dependency "ruby-debug19"
+  s.add_development_dependency "capybara"
   
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")

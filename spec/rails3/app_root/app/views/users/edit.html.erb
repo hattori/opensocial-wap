@@ -1,5 +1,9 @@
 <h1>Editing user</h1>
 
+<p>
+  session id: <%= (sess = request.env["rack.session.record"]) ? sess.session_id : "" %>
+</p>
+
 <%= render 'form' %>
 
 <%= link_to 'Show', @user %> |

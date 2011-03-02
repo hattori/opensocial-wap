@@ -1,3 +1,4 @@
+require 'spec_helper'
 require 'rack'
 require 'oauth'
 require 'opensocial-wap'
