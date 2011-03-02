@@ -35,9 +35,8 @@ AppRoot::Application.configure do
   config.active_support.deprecation = :stderr
 
   # OpenSocial WAP Extention
-  require 'opensocial-wap/platforms/sample_platform'
-  config.opensocial_wap.platform = OpensocialWap::SamplePlatform.new(:consumer_key=>'abcdefg', 
-                                                                     :consumer_secret=>'abcdefg12345')
+  config.opensocial_wap.verifier = OpensocialWap::OpensocialVerifier.new(:consumer_key=>'abcdefg', 
+                                                                         :consumer_secret=>'abcdefg12345')
   config.opensocial_wap.url_options = {
     :url_format => :full,
     :redirect_url_format => :full,
