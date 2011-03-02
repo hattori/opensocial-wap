@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 AppRoot::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
 
@@ -43,4 +44,8 @@ AppRoot::Application.configure do
     :params => { :guid => 'ON' }, 
     :container_host => 'container.example.com' }
   config.opensocial_wap.sid = :parameter
+
+  # 以下、テスト用の設定.
+  require './lib/opensocial_wap_sid_enabler'
+  config.middleware.insert_before ActiveRecord::SessionStore, OpensocialWapSidEnabler
 end
