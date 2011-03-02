@@ -6,7 +6,7 @@ require 'oauth/signature/rsa/sha1'
 
 module OpensocialWap
   # OAuth検証やAPIリクエストを実行するためのクラス.
-  class OpensocialPlatform
+  class OpensocialVerifier
     include OAuth::Helper
     
     LOG_TIMESTAMP_FORMAT = '%Y-%m-%d %H:%M:%S'
@@ -47,33 +47,5 @@ module OpensocialWap
       signature.verify
     end
 
-    # APIリクエストを実行する.
-    def method_missing(method_id, *params)
-      # メソッドを"_"で分割し、前をリクエストメソッド、後ろをAPI識別子とする.
-      method, api = method_id.id2name.split('_', 2)
-      api_request = ApiRequest.new(@platform, 
-                                   consumer, 
-                                   api, 
-                                   params[0], 
-                                   params[1], 
-                                   { :xoauth_requestor_id => @request.parameters['opensocial_viewer_id'] })
-      response = api_request.send(method)
-      unless response.code =~ /2\d\d/
-        raise ApiException.new(api_request, response.code, response.message, response.body)
-      end
-      result = JSON.parse response.body
-      result['entry']
-    end
-
-    private 
-
-    def consumer
-      opts = {
-        :scheme => 'header',
-        :signature_method => 'HMAC-SHA1',
-        :oauth_version => "1.0" 
-      }
-      OAuth::Consumer.new(@consumer_key, @consumer_secret, opts)
-    end
   end
 end
