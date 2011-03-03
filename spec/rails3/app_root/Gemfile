@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.0.3'
+gem 'rails', ">=3.0.0"
 
 gem 'sqlite3-ruby', :require => 'sqlite3'
 gem 'opensocial-wap', :path => '../../../'
@@ -8,6 +8,6 @@ gem 'opensocial-wap', :path => '../../../'
 group :development, :test do
   gem 'ruby-debug19'
   gem 'capybara'
-  gem 'rspec-rails'
+  gem 'rspec-rails', ">=2.5.0"
   gem 'rcov'
 end

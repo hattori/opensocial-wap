@@ -137,7 +137,7 @@ DEPENDENCIES
   opensocial-wap!
   rails (>= 3.0.0)
   rcov
-  rspec (>= 2.4.0)
-  rspec-rails (>= 2.4.1)
+  rspec (>= 2.5.0)
+  rspec-rails (>= 2.5.0)
   ruby-debug19
   sqlite3-ruby
