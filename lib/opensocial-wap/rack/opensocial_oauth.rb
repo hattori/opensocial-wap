@@ -56,10 +56,12 @@ module OpensocialWap
           type, charset = env['Content-Type'].split(/;\s*charset=/)
 
           body = response_to_body(response)
-          body = body.gsub(/<input name="utf8" type="hidden" value="#{[0x2713].pack("U")}"[^>]*?>/, ' ')
-          body = body.gsub(/<input name="utf8" type="hidden" value="&#x2713;"[^>]*?>/, ' ')
+          if body.encoding == Encoding::UTF_8
+            body = body.gsub(/<input name="utf8" type="hidden" value="#{[0x2713].pack("U")}"[^>]*?>/, ' ')
+            body = body.gsub(/<input name="utf8" type="hidden" value="&#x2713;"[^>]*?>/, ' ')
 
-          response.body = body
+            response.body = body
+          end
         end
         response
       end
