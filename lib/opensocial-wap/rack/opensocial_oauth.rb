@@ -133,7 +133,6 @@ module OpensocialWap
     end
 
     class OpensocialOauthVerifier
-      include RequestWithOpensocialOauth
 
       def initialize verifier
          @verifier = verifier 
@@ -154,6 +153,7 @@ module OpensocialWap
           # false if HTTP_AUTHORIZATION header is not available.
           env['OPENSOCIAL_OAUTH_VERIFIED'] = false
         end
+        rack_request.env['opensocial-wap.rack'] ||= {}
         rack_request.env['opensocial-wap.rack'].merge!(env)
       end
 
