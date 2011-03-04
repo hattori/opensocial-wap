@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 # ActionView::Helpers::UrlHelper を拡張.
-# url_for メソッドは、OpensocialWap::Helpers::Base で拡張済み.
 module OpensocialWap
   module Helpers
     module UrlHelper

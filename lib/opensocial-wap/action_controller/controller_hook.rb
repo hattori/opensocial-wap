@@ -6,6 +6,7 @@ module ActionController
     include ::OpensocialWap::Routing::UrlFor
     helper ::OpensocialWap::Helpers::UrlHelper
     helper ::OpensocialWap::Helpers::FormTagHelper
+    helper ::OpensocialWap::Helpers::AssetTagHelper
 
     DEFAULT_OPENSOCIAL_WAP_URL_OPTIONS = { :url_format => nil, :params => {} }.freeze
     class_inheritable_accessor :opensocial_wap_enabled
