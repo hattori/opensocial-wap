@@ -9,7 +9,7 @@ module OpensocialWap
       # イニシャライザもしくはコントローラで設定したURL生成オプションを取得して返す.
       def default_osw_options
         if controller.class.respond_to? 'opensocial_wap_options'
-          controller.class.opensocial_wap_options.dup || {}
+          controller.class.opensocial_wap_options || {}
         else
           nil
         end

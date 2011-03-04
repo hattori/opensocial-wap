@@ -23,6 +23,7 @@ module ActionController
 
       def opensocial_wap_options
         @opensocial_wap_options ||= init_opensocoal_wap_options
+        @opensocial_wap_options.dup
       end
 
       # イニシャライザでの OpenSocial WAP Extension 設定に、コントローラ毎設定をマージして、
