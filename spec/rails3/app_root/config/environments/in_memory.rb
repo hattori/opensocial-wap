@@ -40,6 +40,7 @@ AppRoot::Application.configure do
   config.opensocial_wap.url_options = {
     :url_format => :full,
     :redirect_url_format => :full,
+    :public_path_format => :plain,
     :params => { :guid => 'ON' }, 
     :container_host => 'container.example.com' }
   config.opensocial_wap.sid = :parameter
