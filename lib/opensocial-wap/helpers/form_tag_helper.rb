@@ -23,6 +23,12 @@ module OpensocialWap
       
       # form_tag のHTMLオプションを計算する.
       def html_options_for_form(url_for_options, options, *parameters_for_url)
+        # Jpmobileとの互換性のため、accept_charset を変更できるように.
+        accept_charset = "UTF-8"
+        if defined?(::Jpmobile)
+          accept_charset = (Rails.application.config.jpmobile.form_accept_charset_conversion && request && request.mobile && request.mobile.default_charset)
+        end
+
         options.stringify_keys.tap do |html_options|
           html_options["enctype"] = "multipart/form-data" if html_options.delete("multipart")
           # ows_options を、options から取り出す.
@@ -32,7 +38,7 @@ module OpensocialWap
           # responsability of the caller to escape all the values.
           #html_options["action"]  = url_for(url_for_options, *parameters_for_url)
           html_options["action"]  = url_for(url_for_options, osw_options)
-          html_options["accept-charset"] = "UTF-8"
+          html_options["accept-charset"] = accept_charset
           html_options["data-remote"] = true if html_options.delete("remote")
         end
       end
