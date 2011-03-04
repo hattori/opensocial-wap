@@ -64,10 +64,6 @@ module OpensocialWap
   end
 end
 
-module ActionDispatch
-  module Session
-    class AbstractStore
-      include ::OpensocialWap::Session::OpensocialWapSid
-    end
-  end
+class ActionDispatch::Session::AbstractStore
+  include ::OpensocialWap::Session::OpensocialWapSid
 end
