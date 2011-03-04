@@ -5,6 +5,7 @@ require 'opensocial-wap/routing/url_for'
 require 'opensocial-wap/helpers/base'
 require 'opensocial-wap/helpers/url_helper'
 require 'opensocial-wap/helpers/form_tag_helper'
+require 'opensocial-wap/helpers/asset_tag_helper'
 require 'opensocial-wap/action_controller/controller_hook'
 require 'opensocial-wap/action_controller/metal/redirecting'
 require 'opensocial-wap/session/opensocial_wap_sid'
@@ -12,7 +13,7 @@ require 'opensocial-wap/session/opensocial_wap_sid'
 module OpensocialWap
   class Railtie < Rails::Railtie
 
-     config.opensocial_wap = ActiveSupport::OrderedOptions.new
+    config.opensocial_wap = ActiveSupport::OrderedOptions.new
 
     initializer "opensocial-wap.initialize" do |app|
       # do something..
