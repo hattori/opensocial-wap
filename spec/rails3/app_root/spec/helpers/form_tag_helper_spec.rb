@@ -1,13 +1,6 @@
 # -*- coding: utf-8 -*-
 require 'spec_helper'
-
-# コントローラをセットする.
-def set_controller(c)
-  controller = c
-  helper.controller = c
-  c.request = helper.request
-  helper.stub!(:params).and_return({ :opensocial_app_id => '12345' })
-end
+require File.expand_path("helper_spec_helper", File.dirname(__FILE__))
 
 describe OpensocialWap::Helpers::FormTagHelper do
   fixtures :users
