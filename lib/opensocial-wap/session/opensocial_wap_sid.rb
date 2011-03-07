@@ -13,6 +13,9 @@ module OpensocialWap
           # session store の指定で行った設定が反映されるかどうかは、session store の実装次第. 
           # たとえば、:expire_after の設定は、:mem_cache_store では反映されるが、他の session 
           # store でも反映されるとは限らない.
+          #
+          # なお、jpmobile と併用する場合、jpmobile 関係の middleware が実行されるまでは、
+          # request.params メソッドを使用しないこと(文字コード変換上の問題が発生するため).
           def extract_session_id(env)
             stale_session_check! do
               request = ActionDispatch::Request.new(env)
