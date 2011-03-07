@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 module OpensocialWap
   # Verifier class that does not use POST parameters for parameters_for_signature.
   class SampleVerifier < OpensocialVerifier

@@ -83,8 +83,7 @@ module OpensocialWap
       
       # URLのプロトコルとホスト部分.
       def base_url(options = {})
-        url = ""
-        url << (options[:protocol] || "http")
+        url = (options[:protocol] || "http")
         url << "://" unless url.match("://")
         raise "Missing host to link to! Please provide :host parameter or set default_url_options[:host]" unless options[:host]
         url << options[:host]
