@@ -11,7 +11,7 @@ module OpensocialWap
         url_format = osw_options && osw_options[:url_format]
         return super(options) unless url_format
 
-        # アプリケーションサーバの完全URL(:only_path => false を指定したときのURL)
+        # アプリケーションサーバの完全URL(:only_path => false を指定したときのURL)を作成.
         options ||= {}
         url = case options
               when String
@@ -29,7 +29,7 @@ module OpensocialWap
                 opts = options_for_full_url(nil, osw_options)
                 polymorphic_url(options, opts)
               end
-        
+        # url_format に従って、URLを書き換える.
         format_url(url, osw_options)
       end
       
