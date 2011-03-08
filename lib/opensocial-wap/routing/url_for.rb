@@ -4,7 +4,7 @@
 module OpensocialWap
   module Routing
     module UrlFor
-      include ::OpensocialWap::UrlFormatter
+      include UrlFormatter
 
       # OpenSocial WAP Extension 用 url_for.
       def url_for(options = nil, osw_options = {:params => {}})
