@@ -42,7 +42,7 @@ module OpensocialWap
           def use_opensocial_wap_sid?(request)
             app_config = Rails.application.config
             if app_config.respond_to? :opensocial_wap
-              sid = app_config.opensocial_wap.sid || :cookie # デフォルトでは無効(cookieからセッションIDを取得する).
+              sid = app_config.opensocial_wap[:session_id] || :cookie # デフォルトでは無効(cookieからセッションIDを取得する).
               if sid.to_sym == :parameter
                 # OAuthの検証にパスしている.
                 if request.opensocial_oauth_verified?

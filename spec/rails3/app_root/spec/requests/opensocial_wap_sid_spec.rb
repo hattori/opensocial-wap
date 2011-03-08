@@ -52,7 +52,7 @@ describe OpensocialWap::Session::OpensocialWapSid do
 
     it "Rails.application.config.opensocial_wap.sidの値が:parameterでなければ、セッションキーはopensocial_viewer_idの値にならないこと." do
 
-      app.config.opensocial_wap.sid = :session
+      app.config.opensocial_wap[:session_id] = :session
 
       # テストのために、強制的に OAuth 検証パス状態に設定し、opensocial_viewer_id をパラメターにセット.
       # OpensocialWapSidEnabler 内で env を操作する.

@@ -35,15 +35,17 @@ AppRoot::Application.configure do
   config.active_support.deprecation = :stderr
 
   # OpenSocial WAP Extention
-  config.opensocial_wap.verifier = OpensocialWap::OpensocialVerifier.new(:consumer_key=>'abcdefg', 
-                                                                         :consumer_secret=>'abcdefg12345')
-  config.opensocial_wap.url_options = {
-    :url_format => :full,
-    :redirect_url_format => :full,
-    :public_path_format => :plain,
-    :params => { :guid => 'ON' }, 
-    :container_host => 'container.example.com' }
-  config.opensocial_wap.sid = :parameter
+  config.opensocial_wap = {
+    :verifier => OpensocialWap::OpensocialVerifier.new(:consumer_key=>'abcdefg', 
+                                                       :consumer_secret=>'abcdefg12345'),
+    :url_options => {
+      :url_format => :full,
+      :redirect_url_format => :full,
+      :public_path_format => :plain,
+      :params => { :guid => 'ON' }, 
+      :container_host => 'container.example.com' },
+    :session_id => :parameter
+  }
 
   # 以下、テスト用の設定.
   require File.expand_path("../../lib/opensocial_wap_sid_enabler", File.dirname(__FILE__))

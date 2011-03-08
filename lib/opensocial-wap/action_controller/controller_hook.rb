@@ -33,7 +33,7 @@ module ActionController
         # アプリケーション初期化時に、Application#config にセットした設定をマージ.
         app_config = Rails.application.config
         if app_config.respond_to?(:opensocial_wap)
-          @opensocial_wap_options.merge!(app_config.opensocial_wap.url_options || {}) 
+          @opensocial_wap_options.merge!(app_config.opensocial_wap[:url_options] || {}) 
         end
         # コントローラレベルでの設定をマージ.
         if options
