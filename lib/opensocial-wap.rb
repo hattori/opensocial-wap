@@ -1,3 +1,4 @@
+require 'opensocial-wap/url_formatter.rb'
 require 'opensocial-wap/opensocial_verifier.rb'
 require 'opensocial-wap/rack/opensocial_oauth.rb'
 require 'opensocial-wap/rack/request.rb'
