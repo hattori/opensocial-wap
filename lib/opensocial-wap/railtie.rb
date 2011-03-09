@@ -20,9 +20,8 @@ module OpensocialWap
     end
 
     initializer 'opensocial-wap.load_middleware', :after=> :load_config_initializers do
-      verifier = config.opensocial_wap[:verifier]
-      
-      log_level = config.opensocial_wap[:log_level] || :error
+      verifier = config.opensocial_wap[:verifier] 
+      log_level = config.opensocial_wap[:log_level] || Logger::ERROR
 
       if verifier
         puts "opensocial-wap is enabled with #{verifier.class}"

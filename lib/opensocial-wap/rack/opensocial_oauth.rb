@@ -15,13 +15,13 @@ module OpensocialWap
       def initialize(app, opt={})
         @app = app
         @verifier= opt[:verifier]
-        #@log_level = LogLevel::label_to_log_level opt[:log_level]
         @log_level = opt[:log_level]
         @oauth_verifier= OpensocialOauthVerifier.new @verifier
       end
       
       def call(env)
-        @logger ||= Logger.new env['rack.errors'], @log_level
+        @logger ||= Logger.new env['rack.errors']
+        @logger.level = log_level
         @logger.debug "rack.env['HTTP_AUTHORIZATION'] = #{env['HTTP_AUTHORIZATION']}"
         # marker
         env['opensocial-wap.rack'] ||= {}
