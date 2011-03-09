@@ -20,9 +20,8 @@ module OpensocialWap
       
       def call(env)
         logger = env['rack.logger']
-        @oauth_verifier.logger = @verifier.logger = logger
-
         logger.debug "rack.env['HTTP_AUTHORIZATION'] = #{env['HTTP_AUTHORIZATION']}" if logger
+
         rack_request = ::Rack::Request.new env
         @oauth_verifier.verify rack_request
 
@@ -67,8 +66,6 @@ module OpensocialWap
     
     class OpensocialOauthVerifier
 
-      attr_accessor :logger
-
       def initialize(verifier)
          @verifier = verifier 
       end
@@ -76,7 +73,6 @@ module OpensocialWap
       def verify(rack_request)
         verified = false
         rack_request_proxy = OAuth::OpensocialOauthRequestProxy.new(@verifier, rack_request)
-        rack_request_proxy.logger = logger
         @verifier.request = rack_request_proxy
         if rack_request.env['HTTP_AUTHORIZATION']
           is_valid_request = @verifier.verify_request
@@ -108,8 +104,6 @@ end
 module OAuth
   class OpensocialOauthRequestProxy < OAuth::RequestProxy::RackRequest
 
-    attr_accessor :logger
-
     def initialize(verifier, request, options = {})
       super request, options
       @verifier = verifier
@@ -121,11 +115,11 @@ module OAuth
       else
         params = request_raw_params.merge(query_params).merge(header_params)
         params = params.merge(options[:parameters] || {})
-        if logger
-          logger.debug "request_params = #{request_raw_params}"
-          logger.debug "query_params = #{query_params}"
-          logger.debug "header_params = #{header_params}"
-          logger.debug "all(request,query,header) merged params = #{params}"
+        if @request.logger
+          @request.logger.debug "request_params = #{request_raw_params}"
+          @request.logger.debug "query_params = #{query_params}"
+          @request.logger.debug "header_params = #{header_params}"
+          @request.logger.debug "all(request,query,header) merged params = #{params}"
         end
         params 
       end
@@ -143,7 +137,7 @@ module OAuth
 
     def signature_base_string
       sbs = @verifier.signature_base_string method, normalized_uri, parameters_for_signature, query_params, request_params
-      logger.debug "signature_base_string = #{sbs}" if logger
+      @request.logger.debug "signature_base_string = #{sbs}" if @request.logger
       sbs
     end
   end
