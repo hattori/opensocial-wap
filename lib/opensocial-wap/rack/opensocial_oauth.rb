@@ -69,27 +69,27 @@ module OpensocialWap
 
     class OpensocialOauthVerifier
 
-      def initialize verifier
+      def initialize(verifier)
          @verifier = verifier 
       end
 
-      def verify rack_request, logger=nil
-        env = {}
+      def verify(rack_request, logger=nil)
+        verified = false
         rack_request_proxy = OAuth::OpensocialOauthRequestProxy.new(@verifier, rack_request, logger)
         @verifier.request = rack_request_proxy
         if rack_request.env['HTTP_AUTHORIZATION']
           is_valid_request = @verifier.verify_request :logger=>logger
           if is_valid_request
-            env['OPENSOCIAL_OAUTH_VERIFIED'] = true
+            verified = true
           else
-            env['OPENSOCIAL_OAUTH_VERIFIED'] = false
+            verified = false
           end
         else
           # false if HTTP_AUTHORIZATION header is not available.
-          env['OPENSOCIAL_OAUTH_VERIFIED'] = false
+          verified = false
         end
-        rack_request.env['opensocial-wap.rack'] ||= {}
-        rack_request.env['opensocial-wap.rack'].merge!(env)
+        rack_request.env['opensocial-wap.oauth-verified'] = verified
+        verified
       end
 
       def unauthorized
@@ -100,8 +100,7 @@ module OpensocialWap
           []
         ]
       end
-    end
-    
+    end    
   end
 end
 

@@ -9,7 +9,7 @@ class OpensocialWapSidEnabler
   def call(env)
     config = Rails.application.config
     if (config.respond_to? :enable_opensocial_wap_sid) && config.enable_opensocial_wap_sid
-      env['opensocial-wap.rack']['OPENSOCIAL_OAUTH_VERIFIED'] = true
+      env['opensocial-wap.oauth-verified'] = true
     end
 
     if (config.respond_to? :opensocial_wap_sid_with_parameter) && config.opensocial_wap_sid_with_parameter

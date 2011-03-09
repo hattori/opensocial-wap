@@ -9,7 +9,7 @@ module OpensocialWap
 
     describe OpensocialOauthVerifier do
       context "a normal (oauth NOT signed) get request from sns" do
-        it "must be failed to verify" do
+        it "must fail to verify" do
           # without http authorization header
           env = ::Rack::MockRequest.env_for(
             'http://example.com/?opensocial_app_id=877&opensocial_owner_id=23&sample_key=sample_value')
@@ -19,7 +19,7 @@ module OpensocialWap
                                                            :consumer_secret=>'sample_consumer_secret')
           oauth_verifier = OpensocialWap::Rack::OpensocialOauthVerifier.new verifier
           result = oauth_verifier.verify request_from_sns, nil
-          result.should be_true
+          result.should be_false
           request_from_sns.opensocial_oauth_verified?.should be_false
         end
       end
@@ -39,7 +39,7 @@ module OpensocialWap
           request_from_sns.opensocial_oauth_verified?.should be_true
         end
 
-        it "must be failed to verify" do
+        it "must fail to verify" do
           env = ::Rack::MockRequest.env_for(
             'http://example.com/?opensocial_app_id=877&opensocial_owner_id=23&sample_key=sample_value',
             'HTTP_AUTHORIZATION'=>http_oauth_header('GET'))
@@ -50,13 +50,13 @@ module OpensocialWap
                                                            :consumer_secret=>'foobar')
           oauth_verifier = OpensocialWap::Rack::OpensocialOauthVerifier.new verifier
           result = oauth_verifier.verify request_from_sns, nil
-          result.should be_true
+          result.should be_false
           request_from_sns.opensocial_oauth_verified?.should be_false
         end
       end
 
       context "a normal (oauth NOT signed) post request from sns" do
-        it "must be failed to verify" do
+        it "must fail to verify" do
           # without http authorization header
           env = ::Rack::MockRequest.env_for('http://example.com/?opensocial_app_id=877&opensocial_owner_id=23&sample_key=sample_value',
              :method=>'POST',
@@ -67,7 +67,7 @@ module OpensocialWap
                                                            :consumer_secret=>'sample_consumer_secret')
           oauth_verifier = OpensocialWap::Rack::OpensocialOauthVerifier.new verifier
           result = oauth_verifier.verify request_from_sns, nil
-          result.should be_true
+          result.should be_false
           request_from_sns.opensocial_oauth_verified?.should be_false
         end
       end
@@ -88,7 +88,7 @@ module OpensocialWap
           request_from_sns.opensocial_oauth_verified?.should be_true
         end
 
-        it "must be failed to verify" do
+        it "must fail to verify" do
           env = ::Rack::MockRequest.env_for('http://example.com/?opensocial_app_id=877&opensocial_owner_id=23&sample_key=sample_value',
              :method=>'POST',
              :params=>{'post_sample_key'=>'post_sample_value'}, 
@@ -100,7 +100,7 @@ module OpensocialWap
                                                            :consumer_secret=>'foobar')
           oauth_verifier = OpensocialWap::Rack::OpensocialOauthVerifier.new verifier
           result = oauth_verifier.verify request_from_sns, nil
-          result.should be_true
+          result.should be_false
           request_from_sns.opensocial_oauth_verified?.should be_false
         end
       end

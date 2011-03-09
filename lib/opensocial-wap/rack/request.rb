@@ -4,7 +4,7 @@ module OpensocialWap
   module Rack
     module RequestWithOpensocialOauth
       def opensocial_oauth_verified?
-        env['opensocial-wap.rack'] && env['opensocial-wap.rack']['OPENSOCIAL_OAUTH_VERIFIED']
+        env['opensocial-wap.oauth-verified']
       end
     end
   end
