@@ -15,15 +15,13 @@ module OpensocialWap
       def initialize(app, opt={})
         @app = app
         @verifier= opt[:verifier]
-        @oauth_verifier= OpensocialOauthVerifier.new @verifier
       end
       
       def call(env)
         logger = env['rack.logger']
         logger.debug "rack.env['HTTP_AUTHORIZATION'] = #{env['HTTP_AUTHORIZATION']}" if logger
 
-        rack_request = ::Rack::Request.new env
-        @oauth_verifier.verify rack_request
+        verify(env)
 
         status, header, response = @app.call(env)
  
@@ -33,6 +31,24 @@ module OpensocialWap
       end
 
       private
+
+      def verify(env)
+        verified = false
+        rack_request = ::Rack::Request.new env
+        rack_request_proxy = OAuth::OpensocialOauthRequestProxy.new(@verifier, rack_request)
+        if rack_request.env['HTTP_AUTHORIZATION']
+          if @verifier.verify_request rack_request_proxy
+            verified = true
+          else
+            verified = false
+          end
+        else
+          # false if HTTP_AUTHORIZATION header is not available.
+          verified = false
+        end
+        rack_request.env['opensocial-wap.oauth-verified'] = verified
+        verified
+      end
       
       def response_to_body(response)
         if response.respond_to?(:to_str)
@@ -62,42 +78,16 @@ module OpensocialWap
         end
         response
       end
-    end
-    
-    class OpensocialOauthVerifier
-
-      def initialize(verifier)
-         @verifier = verifier 
-      end
-
-      def verify(rack_request)
-        verified = false
-        rack_request_proxy = OAuth::OpensocialOauthRequestProxy.new(@verifier, rack_request)
-        @verifier.request = rack_request_proxy
-        if rack_request.env['HTTP_AUTHORIZATION']
-          is_valid_request = @verifier.verify_request
-          if is_valid_request
-            verified = true
-          else
-            verified = false
-          end
-        else
-          # false if HTTP_AUTHORIZATION header is not available.
-          verified = false
-        end
-        rack_request.env['opensocial-wap.oauth-verified'] = verified
-        verified
-      end
 
       def unauthorized
-        return [ 401,
+        [ 401,
           { 'Content-Type' => 'text/plain',
             'Content-Length' => '0'
-            },
+          },
           []
         ]
       end
-    end    
+    end
   end
 end
 

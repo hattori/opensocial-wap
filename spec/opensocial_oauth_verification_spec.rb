@@ -7,7 +7,7 @@ require 'opensocial-wap/rack/opensocial_oauth'
 module OpensocialWap
   module Rack
 
-    describe OpensocialOauthVerifier do
+    describe OpensocialOauth do
       context "a normal (oauth NOT signed) get request from sns" do
         it "must fail to verify" do
           # without http authorization header
@@ -17,8 +17,10 @@ module OpensocialWap
 
           verifier = OpensocialWap::OpensocialVerifier.new(:consumer_key=>'sample_consumer_key', 
                                                            :consumer_secret=>'sample_consumer_secret')
-          oauth_verifier = OpensocialWap::Rack::OpensocialOauthVerifier.new verifier
-          result = oauth_verifier.verify request_from_sns
+
+          rack = OpensocialWap::Rack::OpensocialOauth.new(nil, :verifier => verifier)
+          result = rack.send :verify, request_from_sns.env
+
           result.should be_false
           request_from_sns.opensocial_oauth_verified?.should be_false
         end
@@ -33,8 +35,10 @@ module OpensocialWap
 
           verifier = OpensocialWap::OpensocialVerifier.new(:consumer_key=>'sample_consumer_key', 
                                                            :consumer_secret=>'sample_consumer_secret')
-          oauth_verifier = OpensocialWap::Rack::OpensocialOauthVerifier.new verifier
-          result = oauth_verifier.verify request_from_sns
+
+          rack = OpensocialWap::Rack::OpensocialOauth.new(nil, :verifier => verifier)
+          result = rack.send :verify, request_from_sns.env
+
           result.should be_true
           request_from_sns.opensocial_oauth_verified?.should be_true
         end
@@ -48,8 +52,10 @@ module OpensocialWap
           # invalid consumer secret
           verifier = OpensocialWap::OpensocialVerifier.new(:consumer_key=>'sample_consumer_key', 
                                                            :consumer_secret=>'foobar')
-          oauth_verifier = OpensocialWap::Rack::OpensocialOauthVerifier.new verifier
-          result = oauth_verifier.verify request_from_sns
+
+          rack = OpensocialWap::Rack::OpensocialOauth.new(nil, :verifier => verifier)
+          result = rack.send :verify, request_from_sns.env
+
           result.should be_false
           request_from_sns.opensocial_oauth_verified?.should be_false
         end
@@ -65,8 +71,10 @@ module OpensocialWap
 
           verifier = OpensocialWap::OpensocialVerifier.new(:consumer_key=>'sample_consumer_key', 
                                                            :consumer_secret=>'sample_consumer_secret')
-          oauth_verifier = OpensocialWap::Rack::OpensocialOauthVerifier.new verifier
-          result = oauth_verifier.verify request_from_sns
+
+          rack = OpensocialWap::Rack::OpensocialOauth.new(nil, :verifier => verifier)
+          result = rack.send :verify, request_from_sns.env
+
           result.should be_false
           request_from_sns.opensocial_oauth_verified?.should be_false
         end
@@ -82,8 +90,10 @@ module OpensocialWap
 
           verifier = OpensocialWap::OpensocialVerifier.new(:consumer_key=>'sample_consumer_key', 
                                                            :consumer_secret=>'sample_consumer_secret')
-          oauth_verifier = OpensocialWap::Rack::OpensocialOauthVerifier.new verifier
-          result = oauth_verifier.verify request_from_sns
+
+          rack = OpensocialWap::Rack::OpensocialOauth.new(nil, :verifier => verifier)
+          result = rack.send :verify, request_from_sns.env
+
           result.should be_true
           request_from_sns.opensocial_oauth_verified?.should be_true
         end
@@ -98,8 +108,10 @@ module OpensocialWap
           # invalid consumer secret
           verifier = OpensocialWap::OpensocialVerifier.new(:consumer_key=>'sample_consumer_key', 
                                                            :consumer_secret=>'foobar')
-          oauth_verifier = OpensocialWap::Rack::OpensocialOauthVerifier.new verifier
-          result = oauth_verifier.verify request_from_sns
+
+          rack = OpensocialWap::Rack::OpensocialOauth.new(nil, :verifier => verifier)
+          result = rack.send :verify, request_from_sns.env
+
           result.should be_false
           request_from_sns.opensocial_oauth_verified?.should be_false
         end
