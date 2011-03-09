@@ -36,7 +36,7 @@ AppRoot::Application.configure do
 
   # OpenSocial WAP Extention
   config.opensocial_wap = {
-    :verifier => OpensocialWap::OpensocialVerifier.new(:consumer_key=>'abcdefg', 
+    :verifier => OpensocialWap::Verifiers::OpensocialVerifier.new(:consumer_key=>'abcdefg', 
                                                        :consumer_secret=>'abcdefg12345'),
     :url_options => {
       :url_format => :full,

@@ -15,7 +15,7 @@ module OpensocialWap
             'http://example.com/?opensocial_app_id=877&opensocial_owner_id=23&sample_key=sample_value')
           request_from_sns = ::Rack::Request.new(env)
 
-          verifier = OpensocialWap::OpensocialVerifier.new(:consumer_key=>'sample_consumer_key', 
+          verifier = OpensocialWap::Verifiers::OpensocialVerifier.new(:consumer_key=>'sample_consumer_key', 
                                                            :consumer_secret=>'sample_consumer_secret')
 
           rack = OpensocialWap::Rack::OpensocialOauth.new(nil, :verifier => verifier)
@@ -33,7 +33,7 @@ module OpensocialWap
             'HTTP_AUTHORIZATION'=>http_oauth_header('GET'))
           request_from_sns = ::Rack::Request.new(env)
 
-          verifier = OpensocialWap::OpensocialVerifier.new(:consumer_key=>'sample_consumer_key', 
+          verifier = OpensocialWap::Verifiers::OpensocialVerifier.new(:consumer_key=>'sample_consumer_key', 
                                                            :consumer_secret=>'sample_consumer_secret')
 
           rack = OpensocialWap::Rack::OpensocialOauth.new(nil, :verifier => verifier)
@@ -50,7 +50,7 @@ module OpensocialWap
           request_from_sns = ::Rack::Request.new(env)
 
           # invalid consumer secret
-          verifier = OpensocialWap::OpensocialVerifier.new(:consumer_key=>'sample_consumer_key', 
+          verifier = OpensocialWap::Verifiers::OpensocialVerifier.new(:consumer_key=>'sample_consumer_key', 
                                                            :consumer_secret=>'foobar')
 
           rack = OpensocialWap::Rack::OpensocialOauth.new(nil, :verifier => verifier)
@@ -69,7 +69,7 @@ module OpensocialWap
              :params=>{'post_sample_key'=>'post_sample_value'})
           request_from_sns = ::Rack::Request.new(env)
 
-          verifier = OpensocialWap::OpensocialVerifier.new(:consumer_key=>'sample_consumer_key', 
+          verifier = OpensocialWap::Verifiers::OpensocialVerifier.new(:consumer_key=>'sample_consumer_key', 
                                                            :consumer_secret=>'sample_consumer_secret')
 
           rack = OpensocialWap::Rack::OpensocialOauth.new(nil, :verifier => verifier)
@@ -88,7 +88,7 @@ module OpensocialWap
              'HTTP_AUTHORIZATION'=>http_oauth_header('POST', {'post_sample_key'=>'post_sample_value'}))
           request_from_sns = ::Rack::Request.new(env)
 
-          verifier = OpensocialWap::OpensocialVerifier.new(:consumer_key=>'sample_consumer_key', 
+          verifier = OpensocialWap::Verifiers::OpensocialVerifier.new(:consumer_key=>'sample_consumer_key', 
                                                            :consumer_secret=>'sample_consumer_secret')
 
           rack = OpensocialWap::Rack::OpensocialOauth.new(nil, :verifier => verifier)
@@ -106,7 +106,7 @@ module OpensocialWap
           request_from_sns = ::Rack::Request.new(env)
 
           # invalid consumer secret
-          verifier = OpensocialWap::OpensocialVerifier.new(:consumer_key=>'sample_consumer_key', 
+          verifier = OpensocialWap::Verifiers::OpensocialVerifier.new(:consumer_key=>'sample_consumer_key', 
                                                            :consumer_secret=>'foobar')
 
           rack = OpensocialWap::Rack::OpensocialOauth.new(nil, :verifier => verifier)
