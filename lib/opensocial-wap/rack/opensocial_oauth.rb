@@ -15,7 +15,8 @@ module OpensocialWap
       def initialize(app, opt={})
         @app = app
         @verifier= opt[:verifier]
-        @log_level = LogLevel::label_to_log_level opt[:log_level] 
+        #@log_level = LogLevel::label_to_log_level opt[:log_level]
+        @log_level = opt[:log_level]
         @oauth_verifier= OpensocialOauthVerifier.new @verifier
       end
       
@@ -50,23 +51,23 @@ module OpensocialWap
           body
         end
       end
-
+      
       def remove_utf8_form_input_tag env, response
         if env['Content-Type'] =~ %r!text/html|application/xhtml\+xml!
           type, charset = env['Content-Type'].split(/;\s*charset=/)
-
+          
           body = response_to_body(response)
           if body.encoding == Encoding::UTF_8
             body = body.gsub(/<input name="utf8" type="hidden" value="#{[0x2713].pack("U")}"[^>]*?>/, ' ')
             body = body.gsub(/<input name="utf8" type="hidden" value="&#x2713;"[^>]*?>/, ' ')
-
+            
             response.body = body
           end
         end
         response
       end
     end
-
+    
     class OpensocialOauthVerifier
 
       def initialize(verifier)
