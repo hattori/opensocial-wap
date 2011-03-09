@@ -32,14 +32,18 @@ module OpensocialWap
       opts = { :consumer_secret => @consumer_secret, :token_secret => @request.parameters['oauth_token_secret'] }
       signature = OAuth::Signature.build(@request, opts)
 
-      if @request.logger
-        @request.logger.debug "oauth signature : #{OAuth::Signature.sign(@request, opts)}"
-        @request.logger.debug "OauthHandler OAuth verification:"
-        @request.logger.debug "  authorization header: #{@request.request.env['HTTP_AUTHORIZATION']}"
-        @request.logger.debug "  base string:          #{signature.signature_base_string}"
-        @request.logger.debug "  signature:            #{signature.signature}"      
+      if logger
+        logger.debug "oauth signature : #{OAuth::Signature.sign(@request, opts)}"
+        logger.debug "OauthHandler OAuth verification:"
+        logger.debug "  authorization header: #{@request.request.env['HTTP_AUTHORIZATION']}"
+        logger.debug "  base string:          #{signature.signature_base_string}"
+        logger.debug "  signature:            #{signature.signature}"      
       end
       signature.verify
+    end
+
+    def logger
+      @request.request.logger
     end
   end
 end

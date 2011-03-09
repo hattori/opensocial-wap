@@ -142,7 +142,7 @@ module OAuth
     end
     
     def logger
-      @request.request.logger      
+      @request.logger      
     end
   end
 end
