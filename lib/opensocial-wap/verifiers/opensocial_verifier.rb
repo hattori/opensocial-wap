@@ -12,7 +12,7 @@ module OpensocialWap
     LOG_TIMESTAMP_FORMAT = '%Y-%m-%d %H:%M:%S'
 
     attr_reader :gadget_server, :api_server, :consumer_key, :consumer_secret
-    attr_accessor :request
+    attr_accessor :request, :logger
     
     def initialize(options)
       options.each do |k, v|
@@ -29,23 +29,17 @@ module OpensocialWap
     
     # OAuth検証
     def verify_request(options = {})
-      logger = options[:logger]
       opts = { :consumer_secret => @consumer_secret, :token_secret => @request.parameters['oauth_token_secret'] }
       signature = OAuth::Signature.build(@request, opts)
 
-      if logger and logger.isDebug
+      if logger
         logger.debug "oauth signature : #{OAuth::Signature.sign(@request, opts)}"
+        logger.debug "OauthHandler OAuth verification:"
+        logger.debug "  authorization header: #{@request.request.env['HTTP_AUTHORIZATION']}"
+        logger.debug "  base string:          #{signature.signature_base_string}"
+        logger.debug "  signature:            #{signature.signature}"      
       end
-
-      #if options && options[:logger]
-      #  logger = options[:logger]
-      #  logger.write "[#{Time.now.strftime(LOG_TIMESTAMP_FORMAT)}] OauthHandler OAuth verification:"
-      #  logger.write "  authorization header: #{@request.request.env['HTTP_AUTHORIZATION']}"
-      #  logger.write "  base string:          #{signature.signature_base_string}"
-      #  logger.write "  signature:            #{signature.signature}"      
-      #end
       signature.verify
     end
-
   end
 end

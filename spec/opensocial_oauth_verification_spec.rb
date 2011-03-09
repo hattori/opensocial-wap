@@ -18,7 +18,7 @@ module OpensocialWap
           verifier = OpensocialWap::OpensocialVerifier.new(:consumer_key=>'sample_consumer_key', 
                                                            :consumer_secret=>'sample_consumer_secret')
           oauth_verifier = OpensocialWap::Rack::OpensocialOauthVerifier.new verifier
-          result = oauth_verifier.verify request_from_sns, nil
+          result = oauth_verifier.verify request_from_sns
           result.should be_false
           request_from_sns.opensocial_oauth_verified?.should be_false
         end
@@ -34,7 +34,7 @@ module OpensocialWap
           verifier = OpensocialWap::OpensocialVerifier.new(:consumer_key=>'sample_consumer_key', 
                                                            :consumer_secret=>'sample_consumer_secret')
           oauth_verifier = OpensocialWap::Rack::OpensocialOauthVerifier.new verifier
-          result = oauth_verifier.verify request_from_sns, nil
+          result = oauth_verifier.verify request_from_sns
           result.should be_true
           request_from_sns.opensocial_oauth_verified?.should be_true
         end
@@ -49,7 +49,7 @@ module OpensocialWap
           verifier = OpensocialWap::OpensocialVerifier.new(:consumer_key=>'sample_consumer_key', 
                                                            :consumer_secret=>'foobar')
           oauth_verifier = OpensocialWap::Rack::OpensocialOauthVerifier.new verifier
-          result = oauth_verifier.verify request_from_sns, nil
+          result = oauth_verifier.verify request_from_sns
           result.should be_false
           request_from_sns.opensocial_oauth_verified?.should be_false
         end
@@ -66,7 +66,7 @@ module OpensocialWap
           verifier = OpensocialWap::OpensocialVerifier.new(:consumer_key=>'sample_consumer_key', 
                                                            :consumer_secret=>'sample_consumer_secret')
           oauth_verifier = OpensocialWap::Rack::OpensocialOauthVerifier.new verifier
-          result = oauth_verifier.verify request_from_sns, nil
+          result = oauth_verifier.verify request_from_sns
           result.should be_false
           request_from_sns.opensocial_oauth_verified?.should be_false
         end
@@ -83,7 +83,7 @@ module OpensocialWap
           verifier = OpensocialWap::OpensocialVerifier.new(:consumer_key=>'sample_consumer_key', 
                                                            :consumer_secret=>'sample_consumer_secret')
           oauth_verifier = OpensocialWap::Rack::OpensocialOauthVerifier.new verifier
-          result = oauth_verifier.verify request_from_sns, nil
+          result = oauth_verifier.verify request_from_sns
           result.should be_true
           request_from_sns.opensocial_oauth_verified?.should be_true
         end
@@ -99,7 +99,7 @@ module OpensocialWap
           verifier = OpensocialWap::OpensocialVerifier.new(:consumer_key=>'sample_consumer_key', 
                                                            :consumer_secret=>'foobar')
           oauth_verifier = OpensocialWap::Rack::OpensocialOauthVerifier.new verifier
-          result = oauth_verifier.verify request_from_sns, nil
+          result = oauth_verifier.verify request_from_sns
           result.should be_false
           request_from_sns.opensocial_oauth_verified?.should be_false
         end

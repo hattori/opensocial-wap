@@ -15,23 +15,20 @@ module OpensocialWap
       def initialize(app, opt={})
         @app = app
         @verifier= opt[:verifier]
-        @log_level = opt[:log_level]
         @oauth_verifier= OpensocialOauthVerifier.new @verifier
       end
       
       def call(env)
-        @logger ||= Logger.new env['rack.errors']
-        @logger.level = @log_level
-        @logger.debug "rack.env['HTTP_AUTHORIZATION'] = #{env['HTTP_AUTHORIZATION']}"
-        # marker
-        env['opensocial-wap.rack'] ||= {}
+        logger = env['rack.logger']
+        @oauth_verifier.logger = @verifier.logger = logger
+
+        logger.debug "rack.env['HTTP_AUTHORIZATION'] = #{env['HTTP_AUTHORIZATION']}" if logger
         rack_request = ::Rack::Request.new env
-        @oauth_verifier.verify rack_request, @logger 
+        @oauth_verifier.verify rack_request
 
         status, header, response = @app.call(env)
  
         response = remove_utf8_form_input_tag header, response
-
         new_response = ::Rack::Response.new(response, status, header)
         new_response.finish
       end
@@ -70,16 +67,19 @@ module OpensocialWap
     
     class OpensocialOauthVerifier
 
+      attr_accessor :logger
+
       def initialize(verifier)
          @verifier = verifier 
       end
 
-      def verify(rack_request, logger=nil)
+      def verify(rack_request)
         verified = false
-        rack_request_proxy = OAuth::OpensocialOauthRequestProxy.new(@verifier, rack_request, logger)
+        rack_request_proxy = OAuth::OpensocialOauthRequestProxy.new(@verifier, rack_request)
+        rack_request_proxy.logger = logger
         @verifier.request = rack_request_proxy
         if rack_request.env['HTTP_AUTHORIZATION']
-          is_valid_request = @verifier.verify_request :logger=>logger
+          is_valid_request = @verifier.verify_request
           if is_valid_request
             verified = true
           else
@@ -107,26 +107,30 @@ end
 
 module OAuth
   class OpensocialOauthRequestProxy < OAuth::RequestProxy::RackRequest
-    def initialize(verifier, request, logger, options = {})
+
+    attr_accessor :logger
+
+    def initialize(verifier, request, options = {})
       super request, options
       @verifier = verifier
-      @logger = logger
     end
+
     def parameters
       if options[:clobber_request]
         options[:parameters] || {}
       else
         params = request_raw_params.merge(query_params).merge(header_params)
         params = params.merge(options[:parameters] || {})
-        #if @logger and @logger.isDebug
-        #  @logger.debug "request_params = #{request_raw_params}"
-        #  @logger.debug "query_params = #{query_params}"
-        #  @logger.debug "header_params = #{header_params}"
-        #  @logger.debug "all(request,query,header) merged params = #{params}"
-        #end
+        if logger
+          logger.debug "request_params = #{request_raw_params}"
+          logger.debug "query_params = #{query_params}"
+          logger.debug "header_params = #{header_params}"
+          logger.debug "all(request,query,header) merged params = #{params}"
+        end
         params 
       end
     end
+
     def request_raw_params
        @request.POST
        form_params = @request.env['rack.request.form_vars']
@@ -136,11 +140,10 @@ module OAuth
          {}
        end
     end
+
     def signature_base_string
       sbs = @verifier.signature_base_string method, normalized_uri, parameters_for_signature, query_params, request_params
-      if @logger and @logger.isDebug
-        @logger.debug "signature_base_string = #{sbs}"
-      end
+      logger.debug "signature_base_string = #{sbs}" if logger
       sbs
     end
   end
