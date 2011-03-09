@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
 
   s.rubyforge_project = "opensocial-wap"
 
-  s.add_dependency 'rack'
+  s.add_dependency 'rack', ">=1.2.1"
   s.add_dependency 'oauth'
   s.add_development_dependency "rspec", ">=2.5.0"
   s.add_development_dependency "rspec-rails", ">=2.5.0" 
