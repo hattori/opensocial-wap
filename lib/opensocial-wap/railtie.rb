@@ -25,7 +25,7 @@ module OpensocialWap
 
       if verifier
         puts "opensocial-wap is enabled with #{verifier.class}"
-        config.app_middleware.insert_before ActionDispatch::Cookies, OpensocialWap::Rack::OpensocialOauth, :verifier=> verifier, :log_level => log_level.to_s.upcase
+        config.app_middleware.insert_before ActionDispatch::Cookies, OpensocialWap::Rack::OpensocialOauth, :verifier=> verifier, :log_level => log_level
       else
         puts "opensocial-wap is NOT enabled" 
       end

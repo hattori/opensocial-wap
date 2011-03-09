@@ -21,7 +21,7 @@ module OpensocialWap
       
       def call(env)
         @logger ||= Logger.new env['rack.errors']
-        @logger.level = log_level
+        @logger.level = @log_level
         @logger.debug "rack.env['HTTP_AUTHORIZATION'] = #{env['HTTP_AUTHORIZATION']}"
         # marker
         env['opensocial-wap.rack'] ||= {}
