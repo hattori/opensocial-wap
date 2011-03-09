@@ -116,10 +116,10 @@ module OAuth
         params = request_raw_params.merge(query_params).merge(header_params)
         params = params.merge(options[:parameters] || {})
         if logger
-          logger.debug "request_params = #{request_raw_params}"
-          logger.debug "query_params = #{query_params}"
-          logger.debug "header_params = #{header_params}"
-          logger.debug "all(request,query,header) merged params = #{params}"
+          logger.debug "  request_params = #{request_raw_params}"
+          logger.debug "  query_params = #{query_params}"
+          logger.debug "  header_params = #{header_params}"
+          logger.debug "  all(request,query,header) merged params = #{params}"
         end
         params 
       end
@@ -137,7 +137,7 @@ module OAuth
 
     def signature_base_string
       sbs = @verifier.signature_base_string method, normalized_uri, parameters_for_signature, query_params, request_params
-      logger.debug "signature_base_string = #{sbs}" if logger
+      logger.debug "  signature_base_string = #{sbs}" if logger
       sbs
     end
     
