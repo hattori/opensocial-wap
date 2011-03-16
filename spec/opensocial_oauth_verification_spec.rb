@@ -120,17 +120,18 @@ module OpensocialWap
       # generates an http authorization header using the specified parameters.
       def http_oauth_header method, params={}
         oauth_params = [
-          "realm=\"\"",
-          "oauth_nonce=\"0422e0b8f94c22dd8736\"",
-          "oauth_signature_method=\"HMAC-SHA1\"",
-          "oauth_timestamp=\"1295537417\"",
-          "oauth_consumer_key=\"sample_consumer_key\"",
-          "oauth_version=\"1.0\""]
-          http_oauth_header = "OAuth " + oauth_params.join(', ')
+                        "realm=\"\"",
+                        "oauth_nonce=\"0422e0b8f94c22dd8736\"",
+                        "oauth_signature_method=\"HMAC-SHA1\"",
+                        "oauth_timestamp=\"1295537417\"",
+                        "oauth_consumer_key=\"sample_consumer_key\"",
+                        "oauth_version=\"1.0\""]
+        http_oauth_header = "OAuth " + oauth_params.join(', ')
         env = ::Rack::MockRequest.env_for(
-          'http://example.com/?opensocial_app_id=877&opensocial_owner_id=23&sample_key=sample_value',
-          :method=>method, :params=>params,
-          'HTTP_AUTHORIZATION'=>http_oauth_header)
+                                          'http://example.com/?opensocial_app_id=877&opensocial_owner_id=23&sample_key=sample_value',
+                                          :method=>method, 
+                                          :params=>params,
+                                          'HTTP_AUTHORIZATION'=>http_oauth_header)
         request = ::Rack::Request.new(env)
         request_proxy = OAuth::RequestProxy::RackRequest.new(request)
         opts = { :consumer_secret => 'sample_consumer_secret' }
