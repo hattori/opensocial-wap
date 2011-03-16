@@ -3,7 +3,7 @@ PATH
   specs:
     opensocial-wap (0.0.1)
       oauth
-      rack
+      rack (>= 1.2.1)
 
 GEM
   remote: http://rubygems.org/
