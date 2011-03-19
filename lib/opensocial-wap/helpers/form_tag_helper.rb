@@ -8,11 +8,11 @@ module OpensocialWap
       include UrlHelper
 
       # Rails オリジナル実装の form_tag と同じ.
-      # ただし、options ハッシュに、:osw_options ハッシュを渡すことができる.
-      # osw_options の優先順位は、options ハッシュ > コントローラで指定した値 > イニシャライザで指定した値.
+      # ただし、options ハッシュに、:url_settings をキーにした値を渡すことができる.
+      # url_settings の優先順位は、options ハッシュ > イニシャライザで指定した値.
       #
       # == 例
-      # form_tag('/posts', :osw_options => {:url_format=>:query})
+      # form_tag('/posts', :url_settings => {:format=>:query})
       # # => <form action="?=url....." method="post">
       # 
       def form_tag(url_for_options = {}, options = {}, *parameters_for_url, &block)
@@ -31,13 +31,13 @@ module OpensocialWap
 
         options.stringify_keys.tap do |html_options|
           html_options["enctype"] = "multipart/form-data" if html_options.delete("multipart")
-          # ows_options を、options から取り出す.
-          osw_options = extract_osw_options(html_options)
+          # url_settings を、options から取り出す.
+          url_settings = extract_url_settings(html_options)
 
           # The following URL is unescaped, this is just a hash of options, and it is the
           # responsability of the caller to escape all the values.
           #html_options["action"]  = url_for(url_for_options, *parameters_for_url)
-          html_options["action"]  = url_for(url_for_options, osw_options)
+          html_options["action"]  = url_for(url_for_options, url_settings)
           html_options["accept-charset"] = accept_charset
           html_options["data-remote"] = true if html_options.delete("remote")
         end
@@ -46,15 +46,17 @@ module OpensocialWap
       private
 
       # html_options から Opensocial WAP用オプションを取り出す.
-      def extract_osw_options(html_options)
+      def extract_url_settings(html_options)
+        url_settings = nil
         if html_options
-          osw_options = html_options.delete("opensocial_wap")
+          url_settings = html_options.delete("url_settings")
         end
-        # コントローラで opensocial_wap が呼ばれていれば、osw_options を有効にする.
-        if controller.class.opensocial_wap_enabled
-          osw_options ||= {}
+        if !url_settings && default_url_settings
+          # コントローラで opensocial_wap が呼ばれていれば、url_settings を有効にする.
+          # form_tag 系では、:default の設定を使用する.
+          url_settings = default_url_settings.default
         end
-        osw_options
+        url_settings
       end
     end
   end

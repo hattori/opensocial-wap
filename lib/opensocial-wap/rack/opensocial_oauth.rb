@@ -14,7 +14,7 @@ module OpensocialWap
       
       def initialize(app, opt={})
         @app = app
-        @verifier= opt[:verifier]
+        @helper_class = opt[:helper_class]
       end
       
       def call(env)
@@ -34,10 +34,11 @@ module OpensocialWap
 
       def verify(env)
         verified = false
-        rack_request = ::Rack::Request.new env
-        rack_request_proxy = OpensocialOauthRequestProxy.new(@verifier, rack_request)
-        if rack_request.env['HTTP_AUTHORIZATION']
-          if @verifier.verify_request rack_request_proxy
+        request = ::Rack::Request.new(env)
+        helper = @helper_class.new(request)
+
+        if request.env['HTTP_AUTHORIZATION']
+          if helper.verify
             verified = true
           else
             verified = false
@@ -46,7 +47,8 @@ module OpensocialWap
           # false if HTTP_AUTHORIZATION header is not available.
           verified = false
         end
-        rack_request.env['opensocial-wap.oauth-verified'] = verified
+        request.env['opensocial-wap.oauth-verified'] = verified
+        request.env['opensocial-wap.helper'] = helper
         verified
       end
       

@@ -20,13 +20,13 @@ module OpensocialWap
     end
 
     initializer 'opensocial-wap.load_middleware', :after=> :load_config_initializers do
-      verifier = config.opensocial_wap[:verifier] 
+      helper_class = config.opensocial_wap.oauth.helper_class
 
-      if verifier
-        puts "opensocial-wap is enabled with #{verifier.class}"
-        config.app_middleware.insert_before ActionDispatch::Cookies, OpensocialWap::Rack::OpensocialOauth, :verifier=> verifier
+      if helper_class
+        puts "opensocial-wap is enabled with #{helper_class}"
+        config.app_middleware.insert_before ActionDispatch::Cookies, OpensocialWap::Rack::OpensocialOauth, :helper_class => helper_class
       else
-        puts "opensocial-wap is NOT enabled" 
+        puts "opensocial-wap is NOT enabled"
       end
     end
   end

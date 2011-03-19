@@ -8,14 +8,14 @@ module OpensocialWap
       include ::ActionView::Helpers::AssetTagHelper
       
       # compute_public_path を上書き.
-      # コントローラ内もしくは初期化時に、:public_path_format が指定されていれば、パスを
+      # 初期化時に、opensocial_wap[:url] でURL形式が指定されていれば、パスを
       # OpenSocial 用のものに書き換える.
       def compute_public_path(source, dir, ext = nil, include_host = true)
         path = super
-        osw_options = default_osw_options
-        if osw_options[:public_path_format]
-          osw_options[:url_format] = osw_options[:public_path_format]
-          path = url_for(path, osw_options)
+        if default_url_settings
+          # public_path で指定されているオプションを使用する.
+          url_settings = default_url_settings.public_path
+          path = url_for(path, url_settings)
         end
         path
       end

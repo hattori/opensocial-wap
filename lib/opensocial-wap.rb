@@ -1,13 +1,15 @@
 require 'opensocial-wap/config/oauth'
 require 'opensocial-wap/config/url'
-require 'opensocial-wap/config/session'
+require 'opensocial-wap/oauth/helpers/base'
+require 'opensocial-wap/oauth/helpers/basic_helper'
+require 'opensocial-wap/oauth/request_proxy/basic_rack_request'
+require 'opensocial-wap/oauth/client/helper'
+require 'opensocial-wap/oauth/client'
+
 require 'opensocial-wap/routing/url_formatter'
-require 'opensocial-wap/verifiers/opensocial_verifier'
 require 'opensocial-wap/rack/opensocial_oauth'
-require 'opensocial-wap/rack/opensocial_oauth_request_proxy'
 require 'opensocial-wap/rack/request'
-require 'opensocial-wap/client'
-require 'opensocial-wap/client/helper'
+
 
 if defined?(::Rails::Railtie)
   require 'opensocial-wap/railtie'

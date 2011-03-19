@@ -8,38 +8,24 @@ module ActionController
     helper ::OpensocialWap::Helpers::FormTagHelper
     helper ::OpensocialWap::Helpers::AssetTagHelper
 
-    DEFAULT_OPENSOCIAL_WAP_URL_OPTIONS = { :url_format => nil, :params => {} }.freeze
     class_inheritable_accessor :opensocial_wap_enabled
 
     class << self
 
       # OpenSocial WAP Extension 用のURLを構築することを、コントローラに指定する.
-      def opensocial_wap(options = {})
+      def opensocial_wap
         self.opensocial_wap_enabled = true
-        init_opensocoal_wap_options(options)
-        
+
+        app_config = Rails.application.config
+        if app_config.respond_to?(:opensocial_wap)
+          @url_setgings = app_config.opensocial_wap[:url] 
+        end
+
         include ::OpensocialWap::ActionController::Redirecting    
       end
 
-      def opensocial_wap_options
-        @opensocial_wap_options ||= init_opensocoal_wap_options
-        @opensocial_wap_options.dup
-      end
-
-      # イニシャライザでの OpenSocial WAP Extension 設定に、コントローラ毎設定をマージして、
-      # クラスインスタンス変数にセットする.
-      def init_opensocoal_wap_options(options = nil)
-        @opensocial_wap_options = DEFAULT_OPENSOCIAL_WAP_URL_OPTIONS.dup
-        # アプリケーション初期化時に、Application#config にセットした設定をマージ.
-        app_config = Rails.application.config
-        if app_config.respond_to?(:opensocial_wap)
-          @opensocial_wap_options.merge!(app_config.opensocial_wap[:url_options] || {}) 
-        end
-        # コントローラレベルでの設定をマージ.
-        if options
-          @opensocial_wap_options.merge!(options)
-        end
-        @opensocial_wap_options
+      def url_settings
+        @url_setgings
       end
     end
   end

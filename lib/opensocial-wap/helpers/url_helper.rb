@@ -9,49 +9,47 @@ module OpensocialWap
 
       # url_for for the OpenSocial WAP Extension.
       #
-      # ows_options 引数が nil か false である場合、本来の実装による url_for を実行する.
+      # url_settings 引数が nil か false である場合、本来の実装による url_for を実行する.
       #
-      # osw_options 引数に有効な値が指定されていれば、拡張 url_for を呼び出す.
-      # osw_options は、下記の場所で指定することができる.
-      # * url_for の osw_options 引数.
-      # * コントローラの opensocial_wap クラスメソッドの引数中の、:opensocial_wapに対する値.
-      # * Rails.application.config.opensocial_wap.url_options の値(初期化時に指定).
+      # url_settings 引数に有効な値が指定されていれば、拡張 url_for を呼び出す.
+      # url_settings は、下記の場所で指定することができる.
+      # * url_for の url_settings 引数.
+      # * Rails.application.config.opensocial_wap[:url] の値(初期化時に指定).
       # 優先順位は上の方が高い.
       # 
-      def url_for(options = {}, osw_options = nil)
-        unless osw_options
+      def url_for(options = {}, url_settings = nil)
+        unless url_settings
           return super(options) # 本来の実装.
         end
         options ||= {}
-        osw_options = default_osw_options.merge(osw_options) # controller で指定したオプションを引数で上書き.
         case options
         when :back
           controller.request.env["HTTP_REFERER"] || 'javascript:history.back()'
         else
           # OpensocialWap::Routing::UrlFor の url_for を呼び出す.
-          super(options, osw_options)
+          super(options, url_settings)
         end        
       end
 
       # link_to for the OpenSocial WAP Extension.
       # 
       # イニシャライザ、コントローラでの設定に基づいて、OpenSocial WAP用URLをセットする.
-      # html_options引数に、:opensocial_wap というキーで、osw_options の設定を上書きすることができる.
+      # html_options引数に、:url_settings というキーで値を指定して、URL書き換え設定を上書きすることができる.
       # なお、link_to_if, link_to_unless, link_to_unless_current にも本拡張の影響は及ぶ(内部で link_to を呼んでいるため).
       def link_to(*args, &block)
         if block_given?
           options      = args.first || {}
           html_options = args.second
-          link_to(capture(&block), options, html_options, osw_options)
+          link_to(capture(&block), options, html_options)
         else
           name         = args[0]
           options      = args[1] || {}
           html_options = args[2]
 
           html_options = convert_options_to_data_attributes(options, html_options)
-          osw_options = extract_osw_options(html_options)
+          url_settings = extract_url_settings(html_options)
 
-          url = url_for(options, osw_options) # osw_options 引数付きで url_for 呼び出し.
+          url = url_for(options, url_settings) # url_settings 引数付きで url_for 呼び出し.
           href = html_options['href']
           tag_options = tag_options(html_options)
           
@@ -63,7 +61,7 @@ module OpensocialWap
       # button_to for the OpenSocial WAP Extension.
       #
       # イニシャライザ、コントローラでの設定に基づいて、OpenSocial WAP用URLをセットする.
-      # html_options引数に、:opensocial_wap というキーで、osw_options の設定を上書きすることができる.
+      # html_options引数に、:url_settings というキーで値を指定して、URL書き換え定を上書きすることができる.
       def button_to(name, options = {}, html_options = {})
         html_options = html_options.stringify_keys
         convert_boolean_attributes!(html_options, %w( disabled ))
@@ -85,9 +83,9 @@ module OpensocialWap
                                   :value => form_authenticity_token)
         end
 
-        osw_options = extract_osw_options(html_options)
+        url_settings = extract_url_settings(html_options)
 
-        url = url_for(options, osw_options)
+        url = url_for(options, url_settings)
         name ||= url
         
         html_options = convert_options_to_data_attributes(options, html_options)
@@ -101,15 +99,17 @@ module OpensocialWap
       private
 
       # html_options から Opensocial WAP用オプションを取り出す.
-      def extract_osw_options(html_options)
+      def extract_url_settings(html_options)
+        url_settings = nil
         if html_options
-          osw_options = html_options.delete("opensocial_wap")
+          url_settings = html_options.delete("url_settings")
         end
-        # コントローラで opensocial_wap が呼ばれていれば、osw_options を有効にする.
-        if controller.class.opensocial_wap_enabled
-          osw_options ||= {}
+        if !url_settings && default_url_settings
+          # コントローラで opensocial_wap が呼ばれていれば、url_settings を有効にする.
+          # link_to, button_to 系では、:default の設定を使用する.
+          url_settings = default_url_settings.default
         end
-        osw_options
+        url_settings
       end
     end
   end

@@ -10,11 +10,11 @@ module OpensocialWap
         self.freeze
       end
 
-      def oauth_helper(helper = nil)
-        if helper
-          @oauth_helper = helper
+      def helper_class(klass = nil)
+        if klass
+          @helper_class = klass
         end
-        @oauth_helper
+        @helper_class
       end
 
       def api_endpoint(endpoint = nil)

@@ -6,24 +6,23 @@ module OpensocialWap
     module Redirecting
       include ::OpensocialWap::Routing::UrlFor
 
-      # Opensocial WAP Extension の URL設定中の　:redirect_url_format で指定した形式のURLにリダイレクトする.
+      # Opensocial WAP Extension の URL設定中の　:redirect で指定した形式のURLにリダイレクトする.
       def redirect_to(options = {}, response_status = {})
         super
       end
 
       private
       
-      # :redirect_url_format で指定した形式のURLを返す.
+      # opensocial_wap[:url].redirect で指定した形式のURLを返す.
       def _compute_redirect_to_location(options)
         url = super
+        url_settings = nil
         if (self.class.respond_to? :opensocial_wap_enabled) && (self.class.opensocial_wap_enabled == true)
-          osw_options = self.class.opensocial_wap_options.dup
-          redirect_url_format = osw_options[:redirect_url_format]
-          if redirect_url_format
-            osw_options[:url_format] = redirect_url_format
+          if self.class.url_settings
+            url_settings = self.class.url_settings.redirect
           end
         end
-        url_for(url, osw_options)
+        url_for(url, url_settings)
       end
     end
   end

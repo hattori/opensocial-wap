@@ -6,6 +6,10 @@ module OpensocialWap
       def opensocial_oauth_verified?
         env['opensocial-wap.oauth-verified']
       end
+
+      def access_token
+        env['opensocial-wap.access_token']
+      end
     end
   end
 end

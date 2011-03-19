@@ -35,33 +35,23 @@ AppRoot::Application.configure do
   config.active_support.deprecation = :stderr
 
   # OpenSocial WAP Extention
-  # config.opensocial_wap = {
-  #   :verifier => OpensocialWap::Verifiers::OpensocialVerifier.new(:consumer_key=>'abcdefg', 
-  #                                                      :consumer_secret=>'abcdefg12345'),
-  #   :url_options => {
-  #     :url_format => :full,
-  #     :redirect_url_format => :full,
-  #     :public_path_format => :plain,
-  #     :params => { :guid => 'ON' }, 
-  #     :container_host => 'container.example.com' },
-  #   :session_id => :parameter
-  # }
-
-  # config.opensocial_wap.oauth = OpensocialWap::Config::OAuth.new do
-  #   oauth_helper OpensocialWap::OAuth::Helpers::BasicHelper.new(:consumer_key    => 'abcdef',
-  #                                                               :consumer_secret => 'abcdefg12345')
-  #   api_endpoint "http://api.mixi-platform.com/os/0.8/"
-  # end
+  
+  config.opensocial_wap.oauth = OpensocialWap::Config::OAuth.new do |config|
+    options = {
+      :consumer_key => 'abcdef',
+      :consumer_secret => 'abcdefg12345',
+    }
+    config.helper_class  OpensocialWap::OAuth::Helpers::BasicHelper.setup(options)
+    config.api_endpoint  'http://api.mixi-platform.com/os/0.8/'
+  end
 
   config.opensocial_wap.url = OpensocialWap::Config::Url.new do |config|
     config.default     :format => :full, :container_host => 'container.example.com', :params => { :guid => 'ON' }
-    config.redirect    :format => :full, :container_host => 'container.example.com', :params => { :guid => 'ON' }
+    config.redirect    :format => :query, :params => { :guid => 'ON' }
     config.public_path :format => :plain
   end
 
-  config.opensocial_wap.session = OpensocialWap::Config::Session.new do |config|
-    config.session_id :parameter
-  end
+  config.opensocial_wap.session_id = :parameter
 
 
   # 以下、テスト用の設定.

@@ -15,7 +15,7 @@ module OpensocialWap
           # store でも反映されるとは限らない.
           #
           # なお、jpmobile と併用する場合、jpmobile 関係の middleware が実行されるまでは、
-          # request.params メソッドを使用しないこと(文字コード変換上の問題が発生するため).
+          # request.params メソッドを使用しないこと(文字コード変換で問題が発生するため).
           def extract_session_id(env)
             stale_session_check! do
               request = ActionDispatch::Request.new(env)
@@ -35,7 +35,7 @@ module OpensocialWap
 
           # セッションIDを、opensocial_(viewer|owner)_id にするかどうかを判定する.
           # 以下の条件を満たしたときに、true を返す.
-          # * アプリの初期化時に、config.opensocial_wap.sid = :parameter が指定されている.
+          # * アプリの初期化時に、config.opensocial_wap[:session_id] = :parameter が指定されている.
           # * OAuthの検証にパスしている.
           # * opensocial_(viewer|owner)_id がクエリパラメータに存在する.
           # 以上の条件を満たさない場合は、通常通り cookie からセッションIDを取得する.
