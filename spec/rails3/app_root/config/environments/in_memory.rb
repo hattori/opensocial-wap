@@ -41,8 +41,8 @@ AppRoot::Application.configure do
       :consumer_key => 'abcdef',
       :consumer_secret => 'abcdefg12345',
     }
-    config.helper_class  OpensocialWap::OAuth::Helpers::BasicHelper.setup(options)
-    config.api_endpoint  'http://api.mixi-platform.com/os/0.8/'
+    config.helper_class OpensocialWap::OAuth::Helpers::BasicHelper.setup(options)
+    config.api_endpoint 'http://api.mixi-platform.com/os/0.8/'
   end
 
   config.opensocial_wap.url = OpensocialWap::Config::Url.new do |config|
@@ -52,7 +52,6 @@ AppRoot::Application.configure do
   end
 
   config.opensocial_wap.session_id = :parameter
-
 
   # 以下、テスト用の設定.
   require File.expand_path("../../lib/opensocial_wap_sid_enabler", File.dirname(__FILE__))
