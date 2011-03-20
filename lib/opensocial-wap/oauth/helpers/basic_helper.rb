@@ -22,7 +22,7 @@ module OpensocialWap
 
           logger = @request.logger
           if logger
-            logger.debug "oauth signature : #{OAuth::Signature.sign(request_proxy, opts)}"
+            logger.debug "oauth signature : #{::OAuth::Signature.sign(request_proxy, opts)}"
             logger.debug "OauthHandler OAuth verification:"
             logger.debug "  authorization header: #{@request.env['HTTP_AUTHORIZATION']}"
             logger.debug "  base string:          #{signature.signature_base_string}"
