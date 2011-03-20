@@ -9,6 +9,7 @@ module ActionController
     helper ::OpensocialWap::Helpers::AssetTagHelper
 
     class_inheritable_accessor :opensocial_wap_enabled
+    class_inheritable_reader :url_settings
 
     class << self
 
@@ -18,14 +19,10 @@ module ActionController
 
         app_config = Rails.application.config
         if app_config.respond_to?(:opensocial_wap)
-          @url_setgings = app_config.opensocial_wap[:url] 
+          self.write_inheritable_attribute :url_settings, app_config.opensocial_wap[:url]
         end
 
         include ::OpensocialWap::ActionController::Redirecting    
-      end
-
-      def url_settings
-        @url_setgings
       end
     end
   end
