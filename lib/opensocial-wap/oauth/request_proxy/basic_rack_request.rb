@@ -1,10 +1,10 @@
 require 'oauth/request_proxy/rack_request'
 
-module OpensocialWap
-  module OAuth
-    module RequestProxy
-      class BasicRackRequest < ::OAuth::RequestProxy::RackRequest
-
+module OpensocialWap::OAuth::RequestProxy
+  module BasicRackRequest
+    def self.included(base)
+      base.class_eval do
+        
         private
         
         def request_params
@@ -24,3 +24,8 @@ module OpensocialWap
     end
   end
 end
+
+class OAuth::RequestProxy::RackRequest
+  include ::OpensocialWap::OAuth::RequestProxy::BasicRackRequest
+end
+

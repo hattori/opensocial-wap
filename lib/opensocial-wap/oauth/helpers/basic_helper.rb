@@ -15,9 +15,11 @@ module OpensocialWap
         end
         
         def verify(options = nil)
+          request_proxy = ::OAuth::RequestProxy::RackRequest.new(@request)
           opts = {
             :consumer_secret => self.class.consumer_secret,
             :token_secret => request_proxy.parameters['oauth_token_secret'] }
+          @access_token ||= ::OAuth::AccessToken.from_hash(consumer, request_proxy.parameters
           signature = ::OAuth::Signature.build(request_proxy, opts)
 
           logger = @request.logger
@@ -53,16 +55,12 @@ module OpensocialWap
           @consumer_secret
         end
 
-        def request_proxy
-          @request_proxy ||= ::OpensocialWap::OAuth::RequestProxy::BasicRackRequest.new(@request)
-        end
-
         def consumer 
           @consumer ||= ::OAuth::Consumer.new(self.class.consumer_key, self.class.consumer_secret)
         end
 
         def access_token
-          @access_token ||= ::OAuth::AccessToken.from_hash(consumer, request_proxy.parameters)
+          @access_token
         end
 
       end
