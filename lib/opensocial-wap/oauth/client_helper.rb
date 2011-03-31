@@ -14,7 +14,7 @@ module OpensocialWap
       #
       def initialize(oauth_helper, *args)
         @oauth_helper = oauth_helper
-
+        
         # 最後の引数が Hash であれば、GETパラメータとする.
         query_parameters = {}
         if args.size > 0
@@ -24,11 +24,11 @@ module OpensocialWap
         end
         
         # URLを構築.
-        @url = oauth_helper.api_endpoint
+        @url = @oauth_helper.api_endpoint
         @url << '/' if @url[-1] != '/'
         @url << args.join('/')
         unless query_parameters.empty?
-          @url << query_parameters.map{|k,v| "#{k.to_s}=#{::OAuth::Helper.escape(v)}"}.join('&')
+          @url << "?#{::OAuth::Helper.normalize(query_parameters)}"
         end
       end
 

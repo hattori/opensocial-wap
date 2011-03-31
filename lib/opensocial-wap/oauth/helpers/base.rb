@@ -20,7 +20,7 @@ module OpensocialWap
         end
 
         def client_helper(*args)
-          ::OpensocialWap::OAuth::ClientHelper.new(self, args)
+          ::OpensocialWap::OAuth::ClientHelper.new(self, *args)
         end
       end
     end

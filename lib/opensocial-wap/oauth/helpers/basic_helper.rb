@@ -54,11 +54,15 @@ module OpensocialWap
         private
 
         def self.consumer_key
-          @consumer_key
+          @consumer_key.dup if @consumer_key
         end
         
         def self.consumer_secret
-          @consumer_secret
+          @consumer_secret.dup if @consumer_secret
+        end
+
+        def self.api_endpoint
+          @api_endpoint.dup if @api_endpoint
         end
 
         def consumer 
