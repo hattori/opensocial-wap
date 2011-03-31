@@ -25,14 +25,12 @@ module OpensocialWap::OAuth::Client
             'oauth_session_handle'   => options[:oauth_session_handle],
             'xoauth_requestor_id'    => options[:xoauth_requestor_id] # 追加
           }.reject { |k,v| v.to_s == "" }
-        end        
+        end
       end
     end
-    
   end
 end
 
 class OAuth::Client::Helper
   include ::OpensocialWap::OAuth::Client::Helper
 end
-
