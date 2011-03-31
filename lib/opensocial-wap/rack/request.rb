@@ -7,8 +7,8 @@ module OpensocialWap
         env['opensocial-wap.oauth-verified']
       end
 
-      def access_token
-        env['opensocial-wap.access_token']
+      def oauth_helper
+        env['opensocial-wap.helper']
       end
     end
   end
@@ -17,4 +17,3 @@ end
 class Rack::Request
   include OpensocialWap::Rack::RequestWithOpensocialOauth
 end
-
