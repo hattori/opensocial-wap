@@ -16,13 +16,6 @@ module OpensocialWap
         end
         @helper_class
       end
-
-      def api_endpoint(endpoint = nil)
-        if endpoint
-          @api_endpoint = endpoint
-        end
-        @api_endpoint
-      end
     end
   end
 end
