@@ -40,9 +40,9 @@ AppRoot::Application.configure do
     options = {
       :consumer_key => 'abcdef',
       :consumer_secret => 'abcdefg12345',
+      :api_endpoint => 'http://api.mixi-platform.com/os/0.8/'
     }
     config.helper_class OpensocialWap::OAuth::Helpers::BasicHelper.setup(options)
-    config.api_endpoint 'http://api.mixi-platform.com/os/0.8/'
   end
 
   config.opensocial_wap.url = OpensocialWap::Config::Url.new do |config|
