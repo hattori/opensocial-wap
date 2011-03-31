@@ -15,17 +15,18 @@ module OpensocialWap
         end
         
         def verify(options = nil)
-          request_proxy = ::OAuth::RequestProxy::RackRequest.new(@request)
+          request_proxy = ::OAuth::RequestProxy.proxy(@request)
           opts = {
             :consumer_secret => self.class.consumer_secret,
             :token_secret => request_proxy.parameters['oauth_token_secret'] }
-          @access_token ||= ::OAuth::AccessToken.from_hash(consumer, request_proxy.parameters
+          @access_token = ::OAuth::AccessToken.new(consumer,
+                                                   request_proxy.parameters['oauth_token'],
+                                                   request_proxy.parameters['oauth_token_secret'])
           signature = ::OAuth::Signature.build(request_proxy, opts)
-
-          logger = @request.logger
-          if logger
+          
+          if logger = @request.logger
             logger.debug "oauth signature : #{::OAuth::Signature.sign(request_proxy, opts)}"
-            logger.debug "OauthHandler OAuth verification:"
+            logger.debug "=== OauthHandler OAuth verification: ==="
             logger.debug "  authorization header: #{@request.env['HTTP_AUTHORIZATION']}"
             logger.debug "  base string:          #{signature.signature_base_string}"
             logger.debug "  signature:            #{signature.signature}"      
@@ -37,12 +38,17 @@ module OpensocialWap
         end        
 
         def authorization_header(api_request, options = nil)
-          opts = {
-            :consumer => consumer,
-            :token => access_token,
-          }
+          opts = { :consumer => consumer }
+          opts[:token] = access_token if access_token
+          if @request
+            opts[:xoauth_requestor_id] = @request.params['opensocial_viewer_id'] || @request.params['opensocial_owner_id']
+          end
           oauth_helper = ::OAuth::Client::Helper.new(api_request, opts.merge(options))
           oauth_helper.header
+        end
+
+        def api_endpoint
+          self.class.api_endpoint
         end
 
         private
