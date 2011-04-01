@@ -43,8 +43,8 @@ module OpensocialWap
           if @request
             opts[:xoauth_requestor_id] = @request.params['opensocial_viewer_id'] || @request.params['opensocial_owner_id']
           end
-          oauth_helper = ::OAuth::Client::Helper.new(api_request, opts.merge(options))
-          oauth_helper.header
+          oauth_client_helper = ::OAuth::Client::Helper.new(api_request, opts.merge(options))
+          oauth_client_helper.header
         end
 
         def api_endpoint
