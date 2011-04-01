@@ -4,7 +4,6 @@ require 'opensocial-wap/oauth/helpers/base'
 require 'opensocial-wap/oauth/helpers/basic_helper'
 require 'opensocial-wap/oauth/client_helper'
 require 'opensocial-wap/oauth/client/helper'
-#require 'opensocial-wap/oauth/client'
 
 require 'opensocial-wap/routing/url_formatter'
 require 'opensocial-wap/rack/opensocial_oauth'
