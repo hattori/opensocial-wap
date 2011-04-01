@@ -3,7 +3,7 @@ require 'oauth/request_proxy/rack_request'
 require 'opensocial-wap/oauth/request_proxy/basic_rack_request'
 
 module OpensocialWap::OAuth::RequestProxy
-  module SampleRackRequest
+  module ExcludePostParamsFromSignature
     def self.included(base)
       base.class_eval do
         # Do not use POST parameters for parameters_for_signature.
@@ -17,6 +17,5 @@ module OpensocialWap::OAuth::RequestProxy
 end
 
 class OAuth::RequestProxy::RackRequest
-  include ::OpensocialWap::OAuth::RequestProxy::BasicRackRequest
-  include ::OpensocialWap::OAuth::RequestProxy::SampleRackRequest
+  include ::OpensocialWap::OAuth::RequestProxy::ExcludePostParamsFromSignature
 end

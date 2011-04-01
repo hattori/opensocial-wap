@@ -1,7 +1,7 @@
 require 'oauth/request_proxy/rack_request'
 
 module OpensocialWap::OAuth::RequestProxy
-  module BasicRackRequest
+  module RackRequestPatch
     def self.included(base)
       base.class_eval do
         
@@ -26,6 +26,6 @@ module OpensocialWap::OAuth::RequestProxy
 end
 
 class OAuth::RequestProxy::RackRequest
-  include ::OpensocialWap::OAuth::RequestProxy::BasicRackRequest
+  include ::OpensocialWap::OAuth::RequestProxy::RackRequestPatch
 end
 
