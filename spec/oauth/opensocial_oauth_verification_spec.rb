@@ -1,5 +1,7 @@
 require 'spec_helper'
 
+require 'opensocial-wap/oauth/request_proxy/rack_request_patch'
+
 describe ::OpensocialWap::Rack::OpensocialOauth do
   context "a normal (oauth NOT signed) get request from sns" do
     it "must fail to verify" do
@@ -122,9 +124,8 @@ describe ::OpensocialWap::Rack::OpensocialOauth do
                                       :params => params,
                                       'HTTP_AUTHORIZATION' => http_oauth_header)
     request = ::Rack::Request.new(env)
-    request_proxy = ::OpensocialWap::OAuth::RequestProxy::BasicRackRequest.new(request)
     opts = { :consumer_secret => 'sample_consumer_secret' }
-    signature = ::OAuth::Signature.sign(request_proxy, opts)
+    signature = ::OAuth::Signature.sign(request, opts)
     oauth_params.push "oauth_signature=\"#{::OAuth::Helper.escape(signature)}\""
     http_oauth_header = "OAuth " + oauth_params.join(', ')
   end

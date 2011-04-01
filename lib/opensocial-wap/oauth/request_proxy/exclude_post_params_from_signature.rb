@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 require 'oauth/request_proxy/rack_request'
-require 'opensocial-wap/oauth/request_proxy/basic_rack_request'
 
 module OpensocialWap::OAuth::RequestProxy
   module ExcludePostParamsFromSignature

@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'opensocial-wap/oauth/request_proxy/rack_request_patch'
 
 describe OpensocialWap::OAuth::Helpers::BasicHelper do
 
@@ -107,9 +108,8 @@ describe OpensocialWap::OAuth::Helpers::BasicHelper do
                                       :params => params,
                                       'HTTP_AUTHORIZATION' => http_oauth_header)
     request = ::Rack::Request.new(env)
-    request_proxy = ::OpensocialWap::OAuth::RequestProxy::BasicRackRequest.new(request)
     opts = { :consumer_secret => 'sample_consumer_secret' }
-    signature = ::OAuth::Signature.sign(request_proxy, opts)
+    signature = ::OAuth::Signature.sign(request, opts)
     oauth_params.push "oauth_signature=\"#{::OAuth::Helper.escape(signature)}\""
     http_oauth_header = "OAuth " + oauth_params.join(', ')
   end
