@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 require 'oauth/request_proxy/rack_request'
 
 module OpensocialWap::OAuth::RequestProxy
@@ -7,16 +8,20 @@ module OpensocialWap::OAuth::RequestProxy
         
         private
         
+        # request.POST は env["rack.request.form_hash"] の値を返すが、POSTデータ中に
+        # "..var%5Bkey%5D=123.." のような部分があると、"var"=>{"key"=>"123"} という
+        # 形式に変換してしまう.
+        # これを、"var[key]"=>"123" を返すように修正する.
         def request_params
-          request.POST
+          post = request.POST
           form_params = request.env['rack.request.form_vars']
           if form_params && form_params.size > 0
-            form_params.split('&').inject({}) do |hsh, i| 
+            form_params.split('&').inject({}) do |hsh, i|
               kv = i.split('=')
-              hsh[CGI::unescape(kv[0])] = kv[1] ? CGI::unescape(kv[1]) : ''
-              hsh 
+              hsh[::Rack::Utils::unescape(kv[0])] = kv[1] ? ::Rack::Utils::unescape(kv[1]) : ''
+              hsh
             end
-          else      
+          else
             {}
           end
         end
