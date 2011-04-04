@@ -4,6 +4,7 @@
 module OpensocialWap
   module Routing
     module UrlFormatter
+      extend self
 
       # アプリケーションサーバのURL(スキーム・FQDNも含む)を返す.
       # もし url が外部サーバであれば、FALSE を返す.
