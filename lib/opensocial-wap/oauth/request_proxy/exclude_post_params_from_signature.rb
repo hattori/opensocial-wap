@@ -7,7 +7,7 @@ module OpensocialWap::OAuth::RequestProxy
       base.class_eval do
         # Do not use POST parameters for parameters_for_signature.
         def parameters_for_signature
-          # signatture用パラメータから、POSTパラメータを削除.
+          # signature用パラメータから、POSTパラメータを削除.
           super.reject { |k,v| request_params.has_key?(k)}
         end
       end
