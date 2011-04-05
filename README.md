@@ -24,10 +24,13 @@ Sinatra などの Ruby ウェブフレームワークに組み込むことで、
 ## インストール
 
 Gemfile に`'opensocial-wap`を追加します。
+
 ```ruby
 gem 'opensocial-wap', :git => 'https://github.com/hattori/opensocial-wap.git'
 ```
+
 Bundlerでgemをインストールします。
+
 ```
 $ bundle install
 ```
