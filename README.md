@@ -21,8 +21,19 @@ Sinatra などの Ruby ウェブフレームワークに組み込むことで、
 
 環境毎に、上記拡張の有効/無効を切り替えることができるので、通常の方法で開発した Rails アプリを、即座に OpenSocial WAP Extension に対応させることができます。
 
+## インストール
+
+Gemfile に`'opensocial-wap`を追加します。
+```ruby
+gem 'opensocial-wap', :git => 'https://github.com/hattori/opensocial-wap.git'
+```
+Bundlerでgemをインストールします。
+```
+$ bundle install
+```
+
 ## 使い方
 
-* [[wiki]](https://github.com/hattori/opensocial-wap/wiki)参照
+* [wiki](https://github.com/hattori/opensocial-wap/wiki)参照
 
 ## ライセンス
