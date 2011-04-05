@@ -12,7 +12,7 @@ Sinatra などの Ruby ウェブフレームワークに組み込むことで、
 * Restful API リクエスト用 OAuth Signature の生成
 * OpenSocial コンテナ経由のURLの構築
 
-さらに、Ruby on Rails を拡張して、Rails が構築する URL を、OpenSocial コンテナ経由のURLに書き換えます.
+さらに、Ruby on Rails (> 3.0) を拡張して、Rails が構築する URL を、OpenSocial コンテナ経由のURLに書き換えます.
 
 * link_to, button_to などのリンク系ヘルパー
 * form_tag, form_for などのフォーム系ヘルパー
