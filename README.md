@@ -1,12 +1,4 @@
-opensocial-wap は、OpenSocial WAP Extension に準拠したアプリケーションを、簡単に開発するためのツールです。
-
-### OpenSocial WAP Extension とは
-
-JavaScript や iframe をサポートしていないフィーチャーフォン上でも利用できるように、OpenSocial を拡張した仕様です。  
-mixiアプリモバイルの仕様をベースに、OpenSocial の標準仕様として採択されました。  
-フィーチャーフォン上で動作する OpenSocial アプリ用の Gadget XML の書式や、OpenSocial コンテナ経由のリクエスト・レスポンスについての仕様を定めています。
-
-[OpenSocial WAP Extension Specification](http://opensocial-resources.googlecode.com/svn/spec/1.1/OpenSocial-WAP-Extension.xml)
+opensocial-wap は、[OpenSocial WAP Extension](http://opensocial-resources.googlecode.com/svn/spec/1.1/OpenSocial-WAP-Extension.xml) に準拠したアプリケーションを、簡単に開発するためのツールです。
 
 mixiアプリモバイルをはじめ、GREE Platform for FeaturePhone、モバゲーオープンプラットフォームモバイル版などの OpenSocial プラットフォームは、OpenSocial WAP Extension にほぼ準拠しています。  
 しかし、現状では、OAuth Signature の生成方法や URL のルールなどの点で、プラットフォーム毎に差異があります。  
