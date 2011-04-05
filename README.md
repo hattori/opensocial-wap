@@ -23,16 +23,6 @@ Sinatra などの Ruby ウェブフレームワークに組み込むことで、
 
 ## 使い方
 
-* [[OAuthヘルパー]] : OAuthに関する処理を行う
-* [[OpensocialWap::Rack::OpensocialOauth]] : OAuthヘルパーを初期化し、シグネチャの検証をするRackミドルウェア
-* [[クライアントヘルパー]] : APIサーバへにリクエストを送る
-* [[URLの書き換え]]
-
-### RailsアプリをOpenSocial WAP Extentionに対応させる
-
-* [[Rails: OAuthヘルパー]] : リクエストの OAuth Signatureを検証する
-* [[Rails: URLの書き換え]] : URLをOpenSocialコンテナ経由の形式に書き換える
-* [[Rails: セッション]] : セッションを有効にする
-* [[Rails: 設定例]]
+* [[wiki]](https://github.com/hattori/opensocial-wap/wiki)参照
 
 ## ライセンス
