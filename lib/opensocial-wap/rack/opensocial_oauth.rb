@@ -25,7 +25,7 @@ module OpensocialWap
 
         status, header, response = @app.call(env)
  
-        response = remove_utf8_form_input_tag header, response
+        response = remove_utf8_form_input_tag(header, response)
         new_response = ::Rack::Response.new(response, status, header)
         new_response.finish
       end
@@ -66,7 +66,10 @@ module OpensocialWap
         end
       end
       
-      def remove_utf8_form_input_tag env, response
+      def remove_utf8_form_input_tag(env, response)
+        unless response.respond_to?(:body=)
+          return response
+        end
         if env['Content-Type'] =~ %r!text/html|application/xhtml\+xml!
           type, charset = env['Content-Type'].split(/;\s*charset=/)
           
