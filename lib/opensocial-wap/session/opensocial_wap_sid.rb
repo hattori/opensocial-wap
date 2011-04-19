@@ -21,8 +21,7 @@ module OpensocialWap
               request = ActionDispatch::Request.new(env)
               if use_opensocial_wap_sid?(request)
                 # opensocial_(viewer|owner)_id をsession_idとして使用.
-                session_key = request.GET.key?('opensocial_viewer_id') ? 'opensocial_viewer_id' : 'opensocial_owner_id'
-                sid = request.GET[session_key]
+                sid = opensocial_user_id(request)
               else
                 # 通常の方法でsession_idを取得.
                 sid = request.cookies[@key]
@@ -47,13 +46,25 @@ module OpensocialWap
                 # OAuthの検証にパスしている.
                 if request.opensocial_oauth_verified?
                   # opensocial_(viewer|owner)_id がクエリパラメータに存在する.
-                  if [ 'opensocial_viewer_id',  'opensocial_owner_id'].any? {|p| request.GET.keys.include? p }
+                  if opensocial_user_id(request)
                     return true
                   end
                 end
               end
             end
             false
+          end
+
+          def opensocial_user_id(request)
+            unless @opensocial_user_id
+              params = begin
+                         request.GET.update(request.POST)
+                       rescue EOFError => e
+                         request.GET
+                       end
+              @opensocial_user_id = params['opensocial_viewer_id'] || params['opensocial_owner_id']
+            end
+            @opensocial_user_id
           end
         end
       end    
