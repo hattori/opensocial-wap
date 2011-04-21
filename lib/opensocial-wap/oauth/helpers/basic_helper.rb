@@ -15,7 +15,11 @@ module OpensocialWap
         end
         
         def verify(options = nil)
-          request_proxy = ::OAuth::RequestProxy.proxy(@request)
+          if self.class.proxy_class
+            request_proxy = self.class.proxy_class.new(@request)
+          else
+            request_proxy = ::OAuth::RequestProxy.proxy(@request)
+          end
           opts = {
             :consumer_secret => self.class.consumer_secret,
             :token_secret => request_proxy.parameters['oauth_token_secret'] }
