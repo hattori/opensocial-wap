@@ -2,12 +2,13 @@ module OpensocialWap
   class Platform
 
     def mixi(&block)
+      @access_from_pc = false
       instance_eval(&block)
       setup_mixi
     end
 
-    def sandbox(sandbox = true)
-      @sandbox = sandbox
+    def access_from_pc(access_from_pc = true)
+      @access_from_pc = access_from_pc
     end
 
     private
@@ -25,10 +26,14 @@ module OpensocialWap
       end
       @config.opensocial_wap.url = OpensocialWap::Config::Url.new do |config|
         config.default     :format => :query, :params => { :guid => 'ON' }
-        config.redirect    :format => :full, :container_host => 'ma.test.mixi.net', :params => { :guid => 'ON' }
+        config.redirect    :format => :full, :container_host => container_host, :params => { :guid => 'ON' }
         config.public_path :format => :local
       end
       @config.opensocial_wap.session_id = @session ? :parameter : :cookie
+    end
+
+    def container_host
+      @access_from_pc ? 'ma.test.mixi.net' : 'ma.mixi.net'
     end
   end
 end
