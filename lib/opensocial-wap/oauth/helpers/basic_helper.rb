@@ -17,8 +17,7 @@ module OpensocialWap
         end
         
         def verify(options = nil)
-          proxy_class = self.class.instance_variable_get(:@proxy_class) || DEFAULT_PROXY_CLASS
-          request_proxy = proxy_class.new(@request)
+          request_proxy = self.class.proxy_class.new(@request)
 
           opts = {
             :consumer_secret => self.class.consumer_secret,
@@ -67,6 +66,10 @@ module OpensocialWap
 
         def self.api_endpoint
           @api_endpoint.dup if @api_endpoint
+        end
+
+        def self.proxy_class
+          @proxy_class || DEFAULT_PROXY_CLASS
         end
 
         def consumer 
