@@ -33,7 +33,6 @@ debugger
         session true
       end
 
-debugger
       c.opensocial_wap.oauth.helper_class.should == OpensocialWap::OAuth::Helpers::BasicHelper
       c.opensocial_wap.oauth.helper_class.proxy_class.should == OpensocialWap::OAuth::RequestProxy::OAuthRackRequestProxy
       c.opensocial_wap.oauth.helper_class.consumer_key.should == '1234'
