@@ -1,5 +1,6 @@
 require 'opensocial-wap/config/oauth'
 require 'opensocial-wap/config/url'
+require 'opensocial-wap/oauth/request_proxy/oauth_rack_request_proxy'
 require 'opensocial-wap/oauth/helpers/base'
 require 'opensocial-wap/oauth/helpers/basic_helper'
 require 'opensocial-wap/oauth/client_helper'
