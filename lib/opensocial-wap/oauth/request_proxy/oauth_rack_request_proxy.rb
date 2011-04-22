@@ -1,5 +1,11 @@
+# -*- coding: utf-8 -*-
 require 'oauth/request_proxy/rack_request'
 
+# OAuth signature検証のための、request proxy.
+#
+# Railsのcheck_boxヘルパーは、同じパラメター名でhiddenタグとinput type="checkbox"タグを生成するため、
+# 同じパラメターで複数の値が届く場合がある。
+# このようなケースに対応できるよう、OAuth::RequestProxy::RackRequestを拡張した.
 module OpensocialWap::OAuth::RequestProxy
   class OAuthRackRequestProxy < OAuth::RequestProxy::RackRequest
     
