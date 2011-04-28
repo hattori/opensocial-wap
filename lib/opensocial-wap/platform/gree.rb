@@ -4,17 +4,10 @@ module OpensocialWap
     def gree(&block)
       @sandbox = false
       instance_eval(&block)
-      setup_gree
-    end
 
-    def sandbox(sandbox = true)
-      @sandbox = sandbox
-    end
+      container_host = @sandbox ? 'mgadget-sb.gree.jp' : "mgadget.gree.jp"
+      api_endpoint = @sandbox ? 'http://os-sb.gree.jp/api/rest/' : "http://os.gree.jp/api/rest/"
 
-    private
-
-    # Setup the configuration for GREE.
-    def setup_gree
       @config.opensocial_wap.oauth = OpensocialWap::Config::OAuth.new do |config|
         options = {
           :consumer_key => @consumer_key,
@@ -30,14 +23,5 @@ module OpensocialWap
       end
       @config.opensocial_wap.session_id = @session ? :parameter : :cookie
     end
-
-    def container_host
-      @sandbox ? 'mgadget-sb.gree.jp' : "mgadget.gree.jp"
-    end
-
-    def api_endpoint
-      @sandbox ? 'http://os-sb.gree.jp/api/rest/' : "http://os.gree.jp/api/rest/"
-    end
-
   end
 end

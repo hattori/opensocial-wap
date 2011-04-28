@@ -16,5 +16,13 @@ module OpensocialWap
     def session(enabled = true)
       @session = enabled
     end
+
+    def sandbox(sandbox = true)
+      @sandbox = sandbox
+    end
+
+    def app_id(app_id)
+      @app_id = app_id
+    end
   end
 end

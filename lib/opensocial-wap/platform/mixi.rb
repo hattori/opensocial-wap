@@ -4,17 +4,9 @@ module OpensocialWap
     def mixi(&block)
       @access_from_pc = false
       instance_eval(&block)
-      setup_mixi
-    end
 
-    def access_from_pc(access_from_pc = true)
-      @access_from_pc = access_from_pc
-    end
+      container_host = @access_from_pc ? 'ma.test.mixi.net' : 'ma.mixi.net'
 
-    private
-
-    # Setup the configuration for mixi.
-    def setup_mixi
       @config.opensocial_wap.oauth = OpensocialWap::Config::OAuth.new do |config|
         options = {
           :proxy_class => ::OpensocialWap::OAuth::RequestProxy::OAuthRackRequestProxyForMixi,
@@ -32,8 +24,8 @@ module OpensocialWap
       @config.opensocial_wap.session_id = @session ? :parameter : :cookie
     end
 
-    def container_host
-      @access_from_pc ? 'ma.test.mixi.net' : 'ma.mixi.net'
+    def access_from_pc(access_from_pc = true)
+      @access_from_pc = access_from_pc
     end
   end
 end
