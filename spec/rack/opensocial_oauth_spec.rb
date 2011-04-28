@@ -1,7 +1,5 @@
 require 'spec_helper'
 
-require 'opensocial-wap/oauth/request_proxy/rack_request_patch'
-
 describe ::OpensocialWap::Rack::OpensocialOauth do
   context "a normal (oauth NOT signed) get request from sns" do
     it "must fail to verify" do
