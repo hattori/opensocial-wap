@@ -5,7 +5,7 @@ describe OpensocialWap::Platform do
   describe "gree" do
     it "sandbox用に、GREE用の初期化が正しく行えること(セッションOFF)" do
       c = Rails::Application::Configuration.new
-      OpensocialWap::Platform.new(c).gree do
+      OpensocialWap::Platform.gree(c) do
         consumer_key '1234'
         consumer_secret 'abcd'
         sandbox true
@@ -25,7 +25,7 @@ describe OpensocialWap::Platform do
 
     it "本番用に、GREE用の初期化が正しく行えること(セッションON)" do
       c = Rails::Application::Configuration.new
-      OpensocialWap::Platform.new(c).gree do
+      OpensocialWap::Platform.gree(c) do
         consumer_key '1234'
         consumer_secret 'abcd'
         sandbox false

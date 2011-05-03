@@ -1,7 +1,9 @@
 module OpensocialWap
-  class Platform
-
-    def mobage(&block)
+  module Platform
+    extend self
+    
+    def mobage(config, &block)
+      @config = config
       @sandbox = false
       instance_eval(&block)
 

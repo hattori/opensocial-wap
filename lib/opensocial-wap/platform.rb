@@ -1,6 +1,8 @@
 module OpensocialWap
-  class Platform
-    def initialize(config)
+  module Platform
+    extend self
+    
+    def configure(config)
       @config = config
       @session = true
     end

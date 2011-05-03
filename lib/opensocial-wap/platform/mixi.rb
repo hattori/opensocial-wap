@@ -1,7 +1,9 @@
 module OpensocialWap
-  class Platform
+  module Platform
+    extend self
 
-    def mixi(&block)
+    def mixi(config, &block)
+      @config = config
       @access_from_pc = false
       instance_eval(&block)
 

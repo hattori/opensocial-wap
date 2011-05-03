@@ -5,7 +5,7 @@ describe OpensocialWap::Platform do
   describe "mixi" do
     it "mixi用の初期化が正しく行えること" do
       c = Rails::Application::Configuration.new
-      OpensocialWap::Platform.new(c).mixi do
+      OpensocialWap::Platform.mixi(c) do
         consumer_key '1234'
         consumer_secret 'abcd'
         session false
@@ -24,7 +24,7 @@ describe OpensocialWap::Platform do
 
     it "mixi用の初期化が正しく行えること(PCからのテストアクセス用)" do
       c = Rails::Application::Configuration.new
-      OpensocialWap::Platform.new(c).mixi do
+      OpensocialWap::Platform.mixi(c) do
         consumer_key '1234'
         consumer_secret 'abcd'
         session true

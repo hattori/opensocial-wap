@@ -1,7 +1,9 @@
 module OpensocialWap
-  class Platform
+  module Platform
+    extend self
 
-    def gree(&block)
+    def gree(config, &block)
+      configure(config)
       @sandbox = false
       instance_eval(&block)
 
