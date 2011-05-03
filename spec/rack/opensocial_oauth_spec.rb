@@ -10,6 +10,7 @@ describe ::OpensocialWap::Rack::OpensocialOauth do
       helper_class = OpensocialWap::OAuth::Helpers::BasicHelper.configure do
         consumer_key 'sample_consumer_key'
         consumer_secret 'sample_consumer_secret'
+        proxy_class OpensocialWap::OAuth::RequestProxy::OAuthRackRequestProxy
       end
       opts = {:helper_class => helper_class}
       rack = OpensocialWap::Rack::OpensocialOauth.new(nil, opts)
@@ -29,6 +30,7 @@ describe ::OpensocialWap::Rack::OpensocialOauth do
       helper_class = OpensocialWap::OAuth::Helpers::BasicHelper.configure do
         consumer_key 'sample_consumer_key'
         consumer_secret 'sample_consumer_secret'
+        proxy_class OpensocialWap::OAuth::RequestProxy::OAuthRackRequestProxy
       end
       opts = {:helper_class => helper_class}
       rack = OpensocialWap::Rack::OpensocialOauth.new(nil, opts)
@@ -47,6 +49,7 @@ describe ::OpensocialWap::Rack::OpensocialOauth do
       helper_class = OpensocialWap::OAuth::Helpers::BasicHelper.configure do
         consumer_key 'sample_consumer_key'
         consumer_secret 'foobar'
+        proxy_class OpensocialWap::OAuth::RequestProxy::OAuthRackRequestProxy
       end
       opts = {:helper_class => helper_class}
       rack = OpensocialWap::Rack::OpensocialOauth.new(nil, opts)
@@ -68,6 +71,7 @@ describe ::OpensocialWap::Rack::OpensocialOauth do
       helper_class = OpensocialWap::OAuth::Helpers::BasicHelper.configure do
         consumer_key 'sample_consumer_key'
         consumer_secret 'sample_consumer_secret'
+        proxy_class OpensocialWap::OAuth::RequestProxy::OAuthRackRequestProxy
       end
       opts = {:helper_class => helper_class}
       rack = OpensocialWap::Rack::OpensocialOauth.new(nil, opts)
@@ -89,9 +93,11 @@ describe ::OpensocialWap::Rack::OpensocialOauth do
       helper_class = OpensocialWap::OAuth::Helpers::BasicHelper.configure do
         consumer_key 'sample_consumer_key'
         consumer_secret 'sample_consumer_secret'
+        proxy_class OpensocialWap::OAuth::RequestProxy::OAuthRackRequestProxy
       end
       opts = {:helper_class => helper_class}
       rack = OpensocialWap::Rack::OpensocialOauth.new(nil, opts)
+
       result = rack.send :verify, request.env
       
       result.should be_true
@@ -109,6 +115,7 @@ describe ::OpensocialWap::Rack::OpensocialOauth do
       helper_class = OpensocialWap::OAuth::Helpers::BasicHelper.configure do
         consumer_key 'sample_consumer_key'
         consumer_secret 'foobar'
+        proxy_class OpensocialWap::OAuth::RequestProxy::OAuthRackRequestProxy
       end
       opts = {:helper_class => helper_class}
       rack = OpensocialWap::Rack::OpensocialOauth.new(nil, opts)

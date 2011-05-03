@@ -11,6 +11,7 @@ describe OpensocialWap::OAuth::Helpers::BasicHelper do
       OpensocialWap::OAuth::Helpers::BasicHelper.configure do
         consumer_key 'sample_consumer_key'
         consumer_secret 'sample_consumer_secret'
+        proxy_class OpensocialWap::OAuth::RequestProxy::OAuthRackRequestProxy
       end
       oauth_helper = OpensocialWap::OAuth::Helpers::BasicHelper.new(request)
 
@@ -29,6 +30,7 @@ describe OpensocialWap::OAuth::Helpers::BasicHelper do
       OpensocialWap::OAuth::Helpers::BasicHelper.configure do
         consumer_key 'sample_consumer_key'
         consumer_secret 'sample_consumer_secret'
+        proxy_class OpensocialWap::OAuth::RequestProxy::OAuthRackRequestProxy
       end
       oauth_helper = OpensocialWap::OAuth::Helpers::BasicHelper.new(request)
 
@@ -46,6 +48,7 @@ describe OpensocialWap::OAuth::Helpers::BasicHelper do
       OpensocialWap::OAuth::Helpers::BasicHelper.configure do
         consumer_key 'sample_consumer_key'
         consumer_secret 'foobar'
+        proxy_class OpensocialWap::OAuth::RequestProxy::OAuthRackRequestProxy
       end
       oauth_helper = OpensocialWap::OAuth::Helpers::BasicHelper.new(request)
       result = oauth_helper.verify
@@ -65,6 +68,7 @@ describe OpensocialWap::OAuth::Helpers::BasicHelper do
       OpensocialWap::OAuth::Helpers::BasicHelper.configure do
         consumer_key 'sample_consumer_key'
         consumer_secret 'sample_consumer_secret'
+        proxy_class OpensocialWap::OAuth::RequestProxy::OAuthRackRequestProxy
       end
       oauth_helper = OpensocialWap::OAuth::Helpers::BasicHelper.new(request)
       result = oauth_helper.verify
@@ -84,6 +88,7 @@ describe OpensocialWap::OAuth::Helpers::BasicHelper do
       OpensocialWap::OAuth::Helpers::BasicHelper.configure do 
         consumer_key 'sample_consumer_key'
         consumer_secret 'sample_consumer_secret'
+        proxy_class OpensocialWap::OAuth::RequestProxy::OAuthRackRequestProxy
       end
       oauth_helper = OpensocialWap::OAuth::Helpers::BasicHelper.new(request)
       result = oauth_helper.verify
@@ -102,6 +107,7 @@ describe OpensocialWap::OAuth::Helpers::BasicHelper do
       OpensocialWap::OAuth::Helpers::BasicHelper.configure do
         consumer_key 'sample_consumer_key'
         consumer_secret 'foobar'
+        proxy_class OpensocialWap::OAuth::RequestProxy::OAuthRackRequestProxy
       end
       oauth_helper = OpensocialWap::OAuth::Helpers::BasicHelper.new(request)
       result = oauth_helper.verify
