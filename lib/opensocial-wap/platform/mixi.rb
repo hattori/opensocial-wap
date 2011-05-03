@@ -7,21 +7,23 @@ module OpensocialWap
       @access_from_pc = false
       instance_eval(&block)
 
-      container_host = @access_from_pc ? 'ma.test.mixi.net' : 'ma.mixi.net'
+      consumer_key    = @consumer_key
+      consumer_secret = @consumer_secret
+      container_host  = @access_from_pc ? 'ma.test.mixi.net' : 'ma.mixi.net'
 
-      @config.opensocial_wap.oauth = OpensocialWap::Config::OAuth.new do |config|
-        options = {
-          :proxy_class => ::OpensocialWap::OAuth::RequestProxy::OAuthRackRequestProxyForMixi,
-          :consumer_key => @consumer_key,
-          :consumer_secret => @consumer_secret,
-          :api_endpoint => 'http://api.mixi-platform.com/os/0.8/',
-        }
-        config.helper_class OpensocialWap::OAuth::Helpers::BasicHelper.setup(options)
+      OpensocialWap::OAuth::Helpers::BasicHelper.configure do
+        proxy_class     OpensocialWap::OAuth::RequestProxy::OAuthRackRequestProxyForMixi
+        consumer_key    consumer_key
+        consumer_secret consumer_secret
+        api_endpoint    'http://api.mixi-platform.com/os/0.8/'
       end
-      @config.opensocial_wap.url = OpensocialWap::Config::Url.new do |config|
-        config.default     :format => :query, :params => { :guid => 'ON' }
-        config.redirect    :format => :full, :container_host => container_host, :params => { :guid => 'ON' }
-        config.public_path :format => :local
+      @config.opensocial_wap.oauth = OpensocialWap::Config::OAuth.configure do
+        helper_class OpensocialWap::OAuth::Helpers::BasicHelper
+      end
+      @config.opensocial_wap.url = OpensocialWap::Config::Url.configure do
+        default     :format => :query, :params => { :guid => 'ON' }
+        redirect    :format => :full, :container_host => container_host, :params => { :guid => 'ON' }
+        public_path :format => :local
       end
       @config.opensocial_wap.session_id = @session ? :parameter : :cookie
     end

@@ -5,6 +5,10 @@ require File.expand_path("helper_spec_helper", File.dirname(__FILE__))
 describe OpensocialWap::Helpers::FormTagHelper do
   fixtures :users
 
+  before do
+    reset_opensocial_wap_config(Rails.application.config)
+  end
+
   describe "#form_tag" do
 
     context NonOpensocialWapController do

@@ -5,6 +5,10 @@ require File.expand_path("helper_spec_helper", File.dirname(__FILE__))
 
 describe OpensocialWap::Helpers::AssetTagHelper do
 
+  before do
+    reset_opensocial_wap_config(Rails.application.config)
+  end
+
   describe "#image_path" do
     context "コントローラで opensocial_wap を指定していない場合" do
       it "初期化時に指定した形式の URL を返すこと" do

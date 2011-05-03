@@ -20,7 +20,6 @@ module OpensocialWap
     config.opensocial_wap = ActiveSupport::OrderedOptions.new
 
     initializer "opensocial-wap.initialize" do |app|
-      # do something..
     end
 
     initializer 'opensocial-wap.load_middleware', :after=> :load_config_initializers do

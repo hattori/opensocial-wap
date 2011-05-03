@@ -7,8 +7,10 @@ describe ::OpensocialWap::Rack::OpensocialOauth do
       env = ::Rack::MockRequest.env_for('http://example.com/?opensocial_app_id=877&opensocial_owner_id=23&sample_key=sample_value')
       request = ::Rack::Request.new(env)
       
-      helper_class = OpensocialWap::OAuth::Helpers::BasicHelper.setup(:consumer_key => 'sample_consumer_key', 
-                                                                      :consumer_secret => 'sample_consumer_secret')
+      helper_class = OpensocialWap::OAuth::Helpers::BasicHelper.configure do
+        consumer_key 'sample_consumer_key'
+        consumer_secret 'sample_consumer_secret'
+      end
       opts = {:helper_class => helper_class}
       rack = OpensocialWap::Rack::OpensocialOauth.new(nil, opts)
       result = rack.send :verify, request.env
@@ -24,8 +26,10 @@ describe ::OpensocialWap::Rack::OpensocialOauth do
                                         'HTTP_AUTHORIZATION' => http_oauth_header('GET'))
       request = ::Rack::Request.new(env)
       
-      helper_class = OpensocialWap::OAuth::Helpers::BasicHelper.setup(:consumer_key => 'sample_consumer_key', 
-                                                                      :consumer_secret => 'sample_consumer_secret')
+      helper_class = OpensocialWap::OAuth::Helpers::BasicHelper.configure do
+        consumer_key 'sample_consumer_key'
+        consumer_secret 'sample_consumer_secret'
+      end
       opts = {:helper_class => helper_class}
       rack = OpensocialWap::Rack::OpensocialOauth.new(nil, opts)
       result = rack.send :verify, request.env
@@ -40,8 +44,10 @@ describe ::OpensocialWap::Rack::OpensocialOauth do
       request = ::Rack::Request.new(env)
       
       # invalid consumer secret
-      helper_class = OpensocialWap::OAuth::Helpers::BasicHelper.setup(:consumer_key => 'sample_consumer_key', 
-                                                                      :consumer_secret => 'foobar')
+      helper_class = OpensocialWap::OAuth::Helpers::BasicHelper.configure do
+        consumer_key 'sample_consumer_key'
+        consumer_secret 'foobar'
+      end
       opts = {:helper_class => helper_class}
       rack = OpensocialWap::Rack::OpensocialOauth.new(nil, opts)
       result = rack.send :verify, request.env
@@ -59,8 +65,10 @@ describe ::OpensocialWap::Rack::OpensocialOauth do
                                         :params => {'post_sample_key'=>'post_sample_value'})
       request = ::Rack::Request.new(env)
       
-      helper_class = OpensocialWap::OAuth::Helpers::BasicHelper.setup(:consumer_key => 'sample_consumer_key', 
-                                                                      :consumer_secret => 'sample_consumer_secret')
+      helper_class = OpensocialWap::OAuth::Helpers::BasicHelper.configure do
+        consumer_key 'sample_consumer_key'
+        consumer_secret 'sample_consumer_secret'
+      end
       opts = {:helper_class => helper_class}
       rack = OpensocialWap::Rack::OpensocialOauth.new(nil, opts)
       result = rack.send :verify, request.env
@@ -78,8 +86,10 @@ describe ::OpensocialWap::Rack::OpensocialOauth do
                                         'HTTP_AUTHORIZATION' => http_oauth_header('POST', {'post_sample_key'=>'post_sample_value'}))
       request = ::Rack::Request.new(env)
       
-      helper_class = OpensocialWap::OAuth::Helpers::BasicHelper.setup(:consumer_key => 'sample_consumer_key', 
-                                                                      :consumer_secret => 'sample_consumer_secret')
+      helper_class = OpensocialWap::OAuth::Helpers::BasicHelper.configure do
+        consumer_key 'sample_consumer_key'
+        consumer_secret 'sample_consumer_secret'
+      end
       opts = {:helper_class => helper_class}
       rack = OpensocialWap::Rack::OpensocialOauth.new(nil, opts)
       result = rack.send :verify, request.env
@@ -96,8 +106,10 @@ describe ::OpensocialWap::Rack::OpensocialOauth do
       request = ::Rack::Request.new(env)
       
       # invalid consumer secret
-      helper_class = OpensocialWap::OAuth::Helpers::BasicHelper.setup(:consumer_key => 'sample_consumer_key', 
-                                                                      :consumer_secret => 'foobar')
+      helper_class = OpensocialWap::OAuth::Helpers::BasicHelper.configure do
+        consumer_key 'sample_consumer_key'
+        consumer_secret 'foobar'
+      end
       opts = {:helper_class => helper_class}
       rack = OpensocialWap::Rack::OpensocialOauth.new(nil, opts)
       result = rack.send :verify, request.env

@@ -19,3 +19,5 @@ RSpec.configure do |config|
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
   config.use_transactional_fixtures = true
 end
+
+require File.expand_path('../reset_opensocial_wap_config', __FILE__)

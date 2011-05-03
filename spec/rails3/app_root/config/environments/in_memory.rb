@@ -36,19 +36,19 @@ AppRoot::Application.configure do
 
   # OpenSocial WAP Extention
   
-  config.opensocial_wap.oauth = OpensocialWap::Config::OAuth.new do |config|
-    options = {
-      :consumer_key => 'abcdef',
-      :consumer_secret => 'abcdefg12345',
-      :api_endpoint => 'http://api.mixi-platform.com/os/0.8/'
-    }
-    config.helper_class OpensocialWap::OAuth::Helpers::BasicHelper.setup(options)
+  config.opensocial_wap.oauth = OpensocialWap::Config::OAuth.configure do
+    OpensocialWap::OAuth::Helpers::BasicHelper.configure do
+      consumer_key    'abcdef'
+      consumer_secret 'abcdefg12345'
+      api_endpoint    'http://api.example.com/'
+    end
+    helper_class OpensocialWap::OAuth::Helpers::BasicHelper
   end
 
-  config.opensocial_wap.url = OpensocialWap::Config::Url.new do |config|
-    config.default     :format => :full, :container_host => 'container.example.com', :params => { :guid => 'ON' }
-    config.redirect    :format => :query, :params => { :guid => 'ON' }
-    config.public_path :format => :plain
+  config.opensocial_wap.url = OpensocialWap::Config::Url.configure do
+    default     :format => :full, :container_host => 'container.example.com', :params => { :guid => 'ON' }
+    redirect    :format => :query, :params => { :guid => 'ON' }
+    public_path :format => :plain
   end
 
   config.opensocial_wap.session_id = :parameter
@@ -57,3 +57,4 @@ AppRoot::Application.configure do
   require File.expand_path("../../lib/opensocial_wap_sid_enabler", File.dirname(__FILE__))
   config.middleware.insert_before ActiveRecord::SessionStore, OpensocialWapSidEnabler
 end
+

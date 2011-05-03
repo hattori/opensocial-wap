@@ -6,6 +6,7 @@ describe OpensocialWap::Session::OpensocialWapSid do
 
   describe "GET users#edit" do
     before do
+      reset_opensocial_wap_config(Rails.application.config)
       page.reset!
     end
 

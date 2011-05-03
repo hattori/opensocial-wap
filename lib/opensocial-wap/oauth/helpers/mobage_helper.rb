@@ -20,7 +20,10 @@ module OpensocialWap::OAuth::Helpers
 
     private
 
-    def self.app_id
+    def self.app_id(arg = nil)
+      if arg
+        @app_id = arg
+      end
       @app_id.dup if @app_id
     end
   end

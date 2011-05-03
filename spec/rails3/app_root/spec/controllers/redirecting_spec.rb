@@ -15,6 +15,10 @@ end
 
 describe OpensocialWap::ActionController::Redirecting do
 
+  before do
+    reset_opensocial_wap_config(Rails.application.config)
+  end
+
   context "コントローラで opensocial_wap が宣言されていない場合" do
     controller do
       include TestController

@@ -5,6 +5,10 @@ require File.expand_path("helper_spec_helper", File.dirname(__FILE__))
 describe OpensocialWap::Helpers::UrlHelper do
   fixtures :users
 
+  before do
+    reset_opensocial_wap_config(Rails.application.config)
+  end
+
   describe "#url_for" do
     context "コントローラで opensocial_wap を指定していない場合" do
       it "従来の形式の URL を返すこと" do

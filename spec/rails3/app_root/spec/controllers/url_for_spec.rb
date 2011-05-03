@@ -20,6 +20,10 @@ describe OpensocialWap::Routing::UrlFor do
   end
 
   describe 'url_forによるURLの構築.' do
+    before do
+      reset_opensocial_wap_config(Rails.application.config)
+    end
+
     it "url_for を 2番目の引数(url_settings)を指定せずによびだすと、従来の形式の URL が返されること" do
       get :index, :url_format => 'original'
       assigns(:u).should == "http://test.host/users"

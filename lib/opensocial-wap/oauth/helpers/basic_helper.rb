@@ -7,14 +7,6 @@ module OpensocialWap
       class BasicHelper < Base
 
         DEFAULT_PROXY_CLASS = ::OpensocialWap::OAuth::RequestProxy::OAuthRackRequestProxy
-
-        def self.setup(options)
-          # Set class instance variables.
-          options.each do |k, v|
-            self.instance_variable_set "@#{k.to_s}", v
-          end
-          self
-        end
         
         def verify(options = nil)
           request_proxy = self.class.proxy_class.new(@request)
@@ -54,21 +46,38 @@ module OpensocialWap
           self.class.api_endpoint
         end
 
+        def self.configure(&blk)
+          instance_eval(&blk)
+          self
+        end
+
         private
 
-        def self.consumer_key
+        def self.consumer_key(arg = nil)
+          if arg
+            @consumer_key = arg
+          end
           @consumer_key.dup if @consumer_key
         end
         
-        def self.consumer_secret
+        def self.consumer_secret(arg = nil)
+          if arg
+            @consumer_secret = arg
+          end
           @consumer_secret.dup if @consumer_secret
         end
 
-        def self.api_endpoint
+        def self.api_endpoint(arg = nil)
+          if arg
+            @api_endpoint = arg
+          end
           @api_endpoint.dup if @api_endpoint
         end
 
-        def self.proxy_class
+        def self.proxy_class(arg = nil)
+          if arg
+            @proxy_class = arg
+          end
           @proxy_class || DEFAULT_PROXY_CLASS
         end
 

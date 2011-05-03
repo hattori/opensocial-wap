@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 
+# Url 関係設定.
 module OpensocialWap
   module Config
+    module Url
+      extend self
 
-    # Url 関係設定.
-    class Url
-      def initialize
-        yield self
-        self.freeze
+      def configure(&blk)
+        instance_eval(&blk)
+        self
       end
 
       def default(options = nil)
