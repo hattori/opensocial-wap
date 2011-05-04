@@ -1,5 +1,6 @@
 module OpensocialWap
   module Platform
+    # Singleton Pattern
     extend self
     
     def configure(config)

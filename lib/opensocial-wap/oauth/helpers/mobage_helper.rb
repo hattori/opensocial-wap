@@ -24,7 +24,7 @@ module OpensocialWap::OAuth::Helpers
       if arg
         @app_id = arg
       end
-      @app_id.dup if @app_id
+      @app_id if @app_id
     end
   end
 end

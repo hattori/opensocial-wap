@@ -4,6 +4,7 @@
 module OpensocialWap
   module Config
     module Url
+      # Singleton Pattern
       extend self
 
       def configure(&blk)

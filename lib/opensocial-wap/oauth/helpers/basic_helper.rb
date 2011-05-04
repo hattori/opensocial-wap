@@ -57,21 +57,21 @@ module OpensocialWap
           if arg
             @consumer_key = arg
           end
-          @consumer_key.dup if @consumer_key
+          @consumer_key if @consumer_key
         end
         
         def self.consumer_secret(arg = nil)
           if arg
             @consumer_secret = arg
           end
-          @consumer_secret.dup if @consumer_secret
+          @consumer_secret if @consumer_secret
         end
 
         def self.api_endpoint(arg = nil)
           if arg
             @api_endpoint = arg
           end
-          @api_endpoint.dup if @api_endpoint
+          @api_endpoint if @api_endpoint
         end
 
         def self.proxy_class(arg = nil)
