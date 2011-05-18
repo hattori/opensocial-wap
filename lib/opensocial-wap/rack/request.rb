@@ -10,6 +10,10 @@ module OpensocialWap
       def oauth_helper
         env['opensocial-wap.helper']
       end
+
+      def client_helper(*args)
+        self.oauth_helper.client_helper(*args)
+      end
     end
   end
 end
