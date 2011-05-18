@@ -15,7 +15,7 @@ module OpensocialWap
       def initialize(oauth_helper, *args)
         @oauth_helper = oauth_helper
         
-        # 最後の引数が Hash であれば、GETパラメータとする.
+        # 最後の引数が Hash であれば、クエリパラメータとする.
         query_parameters = {}
         if args.size > 0
           if args[-1].is_a? Hash
@@ -36,9 +36,10 @@ module OpensocialWap
         @uri ||= URI.parse(@url)
       end
 
+      # Authorization ヘッダの値を計算して返す.
       def authorization_header(api_request, options = {})
         options[:request_uri] = @url
-        { "Authorization" => @oauth_helper.authorization_header(api_request, options) }
+        @oauth_helper.authorization_header(api_request, options)
       end
     end
   end
