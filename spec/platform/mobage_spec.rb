@@ -19,6 +19,7 @@ describe OpensocialWap::Platform do
       c.opensocial_wap.oauth.helper_class.consumer_secret.should == 'abcd'
       c.opensocial_wap.oauth.helper_class.api_endpoint.should == 'http://sb.app.mbga.jp/api/restful/v1/'
       c.opensocial_wap.oauth.helper_class.app_id.should == '9999'
+      c.opensocial_wap.url.container_host 'sb.pf.mbga.jp'
       c.opensocial_wap.url.default.should == {:format => :query, :params => { :guid => 'ON' }}
       c.opensocial_wap.url.redirect.should == {:format => :local}
       c.opensocial_wap.url.public_path.should == {:format => :local}
@@ -41,6 +42,7 @@ describe OpensocialWap::Platform do
       c.opensocial_wap.oauth.helper_class.consumer_secret.should == 'abcd'
       c.opensocial_wap.oauth.helper_class.api_endpoint.should == 'http://app.mbga.jp/api/restful/v1/'
       c.opensocial_wap.oauth.helper_class.app_id.should == '9999'
+      c.opensocial_wap.url.container_host 'pf.mbga.jp'
       c.opensocial_wap.url.default.should == {:format => :query, :params => { :guid => 'ON' }}
       c.opensocial_wap.url.redirect.should == {:format => :local}
       c.opensocial_wap.url.public_path.should == {:format => :local}

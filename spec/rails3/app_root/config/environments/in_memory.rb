@@ -46,7 +46,8 @@ AppRoot::Application.configure do
   end
 
   config.opensocial_wap.url = OpensocialWap::Config::Url.configure do
-    default     :format => :full, :container_host => 'container.example.com', :params => { :guid => 'ON' }
+    container_host 'container.example.com'
+    default     :format => :full, :params => { :guid => 'ON' }
     redirect    :format => :query, :params => { :guid => 'ON' }
     public_path :format => :plain
   end

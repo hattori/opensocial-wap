@@ -22,9 +22,10 @@ module OpensocialWap
         helper_class OpensocialWap::OAuth::Helpers::BasicHelper
       end
       @config.opensocial_wap.url = OpensocialWap::Config::Url.configure do
-        default     :format => :query, :params => { :guid => 'ON' }
-        redirect    :format => :full, :container_host => container_host, :params => { :guid => 'ON' }
-        public_path :format => :local
+        container_host container_host
+        default        :format => :query, :params => { :guid => 'ON' }
+        redirect       :format => :full, :params => { :guid => 'ON' }
+        public_path    :format => :local
       end
       @config.opensocial_wap.session_id = @session ? :parameter : :cookie
     end

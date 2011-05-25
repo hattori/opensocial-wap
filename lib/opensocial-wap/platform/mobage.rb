@@ -24,9 +24,10 @@ module OpensocialWap
         helper_class OpensocialWap::OAuth::Helpers::MobageHelper
       end
       @config.opensocial_wap.url = OpensocialWap::Config::Url.configure do
-        default     :format => :query, :params => { :guid => 'ON' }
-        redirect    :format => :local
-        public_path :format => :local
+        container_host container_host
+        default        :format => :query, :params => { :guid => 'ON' }
+        redirect       :format => :local
+        public_path    :format => :local
       end
       @config.opensocial_wap.session_id = @session ? :parameter : :cookie
     end

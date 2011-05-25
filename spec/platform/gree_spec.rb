@@ -17,6 +17,7 @@ describe OpensocialWap::Platform do
       c.opensocial_wap.oauth.helper_class.consumer_key.should == '1234'
       c.opensocial_wap.oauth.helper_class.consumer_secret.should == 'abcd'
       c.opensocial_wap.oauth.helper_class.api_endpoint.should == 'http://os-sb.gree.jp/api/rest/'
+      c.opensocial_wap.url.container_host == 'mgadget-sb.gree.jp'
       c.opensocial_wap.url.default.should == {:format => :query, :params => { :guid => 'ON' }}
       c.opensocial_wap.url.redirect.should == {:format => :local}
       c.opensocial_wap.url.public_path.should == {:format => :local}
@@ -37,6 +38,7 @@ describe OpensocialWap::Platform do
       c.opensocial_wap.oauth.helper_class.consumer_key.should == '1234'
       c.opensocial_wap.oauth.helper_class.consumer_secret.should == 'abcd'
       c.opensocial_wap.oauth.helper_class.api_endpoint.should == 'http://os.gree.jp/api/rest/'
+      c.opensocial_wap.url.container_host == 'mgadget.gree.jp'
       c.opensocial_wap.url.default.should == {:format => :query, :params => { :guid => 'ON' }}
       c.opensocial_wap.url.redirect.should == {:format => :local}
       c.opensocial_wap.url.public_path.should == {:format => :local}
