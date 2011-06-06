@@ -25,7 +25,7 @@ module OpensocialWap
 
         status, header, response = @app.call(env)
  
-        response = remove_utf8_form_input_tag(header, response)
+        response = remove_utf8_form_input_tag_from_response(header, response)
         new_response = ::Rack::Response.new(response, status, header)
         new_response.finish
       end
@@ -51,38 +51,38 @@ module OpensocialWap
         request.env['opensocial-wap.helper'] = helper
         verified
       end
-      
-      def response_to_body(response)
-        if response.respond_to?(:to_str)
-          response.to_str
-        elsif response.respond_to?(:each)
-          body = []
-          response.each do |part|
-            body << response_to_body(part)
-          end
-          body.join("\n")
-        else
-          body
-        end
-      end
-      
-      def remove_utf8_form_input_tag(env, response)
+
+      def remove_utf8_form_input_tag_from_response(env, response)
         unless response.respond_to?(:body=)
           return response
         end
         if env['Content-Type'] =~ %r!text/html|application/xhtml\+xml!
           type, charset = env['Content-Type'].split(/;\s*charset=/)
           
-          body = response_to_body(response)
-          if body.encoding == Encoding::UTF_8
-            body = body.gsub(/<input name="utf8" type="hidden" value="#{[0x2713].pack("U")}"[^>]*?>/, ' ')
-            body = body.gsub(/<input name="utf8" type="hidden" value="&#x2713;"[^>]*?>/, ' ')
-            
+          if response.respond_to?(:to_str)
+            response.body = remove_utf8_form_input_tag(response.to_str)
+          elsif response.respond_to?(:each)
+            body = []
+            response.each do |part|
+              body << remove_utf8_form_input_tag(part)
+            end
             response.body = body
+          else
+            response.body = remove_utf8_form_input_tag(response.body)
           end
         end
         response
       end
+
+      def remove_utf8_form_input_tag(str)
+        if str.encoding == Encoding::UTF_8
+          str
+            .gsub(/<input name="utf8" type="hidden" value="#{[0x2713].pack("U")}"[^>]*?>/, ' ')
+            .gsub(/<input name="utf8" type="hidden" value="&#x2713;"[^>]*?>/, ' ')
+        else
+          str
+        end
+      end      
 
       def unauthorized
         [ 401,
