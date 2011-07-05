@@ -18,7 +18,7 @@ module OpensocialWap
           # request.params メソッドを使用しないこと(文字コード変換で問題が発生するため).
           def extract_session_id(env)
             stale_session_check! do
-              request = ActionDispatch::Request.new(env)
+              request = ::Rack::Request.new(env)
               if use_opensocial_wap_sid?(request)
                 # opensocial_(viewer|owner)_id をsession_idとして使用.
                 sid = opensocial_user_id(request)
@@ -44,7 +44,7 @@ module OpensocialWap
               sid = app_config.opensocial_wap[:session_id] || :cookie # デフォルトでは無効(cookieからセッションIDを取得する).
               if sid.to_sym == :parameter
                 # OAuthの検証にパスしている.
-                if request.opensocial_oauth_verified?
+                if request.env['opensocial-wap.oauth-verified']
                   # opensocial_(viewer|owner)_id がクエリパラメータに存在する.
                   if opensocial_user_id(request)
                     return true
@@ -58,7 +58,7 @@ module OpensocialWap
           def opensocial_user_id(request)
             unless @opensocial_user_id
               params = begin
-                         request.GET.update(request.POST)
+                         request.GET.merge(request.POST)
                        rescue EOFError => e
                          request.GET
                        end

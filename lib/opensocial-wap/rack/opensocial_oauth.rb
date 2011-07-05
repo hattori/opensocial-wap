@@ -82,7 +82,7 @@ module OpensocialWap
         else
           str
         end
-      end      
+      end
 
       def unauthorized
         [ 401,
