@@ -56,15 +56,12 @@ module OpensocialWap
           end
 
           def opensocial_user_id(request)
-            unless @opensocial_user_id
-              params = begin
-                         request.GET.merge(request.POST)
-                       rescue EOFError => e
-                         request.GET
-                       end
-              @opensocial_user_id = params['opensocial_viewer_id'] || params['opensocial_owner_id']
-            end
-            @opensocial_user_id
+            params = begin
+                       request.GET.merge(request.POST)
+                     rescue EOFError
+                       request.GET
+                     end
+            opensocial_user_id = params['opensocial_viewer_id'] || params['opensocial_owner_id']
           end
         end
       end    
