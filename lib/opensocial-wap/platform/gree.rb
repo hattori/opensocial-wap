@@ -10,6 +10,7 @@ module OpensocialWap
 
       consumer_key    = @consumer_key
       consumer_secret = @consumer_secret
+      app_id          = @app_id
       container_host  = @sandbox ? 'mgadget-sb.gree.jp' : "mgadget.gree.jp"
       api_endpoint    = @sandbox ? 'http://os-sb.gree.jp/api/rest/' : "http://os.gree.jp/api/rest/"
 
@@ -17,6 +18,7 @@ module OpensocialWap
         consumer_key    consumer_key
         consumer_secret consumer_secret
         api_endpoint    api_endpoint
+        app_id          app_id
       end
       @config.opensocial_wap.oauth = OpensocialWap::Config::OAuth.configure do
         helper_class OpensocialWap::OAuth::Helpers::BasicHelper

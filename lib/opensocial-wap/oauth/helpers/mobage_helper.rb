@@ -3,7 +3,7 @@ module OpensocialWap::OAuth::Helpers
 
   # mobage 用 oauthヘルパー.
   # バッチタイプ(mobageではTrusted モデル)のリクエスト時には、xoauth_requestor_id
-  # としてapp_id を渡すところ、BasicHelper と異なる.
+  # としてapp_id を渡すところが、BasicHelper と異なる.
   class MobageHelper < BasicHelper
 
     def authorization_header(api_request, options = nil)
@@ -16,15 +16,6 @@ module OpensocialWap::OAuth::Helpers
       end
       oauth_client_helper = ::OAuth::Client::Helper.new(api_request, opts.merge(options))
       oauth_client_helper.header
-    end
-
-    private
-
-    def self.app_id(arg = nil)
-      if arg
-        @app_id = arg
-      end
-      @app_id if @app_id
     end
   end
 end

@@ -10,6 +10,7 @@ module OpensocialWap
 
       consumer_key    = @consumer_key
       consumer_secret = @consumer_secret
+      app_id          = @app_id
       container_host  = @access_from_pc ? 'ma.test.mixi.net' : 'ma.mixi.net'
 
       OpensocialWap::OAuth::Helpers::BasicHelper.configure do
@@ -17,6 +18,7 @@ module OpensocialWap
         consumer_key    consumer_key
         consumer_secret consumer_secret
         api_endpoint    'http://api.mixi-platform.com/os/0.8/'
+        app_id          app_id
       end
       @config.opensocial_wap.oauth = OpensocialWap::Config::OAuth.configure do
         helper_class OpensocialWap::OAuth::Helpers::BasicHelper

@@ -1,7 +1,7 @@
 PATH
   remote: ../../../
   specs:
-    opensocial-wap (0.0.1)
+    opensocial-wap (0.0.3)
       oauth
       rack (>= 1.2.1)
 
@@ -68,7 +68,7 @@ GEM
       treetop (~> 1.4.8)
     mime-types (1.16)
     nokogiri (1.4.4)
-    oauth (0.4.4)
+    oauth (0.4.5)
     polyglot (0.3.1)
     rack (1.2.1)
     rack-mount (0.6.13)

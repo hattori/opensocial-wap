@@ -74,6 +74,13 @@ module OpensocialWap
           @api_endpoint if @api_endpoint
         end
 
+        def self.app_id(arg = nil)
+          if arg
+            @app_id = arg
+          end
+          @app_id if @app_id
+        end
+
         def self.proxy_class(arg = nil)
           if arg
             @proxy_class = arg
